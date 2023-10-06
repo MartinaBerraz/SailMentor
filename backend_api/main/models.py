@@ -73,7 +73,7 @@ class YachtType(models.Model):
 # Model for yacht
 class Yacht(models.Model):
     yacht_type = models.ForeignKey(YachtType,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='yacht_imgs/')
+    image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True)
 
     name = models.TextField(null=True)
     year_built = models.IntegerField(null=True)
@@ -110,11 +110,10 @@ class Booking(models.Model):
         return self.status
     
 
-class Rating(models.Model):
+class Review(models.Model):
     rating = models.IntegerField(null=True)
     comment = models.TextField(null=True)
     booking = models.ForeignKey(Booking,on_delete=models.CASCADE)
-
 
     def __str__(self):
         return self.comment

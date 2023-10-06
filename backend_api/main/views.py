@@ -41,3 +41,49 @@ class RegionList(generics.ListCreateAPIView):
 class RegionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Region.objects.all()
     serializer_class=serializers.RegionDetailSerializer
+
+class YachtTypeList(generics.ListCreateAPIView):
+    queryset = models.YachtType.objects.all()
+    serializer_class=serializers.YachtTypeSerializer
+
+
+class YachtTypeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.YachtType.objects.all()
+    serializer_class=serializers.YachtTypeDetailSerializer
+
+class YachtList(generics.ListCreateAPIView):
+    queryset = models.Yacht.objects.all()
+    serializer_class=serializers.YachtSerializer
+
+
+class YachtDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Yacht.objects.all()
+    serializer_class=serializers.YachtDetailSerializer
+
+class BookingStatusList(generics.ListCreateAPIView):
+    queryset = models.BookingStatus.objects.all()
+    serializer_class=serializers.BookingStatusSerializer
+
+
+class BookingStatusDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.BookingStatus.objects.all()
+    serializer_class=serializers.BookingStatusDetailSerializer
+
+class BookingList(generics.ListCreateAPIView):
+    queryset = models.Booking.objects.all()
+    serializer_class=serializers.BookingSerializer
+
+
+class BookingDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Booking.objects.all()
+    serializer_class=serializers.BookingDetailSerializer
+
+
+class AvailabilityList(generics.ListCreateAPIView):
+    queryset = models.Availability.objects.all()
+    serializer_class=serializers.AvailabilitySerializer
+
+
+class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Availability.objects.all()
+    serializer_class=serializers.AvailabilityDetailSerializer
