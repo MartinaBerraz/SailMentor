@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 const Experiences = () => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [experiences, setExperiences] = useState([]);
+  const [columns, setColumns] = useState([]);
 
   useEffect(() => {
     fetchData(baseUrl + "/experiences/");
@@ -18,21 +19,21 @@ const Experiences = () => {
       });
   };
 
-  const rows = [
-    { id: 1, name: "John", age: 30 },
-    { id: 2, name: "Jane", age: 28 },
-    { id: 3, name: "Bob", age: 35 },
-  ];
+  useEffect(() => {
+    if (experiences && experiences.length > 0) {
+      const newColumns = Object.keys(experiences[0]).map((key) => ({
+        headerName: key.toUpperCase(),
+        field: key,
+        width: 200,
+      }));
 
-  const columns = [
-    { field: "id", headerName: "ID" },
-    { field: "name", headerName: "Name" },
-    { field: "age", headerName: "Age" },
-  ];
+      setColumns(newColumns);
+    }
+  }, [experiences]);
 
   return (
     <DataGrid
-      rows={rows}
+      rows={experiences}
       columns={columns}
       initialState={{
         pagination: {

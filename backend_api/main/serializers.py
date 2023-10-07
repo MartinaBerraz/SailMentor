@@ -20,13 +20,16 @@ class CompanyDetailSerializer(serializers.ModelSerializer):
 
 # Experience serializers
 class ExperienceSerializer(serializers.ModelSerializer):
+    yachts_count = serializers.IntegerField()  # Add this field for yachts_count
+
     class Meta:
         model=models.Experience
-        fields=['id','brief_description','precautions','destination','company','detailed_description','recommendation']
+        fields=['id','name','destination','company','yachts_count']
     
     def __init__(self, *args, **kwargs):
         super(ExperienceSerializer, self).__init__(*args, **kwargs)
         # self.Meta.depth = 1 # it will fetch the relation, now we can see user data
+        
 
 class ExperienceImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,15 +39,21 @@ class ExperienceImageSerializer(serializers.ModelSerializer):
 
 class ExperienceDetailSerializer(serializers.ModelSerializer):
     experience_imgs=ExperienceImageSerializer(many=True,read_only=True)
+    yachts = serializers.SerializerMethodField()
 
     class Meta:
         model=models.Experience
-        fields=['id','brief_description','precautions','destination','company','detailed_description','recommendation','experience_imgs']
+        fields=['id','brief_description','precautions','destination','company','detailed_description','yachts','recommendation','experience_imgs']
 
     
     def __init__(self, *args, **kwargs):
         super(ExperienceDetailSerializer, self).__init__(*args, **kwargs)
         # self.Meta.depth = 1 
+        
+    def get_yachts(self, obj):
+        # Retrieve and serialize the boats associated with the current experience
+        yachts = models.Yacht.objects.filter(experience=obj)
+        return YachtSerializer(yachts, many=True).data
 
 # Region serializers
 class RegionSerializer(serializers.ModelSerializer):

@@ -2,6 +2,8 @@ from rest_framework import generics, permissions, pagination, viewsets
 from django.shortcuts import render
 from . import models
 from . import serializers
+from django.db.models import Count
+
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
@@ -14,7 +16,7 @@ class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ExperienceList(generics.ListCreateAPIView):
-    queryset = models.Experience.objects.all()
+    queryset = models.Experience.objects.annotate(yachts_count=Count('yacht'))
     serializer_class=serializers.ExperienceSerializer
 
 

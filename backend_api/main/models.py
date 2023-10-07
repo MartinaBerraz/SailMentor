@@ -42,7 +42,9 @@ class Destination(models.Model):
 
 # Model for experience
 class Experience(models.Model):
-    brief_description = models.TextField(null=True)
+    name = models.CharField(max_length=30)
+
+    brief_description = models.CharField(max_length=150)
     detailed_description = models.TextField(null=True)
     recommendation = models.TextField(null=True)
     precautions = models.TextField(null=True)
@@ -53,6 +55,7 @@ class Experience(models.Model):
 
     def __str__(self):
         return self.brief_description
+    
     
 class ExperienceImage(models.Model):
     experience=models.ForeignKey(Experience,on_delete=models.CASCADE,related_name='experience_imgs')
