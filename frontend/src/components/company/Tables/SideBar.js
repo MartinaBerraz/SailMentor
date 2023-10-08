@@ -22,11 +22,11 @@ import HistoryIcon from "@mui/icons-material/History";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
-import "../common/styles.css";
+import "../../common/styles.css";
 
 const drawerWidth = 240;
 
-export const Dashboard = (props) => {
+export const SideBar = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   console.log(props);
 
@@ -136,17 +136,8 @@ export const Dashboard = (props) => {
           {drawer}
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        <props.component />
-      </Box>
     </Box>
   );
 };
+
+export default SideBar;

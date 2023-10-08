@@ -1,0 +1,6 @@
+/* Remove underlines and customize link appearance */
+.link-no-formatting {
+    text-decoration: none; /* Remove underlines */
+    color: #000; /* Customize the link color */
+    /* Add any other styles you want */
+  }

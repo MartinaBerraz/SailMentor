@@ -54,7 +54,7 @@ class Experience(models.Model):
 
 
     def __str__(self):
-        return self.brief_description
+        return self.name
     
     
 class ExperienceImage(models.Model):
@@ -67,7 +67,7 @@ class ExperienceImage(models.Model):
 
 # Model for yacht type
 class YachtType(models.Model):
-    description = models.IntegerField(null=True)
+    description = models.CharField(max_length=20,null=True)
     sailing_boat = models.BooleanField(null=True)
 
     def __str__(self):
@@ -78,7 +78,7 @@ class Yacht(models.Model):
     yacht_type = models.ForeignKey(YachtType,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True)
 
-    name = models.TextField(null=True)
+    name = models.CharField(max_length=20,null=True)
     year_built = models.IntegerField(null=True)
     max_people = models.IntegerField(null=True)
     price_per_night = models.FloatField(null=True)
