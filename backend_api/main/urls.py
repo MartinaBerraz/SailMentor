@@ -19,5 +19,6 @@ urlpatterns = [
     path('booking/<int:pk>/',views.BookingDetail.as_view()),
     path('bookingStatus/',views.BookingStatusList.as_view()),
     path('bookingStatus/<int:pk>/',views.BookingStatusDetail.as_view()),
-
+    path('yachts-fields/', views.YachtFields.as_view()),
+   
     ]

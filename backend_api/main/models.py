@@ -40,9 +40,16 @@ class Destination(models.Model):
     def __str__(self):
         return self.name
 
+class ExperienceManager(models.Manager):
+    def get_experience_choices(self):
+        return tuple((yt.name, yt.name) for yt in self.all())
+
 # Model for experience
 class Experience(models.Model):
     name = models.CharField(max_length=30)
+
+    objects = ExperienceManager()
+
 
     brief_description = models.CharField(max_length=150)
     detailed_description = models.TextField(null=True)
@@ -65,16 +72,27 @@ class ExperienceImage(models.Model):
         return self.image.url
 
 
+
+class YachtTypeManager(models.Manager):
+    def get_yacht_type_choices(self):
+        return tuple((yt.description, yt.description) for yt in self.all())
+
 # Model for yacht type
 class YachtType(models.Model):
+
+    objects = YachtTypeManager()
+
     description = models.CharField(max_length=20,null=True)
     sailing_boat = models.BooleanField(null=True)
 
     def __str__(self):
         return self.description
 
+
 # Model for yacht
 class Yacht(models.Model):
+
+
     yacht_type = models.ForeignKey(YachtType,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True)
 
@@ -110,7 +128,7 @@ class Booking(models.Model):
     end_date = models.DateField(null=True)
 
     def __str__(self):
-        return self.status
+        return self.experience.name
     
 
 class Review(models.Model):

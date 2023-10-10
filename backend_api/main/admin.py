@@ -2,6 +2,7 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.Company)
+admin.site.register(models.Sailor)
 admin.site.register(models.Region)
 admin.site.register(models.Destination)
 admin.site.register(models.Booking)

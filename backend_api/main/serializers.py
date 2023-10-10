@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from . import models
+from django.db import models as django_models
+
 
 # Company serializers
 class CompanySerializer(serializers.ModelSerializer):
@@ -18,13 +20,48 @@ class CompanyDetailSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(CompanyDetailSerializer, self).__init__(*args, **kwargs)
 
+# Sailor serializers
+class SailorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=models.Sailor
+        fields=['user','year_sailing_since','skipper_license']
+    
+    def __init__(self, *args, **kwargs):
+        super(CompanySerializer, self).__init__(*args, **kwargs)
+
+class SailorDetailSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=True)
+
+    class Meta:
+        model=models.Sailor
+        fields=['user','year_sailing_since','skipper_license','image']
+    
+    def __init__(self, *args, **kwargs):
+        super(CompanyDetailSerializer, self).__init__(*args, **kwargs)
+
+
 # Experience serializers
 class ExperienceSerializer(serializers.ModelSerializer):
+    company_name = serializers.SerializerMethodField()
+
+    destination_name = serializers.SlugRelatedField(
+        source='destination',  # Name of the foreign key field in the Booking model
+        slug_field='name',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
+        read_only=True  # Make it read-only
+        )
+    
+    def get_company_name(self, obj):
+        # Access the related Company object from the Experience object
+        company = obj.company
+
+        # Call the __str__ method on the Company object to get its name
+        return str(company)
+    
     yachts_count = serializers.IntegerField()  # Add this field for yachts_count
 
     class Meta:
         model=models.Experience
-        fields=['id','name','destination','company','yachts_count']
+        fields=['id','name','destination_name','company_name','yachts_count']
     
     def __init__(self, *args, **kwargs):
         super(ExperienceSerializer, self).__init__(*args, **kwargs)
@@ -128,6 +165,48 @@ class YachtDetailSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(YachtDetailSerializer, self).__init__(*args, **kwargs)
 
+# serializer for form data
+class YachtFieldMetadataSerializer(serializers.ModelSerializer):
+    yacht_type_choices = serializers.SerializerMethodField()
+    experience_choices = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Yacht  # Specify the model you want to serialize
+        fields = '__all__'  # Include all fields from the model
+    
+    _field_info = None  # Class-level variable to cache field information
+
+    def get_field_info(cls):
+        if cls._field_info is None:
+            model = cls.Meta.model
+            fields = model._meta.fields
+            field_info = []
+
+            for field in fields:
+                field_type = field.get_internal_type()
+                if isinstance(field, django_models.ForeignKey):
+                    field_type = "ForeignKey"
+                field_info.append({
+                    "name": field.name,
+                    "type": field_type,
+                })
+
+            cls._field_info = field_info
+        return cls._field_info
+
+    def to_representation(self, instance):
+        field_info = self.get_field_info()
+        return field_info
+
+        
+    def get_yacht_type_choices(self, obj):
+        return models.YachtType.objects.get_yacht_type_choices()
+
+    def get_experience_choices(self, obj):
+        # Retrieve the choices for the 'experience' field
+        return models.Experience.objects.get_experience_choices()
+    
+
 # Booking status serializers
 class BookingStatusSerializer(serializers.ModelSerializer):
     class Meta:
@@ -147,14 +226,43 @@ class BookingStatusDetailSerializer(serializers.ModelSerializer):
 
 # Booking  serializers
 class BookingSerializer(serializers.ModelSerializer):
+    sailor_name = serializers.SerializerMethodField()
+
+    
+    def get_sailor_name(self, obj):
+        # Access the related Company object from the Experience object
+        sailor = obj.sailor
+
+        # Call the __str__ method on the Company object to get its name
+        return str(sailor)
+
+    yacht_name = serializers.SlugRelatedField(
+        source='yacht',  # Name of the foreign key field in the Booking model
+        slug_field='name',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
+        read_only=True  # Make it read-only
+        )
+    
+    b_status = serializers.SlugRelatedField(
+        source='status',  # Name of the foreign key field in the Booking model
+        slug_field='status',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
+        read_only=True  # Make it read-only
+        )
+    
+    experience_name = serializers.SlugRelatedField(
+        source='experience',  # Name of the foreign key field in the Booking model
+        slug_field='name',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
+        read_only=True  # Make it read-only
+        )
+    
     class Meta:
         model=models.Booking
-        fields=['sailor','experience','start_date','end_date','yacht','status']
+        fields=['id','sailor_name','experience_name','start_date','end_date','yacht_name','b_status']
     
     def __init__(self, *args, **kwargs):
         super(BookingSerializer, self).__init__(*args, **kwargs)
 
-class BookingDetailSerializer(serializers.ModelSerializer):  
+class BookingDetailSerializer(serializers.ModelSerializer):
+      
     class Meta:
         model=models.Booking
         fields=['id','sailor','experience','start_date','end_date','yacht','status']

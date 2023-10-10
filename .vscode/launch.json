@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+          "name": "Python: Django",
+          "type": "python",
+          "request": "launch",
+          "program": "backend_api/manage.py",
+          "args": ["runserver"],
+          "django": true,
+          "justMyCode": true
+        }
+      ]
+}

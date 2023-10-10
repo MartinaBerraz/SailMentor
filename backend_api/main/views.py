@@ -1,18 +1,29 @@
-from rest_framework import generics, permissions, pagination, viewsets
+from rest_framework import generics, response, permissions, pagination, viewsets
 from django.shortcuts import render
 from . import models
 from . import serializers
 from django.db.models import Count
+from rest_framework.views import APIView
 
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
     serializer_class=serializers.CompanySerializer
 
-
+    
 class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Company.objects.all()
     serializer_class=serializers.CompanyDetailSerializer
+
+class SailorList(generics.ListCreateAPIView):
+    queryset = models.Company.objects.all()
+    serializer_class=serializers.SailorSerializer
+
+    
+class SailorDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = models.Company.objects.all()
+    serializer_class=serializers.SailorDetailSerializer
+
 
 
 class ExperienceList(generics.ListCreateAPIView):
@@ -61,6 +72,10 @@ class YachtList(generics.ListCreateAPIView):
 class YachtDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Yacht.objects.all()
     serializer_class=serializers.YachtDetailSerializer
+
+class YachtFields(generics.ListCreateAPIView):
+    queryset = models.Yacht._meta.fields
+    serializer_class=serializers.YachtFieldMetadataSerializer
 
 class BookingStatusList(generics.ListCreateAPIView):
     queryset = models.BookingStatus.objects.all()

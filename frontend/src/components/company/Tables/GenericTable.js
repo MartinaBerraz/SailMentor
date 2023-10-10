@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
+import { AddForm } from "../forms/AddForm";
 
 const GenericTable = (props) => {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -46,7 +47,6 @@ const GenericTable = (props) => {
       .then((response) => response.json())
       .then((data) => {
         setResources(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -67,14 +67,16 @@ const GenericTable = (props) => {
         width: 200,
         renderCell: (params) => (
           <>
-            <Button
-              size="small"
-              style={customButtonStyle}
-              onClick={() => handleUpdate(params.row.id)}
-              variant="contained"
-            >
-              Update
-            </Button>
+            {props.category !== "bookings" && (
+              <Button
+                size="small"
+                style={customButtonStyle}
+                onClick={() => handleUpdate(params.row.id)}
+                variant="contained"
+              >
+                Update
+              </Button>
+            )}
             <Button
               size="small"
               style={customButtonStyle}
@@ -105,21 +107,23 @@ const GenericTable = (props) => {
         checkboxSelection
         autoHeight
       />
-      <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-        <Button
-          style={addButtonStyle}
-          onClick={() => handleAdd()}
-          variant="contained"
-        >
-          <Link
-            style={{ textDecoration: "none", color: "white" }}
-            sx={{ color: "white" }}
-            to={props.category + "/add"}
+      {props.category !== "bookings" && (
+        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+          <Button
+            style={addButtonStyle}
+            onClick={() => handleAdd()}
+            variant="contained"
           >
-            Add Experience
-          </Link>
-        </Button>
-      </Box>
+            <Link
+              style={{ textDecoration: "none", color: "white" }}
+              sx={{ color: "white" }}
+              to={`/${props.category}/add/`}
+            >
+              Add {props.category}
+            </Link>
+          </Button>
+        </Box>
+      )}
     </div>
   );
 };

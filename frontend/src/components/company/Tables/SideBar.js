@@ -23,6 +23,8 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import "../../common/styles.css";
+import logo from "../../../logo.png";
+import sailmentor from "../../../sailmentor.png";
 
 const drawerWidth = 240;
 
@@ -34,9 +36,18 @@ export const SideBar = (props) => {
     setMobileOpen(!mobileOpen);
   };
 
+  const imageStyle = {
+    // maxWidth: "80%", // Set the maximum width
+    // maxHeight: "100%", // Set the maximum height
+    width: "35%",
+    float: "left",
+    alignSelf: "flex-start",
+  };
+
   const drawer = (
     <div>
       <Toolbar />
+
       <Divider />
       <List>
         {[
@@ -62,12 +73,17 @@ export const SideBar = (props) => {
           { text: "Bookings", icon: <MenuBookIcon /> },
           { text: "History", icon: <HistoryIcon /> },
         ].map((item, index) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
+          <Link
+            to={`/` + item.text.toLowerCase()}
+            className="link-no-formatting"
+          >
+            <ListItem key={item.text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
       <Divider sx={{ mt: "50vh" }} />
@@ -94,8 +110,8 @@ export const SideBar = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Dashboard
+          <Typography noWrap component="div">
+            <img src={sailmentor} style={imageStyle} />
           </Typography>
         </Toolbar>
       </AppBar>
