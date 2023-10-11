@@ -9,6 +9,7 @@ const GenericTable = (props) => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
   const [columns, setColumns] = useState([]);
+  const columnsToExclude = ["image"]; // Add the column names you want to exclude
 
   useEffect(() => {
     fetchData(baseUrl + `/${props.category}/`);
@@ -55,11 +56,13 @@ const GenericTable = (props) => {
 
   useEffect(() => {
     if (resources && resources.length > 0) {
-      const newColumns = Object.keys(resources[0]).map((key) => ({
-        headerName: key.toUpperCase(),
-        field: key,
-        width: 170,
-      }));
+      const newColumns = Object.keys(resources[0])
+        .filter((key) => !columnsToExclude.includes(key))
+        .map((key) => ({
+          headerName: key.toUpperCase(),
+          field: key,
+          width: 170,
+        }));
 
       newColumns.push({
         headerName: "ACTIONS",

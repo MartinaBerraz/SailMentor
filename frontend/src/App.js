@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { Home } from "./components/company/Tables/Home";
+import { Home } from "./components/sailor/Home.js";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import GenericTable from "./components/company/Tables/GenericTable";
 import Dash from "./components/company/Dash";
@@ -32,6 +32,7 @@ function App() {
           <Route path="/bookings" element={<Dash category="bookings" />} />
           <Route path="/yachts/add" element={<AddForm category="yachts" />} />
           <Route path="/yachts" element={<Dash category="yachts" />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </ThemeProvider>
     </div>

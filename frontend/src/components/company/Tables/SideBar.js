@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import "../../common/styles.css";
 import logo from "../../../logo.png";
 import sailmentor from "../../../sailmentor.png";
+import { Paper } from "@mui/material";
 
 const drawerWidth = 240;
 

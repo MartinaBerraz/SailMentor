@@ -42,6 +42,8 @@ class SailorDetailSerializer(serializers.ModelSerializer):
 
 # Experience serializers
 class ExperienceSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField(method_name='get_image')
+
     company_name = serializers.SerializerMethodField()
 
     destination_name = serializers.SlugRelatedField(
@@ -49,6 +51,15 @@ class ExperienceSerializer(serializers.ModelSerializer):
         slug_field='name',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
         read_only=True  # Make it read-only
         )
+    
+    def get_image(self, obj):
+        # Check if experience_imgs is not empty
+        if obj.experience_imgs.exists():
+            first_image = obj.experience_imgs.first()
+            return first_image.image.url  # Assuming you have an 'image' field in the ExperienceImage model
+        else:
+            return None  # Return None if there are no images
+
     
     def get_company_name(self, obj):
         # Access the related Company object from the Experience object
@@ -61,7 +72,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Experience
-        fields=['id','name','destination_name','company_name','yachts_count']
+        fields=['id','name','destination_name','company_name','yachts_count','image']
     
     def __init__(self, *args, **kwargs):
         super(ExperienceSerializer, self).__init__(*args, **kwargs)
@@ -228,7 +239,6 @@ class BookingStatusDetailSerializer(serializers.ModelSerializer):
 class BookingSerializer(serializers.ModelSerializer):
     sailor_name = serializers.SerializerMethodField()
 
-    
     def get_sailor_name(self, obj):
         # Access the related Company object from the Experience object
         sailor = obj.sailor
