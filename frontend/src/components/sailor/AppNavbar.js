@@ -211,9 +211,6 @@ export const AppNavbar = () => {
             </IconButton>
           </Box>
         </Toolbar>
-        <Typography>
-          <h2>Ready for a New Adventure?</h2>
-        </Typography>
       </AppBar>
       {renderMobileMenu}
       {renderMenu}

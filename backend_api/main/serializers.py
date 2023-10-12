@@ -72,7 +72,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Experience
-        fields=['id','name','destination_name','company_name','yachts_count','image']
+        fields=['id','name','destination_name','company_name','yachts_count','image', 'brief_description']
     
     def __init__(self, *args, **kwargs):
         super(ExperienceSerializer, self).__init__(*args, **kwargs)
