@@ -9,17 +9,49 @@ import InputAutocomplete from "../common/InputAutocomplete";
 export const Home = () => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleCallback = (childData) => {
+    // Update the name in the component's state
+    setSelectedOption(childData);
+    handleSelected(options.find((option) => option.name === selectedOption));
+  };
 
   useEffect(() => {
+    fetchOptions(baseUrl + `/destinations/`);
     fetchData(baseUrl + `/experiences/`);
   }, []);
+
+  useEffect(() => {
+    console.log(selectedOption);
+  }, [selectedOption]);
+
+  const handleSelected = (option) => {
+    if (option) {
+      console.log("Found option:", option.name);
+      console.log("ID:", option.id);
+    } else {
+      console.log(`${selectedOption} not found in the options array`);
+    }
+  };
 
   const fetchData = (url) => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setResources(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  };
+
+  const fetchOptions = (url) => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setOptions(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -41,9 +73,13 @@ export const Home = () => {
           <h2>Ready for a New Adventure?</h2>
           <p>Let's start by choosing a destination</p>
         </Typography>
-        <InputAutocomplete options={["1", "2", "3"]} label="Discover" />
+        <InputAutocomplete
+          options={options}
+          label="Discover"
+          parentCallback={handleCallback}
+        />
       </Box>
-      <ExperiencesStepper experiences={resources} />
+      {resources.length > 0 && <ExperiencesStepper experiences={resources} />}
     </>
   );
 };
