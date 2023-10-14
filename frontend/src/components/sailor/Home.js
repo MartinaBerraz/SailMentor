@@ -5,17 +5,24 @@ import React, { useState, useEffect } from "react";
 import ExperiencesStepper from "./ExperiencesStepper";
 import Typography from "@mui/material/Typography";
 import InputAutocomplete from "../common/InputAutocomplete";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import Yachts from "./Yachts";
 
 export const Home = () => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
+  const [displayResources, setDisplayedResources] = useState([]);
+
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleCallback = (childData) => {
     // Update the name in the component's state
-    setSelectedOption(childData);
-    handleSelected(options.find((option) => option.name === selectedOption));
+    setDisplayedResources(
+      resources.filter((item) => item.destination_name === childData)
+    );
+    setSelectedOption(options.find((option) => option.name === childData));
   };
 
   useEffect(() => {
@@ -23,24 +30,12 @@ export const Home = () => {
     fetchData(baseUrl + `/experiences/`);
   }, []);
 
-  useEffect(() => {
-    console.log(selectedOption);
-  }, [selectedOption]);
-
-  const handleSelected = (option) => {
-    if (option) {
-      console.log("Found option:", option.name);
-      console.log("ID:", option.id);
-    } else {
-      console.log(`${selectedOption} not found in the options array`);
-    }
-  };
-
   const fetchData = (url) => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setResources(data);
+        setDisplayedResources(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -62,7 +57,7 @@ export const Home = () => {
     <>
       <Box
         sx={{
-          height: "35vh", // Set the height to 40% of the viewport height
+          height: "33vh", // Set the height to 40% of the viewport height
           flexGrow: 1,
           backgroundColor: "#3FB295", // Replace with your desired color
           color: "white",
@@ -79,7 +74,17 @@ export const Home = () => {
           parentCallback={handleCallback}
         />
       </Box>
-      {resources.length > 0 && <ExperiencesStepper experiences={resources} />}
+      <Button
+        component={Link}
+        to={`/yachts/${selectedOption.id}`}
+        variant="contained"
+        color="primary"
+      >
+        Book a yacht
+      </Button>
+      {displayResources.length > 0 && (
+        <ExperiencesStepper experiences={displayResources} />
+      )}
     </>
   );
 };

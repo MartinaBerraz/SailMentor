@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import { AddForm } from "./components/company/forms/AddForm";
+import Yachts from "./components/sailor/Yachts";
 
 function App() {
   const customTheme = createTheme({
@@ -19,6 +20,30 @@ function App() {
     //     default: "#f0f0f0", // Change to your desired background color
     //   },
     // },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          containedPrimary: {
+            backgroundColor: "#3FB295", // Custom background color for primary contained button
+            color: "white", // Custom text color for primary contained button
+            "&:hover": {
+              backgroundColor: "grey", // Custom background color on hover
+            },
+            margin: "1px",
+            marginTop: "1%",
+          },
+          containedSecondary: {
+            backgroundColor: "dark", // Custom background color for primary contained button
+            color: "white", // Custom text color for primary contained button
+            "&:hover": {
+              backgroundColor: "grey", // Custom background color on hover
+            },
+            margin: "1px",
+            marginTop: "1%",
+          },
+        },
+      },
+    },
   });
 
   return (
@@ -32,6 +57,7 @@ function App() {
           <Route path="/bookings" element={<Dash category="bookings" />} />
           <Route path="/yachts/add" element={<AddForm category="yachts" />} />
           <Route path="/yachts" element={<Dash category="yachts" />} />
+          <Route path="/yachts/:destination_id" element={<Yachts />} />
           <Route path="/home" element={<Home />} />
         </Routes>
       </ThemeProvider>
