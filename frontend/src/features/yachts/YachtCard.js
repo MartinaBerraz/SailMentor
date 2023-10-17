@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea, Grid } from "@mui/material";
+import { Button, CardActionArea, Grid } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import HotelIcon from "@mui/icons-material/Hotel";
 import Box from "@mui/material/Box";
@@ -54,6 +54,9 @@ export const YachtCard = ({ yacht }) => {
             </Grid>
           </Grid>
         </CardContent>
+        <Button variant="contained" color="primary" sx={{ marginBottom: "1%" }}>
+          Book Now
+        </Button>
       </CardActionArea>
     </Card>
   );

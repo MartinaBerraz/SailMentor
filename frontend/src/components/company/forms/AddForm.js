@@ -44,7 +44,6 @@ export const AddForm = (props) => {
       name: "experience",
       type: "ForeignKey",
     },
-
     {
       name: "image",
       type: "FileField",

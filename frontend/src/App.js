@@ -33,7 +33,7 @@ function App() {
             marginTop: "1%",
           },
           containedSecondary: {
-            backgroundColor: "dark", // Custom background color for primary contained button
+            backgroundColor: "black", // Custom background color for primary contained button
             color: "white", // Custom text color for primary contained button
             "&:hover": {
               backgroundColor: "grey", // Custom background color on hover

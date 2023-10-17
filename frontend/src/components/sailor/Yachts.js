@@ -1,57 +1,69 @@
 import React from "react";
 import AppNavbar from "./AppNavbar";
-import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Typography } from "@mui/material";
-import Box from "@mui/material/Box";
-import YachtCard from "./YachtCard";
-import YachtsStepper from "./YachtsStepper";
+import { Box, Grid, Typography } from "@mui/material";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import InputDatePicker from "../common/InputDatePicker";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchDestinations,
+  selectAllDestinations,
+} from "../../features/destinations/destinationsSlice";
+import YachtsList from "../../features/yachts/YachtsList";
+import FilterForm from "../common/FilterForm";
 
 export const Yachts = () => {
-  const { destination_id } = useParams();
-  const [resources, setResources] = useState([]);
-  const [displayResources, setDisplayedResources] = useState([]);
-  const baseUrl = "http://127.0.0.1:8000/api";
+  const destinationStatus = useSelector((state) => state.destinations.status);
 
-  const [filters, setFilters] = useState({
-    destination: "",
-    max_people: 0,
-  });
+  const dispatch = useDispatch();
+  const destinationsList = useSelector(selectAllDestinations);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(filters).toString();
-
-    fetchData(baseUrl + `/yachts/?${queryParams}`);
-  }, []);
-
-  const fetchData = (url) => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setDisplayedResources(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
+    if (destinationStatus === "idle") {
+      dispatch(fetchDestinations());
+      console.log(destinationsList);
+    }
+  }, [destinationStatus, dispatch]);
 
   return (
     <>
       <Box
         sx={{
-          height: "30vh", // Set the height to 40% of the viewport height
+          height: "40vh", // Set the height to 40% of the viewport height
           flexGrow: 1,
           backgroundColor: "#3FB295", // Replace with your desired color
           color: "white",
         }}
       >
         <AppNavbar />
-        <Typography>
+        <Typography sx={{ marginBottom: "10vh" }}>
           <h2>Find your perfect yacht</h2>
         </Typography>
-        {console.log(destination_id)}
+        <FilterForm />
+
+        {/* <Grid
+          sx={{ marginLeft: "2%" }}
+          container
+          spacing={1}
+          alignItems="center"
+        >
+          <Grid item>
+            <InputDatePicker label={"Departure date"} />
+          </Grid>
+          <Grid item></Grid>
+          <Grid item>
+            <FormGroup sx={{ marginLeft: "20%" }}>
+              <FormControlLabel
+                control={<Switch defaultChecked />}
+                label="Tripulation"
+              />
+            </FormGroup>
+          </Grid>
+        </Grid> */}
       </Box>
-      <YachtsStepper yachts={displayResources} />
+      <YachtsList />
     </>
   );
 };
