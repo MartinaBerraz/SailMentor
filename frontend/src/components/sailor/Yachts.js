@@ -2,10 +2,6 @@ import React from "react";
 import AppNavbar from "./AppNavbar";
 import { useState, useEffect } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import InputDatePicker from "../common/InputDatePicker";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchDestinations,

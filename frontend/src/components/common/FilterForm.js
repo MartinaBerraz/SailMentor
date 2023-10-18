@@ -3,6 +3,7 @@ import DestinationFilter from "./filters/DestinationFilter";
 import { Divider, Grid } from "@mui/material";
 import MaxPeopleFilter from "./filters/MaxPeopleFilter";
 import NoCabinsFilter from "./filters/NoCabinsFilter";
+import YachtTypesFilter from "./filters/YachtTypeFilter";
 
 const FilterForm = () => {
   return (
@@ -25,6 +26,9 @@ const FilterForm = () => {
           <NoCabinsFilter />
         </Grid>
         <Grid item xs={2}>
+          <YachtTypesFilter />
+        </Grid>
+        <Grid item xs={1}>
           <DestinationFilter />
         </Grid>
       </Grid>

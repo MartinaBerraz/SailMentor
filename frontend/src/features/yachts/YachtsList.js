@@ -4,6 +4,10 @@ import {
   selectAllYachts,
   fetchYachts,
 } from "../../features/yachts/yachtsSlice";
+import {
+  selectAllYachtTypes,
+  fetchYachtTypes,
+} from "../../features/yachtTypes/yachtTypesSlice";
 import YachtsStepper from "./YachtsStepper";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
@@ -30,6 +34,10 @@ export const YachtsList = () => {
       console.log(filters.noCabins);
       console.log(yacht.no_cabins);
 
+      return false;
+    }
+
+    if (filters.yachtType && filters.yachtType !== yacht.yacht_type) {
       return false;
     }
 

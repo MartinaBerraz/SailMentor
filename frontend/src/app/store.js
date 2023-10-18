@@ -4,6 +4,7 @@ import usersReducer from "../features/users/usersSlice";
 import filtersReducer from "../features/filters/filtersSlice";
 
 import destinationsReducer from "../features/destinations/destinationsSlice";
+import yachtTypesReducer from "../features/yachtTypes/yachtTypesSlice";
 
 export default configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export default configureStore({
     users: usersReducer,
     destinations: destinationsReducer,
     filters: filtersReducer,
+    yachtTypes: yachtTypesReducer,
   },
 });

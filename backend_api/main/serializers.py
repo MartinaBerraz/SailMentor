@@ -142,7 +142,7 @@ class DestinationDetailSerializer(serializers.ModelSerializer):
 class YachtTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.YachtType
-        fields=['description','sailing_boat']
+        fields=['id','description','sailing_boat']
     
     def __init__(self, *args, **kwargs):
         super(YachtTypeSerializer, self).__init__(*args, **kwargs)

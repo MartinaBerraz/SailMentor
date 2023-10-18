@@ -7,8 +7,24 @@ import { Button, CardActionArea, Grid } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import HotelIcon from "@mui/icons-material/Hotel";
 import Box from "@mui/material/Box";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchYachtTypes,
+  selectAllYachtTypes,
+} from "../yachtTypes/yachtTypesSlice";
 
 export const YachtCard = ({ yacht }) => {
+  const dispatch = useDispatch();
+
+  const yachtTypeStatus = useSelector((state) => state.yachtTypes.status);
+  const yachtTypes = useSelector(selectAllYachtTypes);
+
+  React.useEffect(() => {
+    if (yachtTypeStatus === "idle") {
+      dispatch(fetchYachtTypes());
+    }
+  }, [yachtTypeStatus, dispatch]);
+
   const borderedGridItem = {
     border: "1px solid #ccc",
     borderRadius: "8px",
@@ -27,7 +43,7 @@ export const YachtCard = ({ yacht }) => {
         marginTop: "5%",
       }}
     >
-      {console.log(yacht)}
+      {console.log(yachtTypes)}
       <CardActionArea>
         <CardMedia
           component="img"
@@ -36,8 +52,14 @@ export const YachtCard = ({ yacht }) => {
           alt="green iguana"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography variant="h5" component="div">
             {yacht.company_name} - {yacht.length_in_feet}
+          </Typography>
+          <Typography color="grey">
+            {
+              yachtTypes.find((type) => type.id === yacht.yacht_type)
+                .description
+            }
           </Typography>
 
           <Grid container style={borderedGridItem}>
