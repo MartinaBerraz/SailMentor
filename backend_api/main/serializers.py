@@ -242,31 +242,13 @@ class BookingStatusDetailSerializer(serializers.ModelSerializer):
 
 # Booking  serializers
 class BookingSerializer(serializers.ModelSerializer):
-    sailor_name = serializers.SerializerMethodField()
+    yacht_name = serializers.CharField(source='availability.yacht.name', read_only=True)
+    start_date = serializers.DateField(source='availability.start_date', read_only=True)
+    end_date = serializers.DateField(source='availability.end_date', read_only=True)
 
-    def get_sailor_name(self, obj):
-        # Access the related Company object from the Experience object
-        sailor = obj.sailor
-
-        # Call the __str__ method on the Company object to get its name
-        return str(sailor)
-
-    yacht_name = serializers.SlugRelatedField(
-        source='yacht',  # Name of the foreign key field in the Booking model
-        slug_field='name',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
-        read_only=True  # Make it read-only
-        )
-    
-    b_status = serializers.SlugRelatedField(
-        source='status',  # Name of the foreign key field in the Booking model
-        slug_field='status',  # Name of the field in the Yacht model to retrieve (in this case, 'name')
-        read_only=True  # Make it read-only
-        )
-    
-    
     class Meta:
-        model=models.Booking
-        fields=['id','sailor_name','start_date','end_date','yacht_name','b_status']
+        model = models.Booking
+        fields = ['id', 'sailor', 'availability', 'status', 'yacht_name', 'start_date', 'end_date']
     
     def __init__(self, *args, **kwargs):
         super(BookingSerializer, self).__init__(*args, **kwargs)
@@ -275,7 +257,7 @@ class BookingDetailSerializer(serializers.ModelSerializer):
       
     class Meta:
         model=models.Booking
-        fields=['id','sailor','start_date','end_date','yacht','status']
+        fields=['id','sailor','start_date','end_date','yacht_name','availability','status']
     
     def __init__(self, *args, **kwargs):
         super(BookingDetailSerializer, self).__init__(*args, **kwargs)

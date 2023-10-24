@@ -35,7 +35,7 @@ const YachtTypesFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw" }}>
+      <FormControl sx={{ minWidth: "10vw", marginBottom: "2vh" }}>
         <InputLabel id="demo-simple-select-label">Yacht Type</InputLabel>
 
         <Select

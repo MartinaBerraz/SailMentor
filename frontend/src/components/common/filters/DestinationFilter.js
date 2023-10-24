@@ -13,7 +13,9 @@ import { FormControl } from "@mui/material";
 
 const DestinationFilter = () => {
   const dispatch = useDispatch();
-  const [selected, setSelected] = React.useState("");
+
+  const initialDestination = useSelector((state) => state.filters.destination);
+  const [selected, setSelected] = React.useState(initialDestination);
 
   const destinationOptions = useSelector(selectAllDestinations);
 
@@ -26,7 +28,7 @@ const DestinationFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw" }}>
+      <FormControl sx={{ minWidth: "10vw", marginBottom: "2vh" }}>
         <InputLabel id="demo-simple-select-label">Destinations</InputLabel>
 
         <Select

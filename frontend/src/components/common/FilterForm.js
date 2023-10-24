@@ -1,37 +1,39 @@
 import React from "react";
 import DestinationFilter from "./filters/DestinationFilter";
-import { Divider, Grid } from "@mui/material";
+import { Card, Divider, Grid, Typography } from "@mui/material";
 import MaxPeopleFilter from "./filters/MaxPeopleFilter";
 import NoCabinsFilter from "./filters/NoCabinsFilter";
 import YachtTypesFilter from "./filters/YachtTypeFilter";
+import DateAndNightsPicker from "./filters/DateAndNightsPicker";
 
 const FilterForm = () => {
   return (
     <>
-      <Divider
-        variant="middle"
+      <Typography sx={{ color: "#3FB295" }}>
+        <h3>Plan Your Trip</h3>
+      </Typography>
+      <Card
         sx={{
-          marginBottom: "3%",
-          backgroundColor: "white",
-          width: "80%",
-          margin: "0 auto",
+          marginInline: "2vw",
+          marginBlock: "2vh",
+          paddingBlock: "2vh",
+          borderColor: "#3FB295",
         }}
-      />
+      >
+        <YachtTypesFilter sx={{ marginBottom: "2vh" }} />
+        <DestinationFilter sx={{ marginBottom: "2vh" }} />
 
-      <Grid container alignItems="center" sx={{ marginTop: "2%" }}>
-        <Grid item xs={1} sx={{ marginLeft: "10%" }}>
-          <MaxPeopleFilter />
+        <Grid container>
+          <Grid item xs={6} md={6} sx={{ marginBottom: "2vh" }}>
+            <MaxPeopleFilter />
+          </Grid>
+          <Grid item xs={6} md={6} sx={{ marginBottom: "2vh" }}>
+            <NoCabinsFilter />
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <NoCabinsFilter />
-        </Grid>
-        <Grid item xs={2}>
-          <YachtTypesFilter />
-        </Grid>
-        <Grid item xs={1}>
-          <DestinationFilter />
-        </Grid>
-      </Grid>
+
+        <DateAndNightsPicker />
+      </Card>
     </>
   );
 };

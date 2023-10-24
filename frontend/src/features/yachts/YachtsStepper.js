@@ -23,8 +23,14 @@ export const YachtsStepper = ({ yachts }) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const steps = Math.ceil(yachts.length / 3); // Calculate the number of steps
+  const steps = Math.ceil(yachts.length / 2); // Calculate the number of steps
   const [activeStep, setActiveStep] = useState(0); // Initialize it with 0 or the desired step
+  const cardsPerPage = 2; // Set the number of cards to display per page
+
+  const startIndex = activeStep * cardsPerPage;
+  const endIndex = startIndex + cardsPerPage;
+  const displayedYachts = yachts.slice(startIndex, endIndex);
+
   return (
     <div>
       <Stepper activeStep={activeStep} alternativeLabel>
@@ -33,7 +39,7 @@ export const YachtsStepper = ({ yachts }) => {
         ))}
       </Stepper>
       <Grid sx={{ justifyContent: "center" }} container spacing={3}>
-        {yachts.map((yacht, index) => (
+        {displayedYachts.map((yacht, index) => (
           <Grid item key={yacht.id}>
             <YachtCard yacht={yacht} />
           </Grid>

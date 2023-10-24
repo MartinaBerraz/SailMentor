@@ -11,6 +11,10 @@ import {
 import YachtsStepper from "./YachtsStepper";
 import { useSelector, useDispatch } from "react-redux";
 import { Typography } from "@mui/material";
+import {
+  fetchAvailabilities,
+  selectAllAvailabilities,
+} from "../availabilities/availabilitySlice";
 
 export const YachtsList = () => {
   const yachtStatus = useSelector((state) => state.yachts.status);
@@ -19,6 +23,66 @@ export const YachtsList = () => {
   const dispatch = useDispatch();
   const yachtsList = useSelector(selectAllYachts);
   const filters = useSelector((state) => state.filters);
+
+  const availabilityStatus = useSelector(
+    (state) => state.availabilities.status
+  );
+
+  const availabilities = useSelector(selectAllAvailabilities);
+
+  useEffect(() => {
+    console.log(availabilityStatus);
+    if (availabilityStatus === "idle") {
+      dispatch(fetchAvailabilities());
+    }
+  }, [availabilityStatus, dispatch]);
+
+  const isYachtAvailable = (yacht, start, noNights) => {
+    const startDate = new Date(start);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + noNights);
+
+    const yachtAvailabilities = availabilities.filter(
+      (availability) => availability.yacht === yacht.id
+    );
+
+    if (yachtAvailabilities.length === 0) {
+      return true;
+    }
+
+    var flag = true;
+
+    yachtAvailabilities.forEach((availability) => {
+      flag = !isDateRangeOverlap(
+        startDate,
+        endDate,
+        new Date(availability.start_date),
+        new Date(availability.end_date)
+      );
+
+      if (!flag) {
+        return !flag;
+      }
+    });
+
+    return flag;
+
+    // Check if there is any overlap in date ranges
+    return yachtAvailabilities.some((availability) => {
+      isDateRangeOverlap(
+        startDate,
+        endDate,
+        new Date(availability.start_date),
+        new Date(availability.end_date)
+      );
+    });
+  };
+
+  // Helper function to check if two date ranges overlap
+  function isDateRangeOverlap(start1, end1, start2, end2) {
+    console.log(start1 <= end2 && start2 <= end1);
+    return start1 <= end2 && start2 <= end1;
+  }
 
   // Filter yachts based on the filter criteria
   const filteredYachts = yachtsList.filter((yacht) => {
@@ -38,6 +102,18 @@ export const YachtsList = () => {
     }
 
     if (filters.yachtType && filters.yachtType !== yacht.yacht_type) {
+      return false;
+    }
+
+    if (
+      filters.startDate &&
+      filters.noNights &&
+      !isYachtAvailable(yacht, filters.startDate, filters.noNights)
+    ) {
+      console.log(
+        "Is yacht available:" +
+          isYachtAvailable(yacht, filters.startDate, filters.noNights)
+      );
       return false;
     }
 

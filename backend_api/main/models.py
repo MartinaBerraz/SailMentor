@@ -88,6 +88,7 @@ class YachtType(models.Model):
 class Yacht(models.Model):
     yacht_type = models.ForeignKey(YachtType,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True)
+    name = models.CharField(max_length=30)
 
     max_people = models.IntegerField(null=True)
     price_per_night = models.FloatField(null=True)
@@ -97,11 +98,16 @@ class Yacht(models.Model):
     destination = models.ForeignKey(Destination,on_delete=models.PROTECT)
 
     def __str__(self):
-        return f'{self.company} - {self.length_in_feet}'
+        return self.name
 
 class Availability(models.Model):
     start_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
+    yacht = models.ForeignKey(Yacht,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.yacht.name
+
 
 
 class BookingStatus(models.Model):
@@ -111,13 +117,19 @@ class BookingStatus(models.Model):
         return self.status
     
 class Booking(models.Model):
-    status = models.ForeignKey(BookingStatus,on_delete=models.CASCADE)
-    sailor = models.ForeignKey(Sailor,on_delete=models.CASCADE)
-    yacht = models.ForeignKey(Yacht,on_delete=models.CASCADE)
-
-    start_date = models.DateField(null=True)
-    end_date = models.DateField(null=True)
+    status = models.ForeignKey(BookingStatus, on_delete=models.CASCADE)
+    sailor = models.ForeignKey(Sailor, on_delete=models.CASCADE)
+    availability = models.ForeignKey(Availability, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.experience.name
+        return self.availability.yacht.name
+    
+    def yacht_name(self):
+        return self.availability.yacht.name
+
+    def start_date(self):
+        return self.availability.start_date
+
+    def end_date(self):
+        return self.availability.end_date
     

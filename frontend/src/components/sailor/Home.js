@@ -8,14 +8,18 @@ import InputAutocomplete from "../common/InputAutocomplete";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import Yachts from "./Yachts";
+import { setDestinationFilter } from "../../features/filters/filtersSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Home = () => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
   const [displayResources, setDisplayedResources] = useState([]);
+  const dispatch = useDispatch();
+  const initialDestination = useSelector((state) => state.filters.destination);
 
   const [options, setOptions] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState(initialDestination);
 
   const handleCallback = (childData) => {
     // Update the name in the component's state
@@ -53,6 +57,13 @@ export const Home = () => {
       });
   };
 
+  const handleOnClick = (e) => {
+    if (selectedOption) {
+      console.log(selectedOption);
+      dispatch(setDestinationFilter(selectedOption.id));
+    }
+  };
+
   return (
     <>
       <Box
@@ -79,6 +90,7 @@ export const Home = () => {
         to={`/yachts/${selectedOption.id}`}
         variant="contained"
         color="primary"
+        onClick={handleOnClick}
       >
         Book a yacht
       </Button>

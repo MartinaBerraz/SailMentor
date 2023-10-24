@@ -6,6 +6,9 @@ const initialState = {
   maxPeople: 0,
   noCabins: 0,
   yachtType: "",
+  availability: false,
+  startDate: null, // Add the start date filter
+  noNights: 1,
   // Add more filter criteria here
 };
 
@@ -25,6 +28,12 @@ const filtersSlice = createSlice({
     setYachtTypesFilter: (state, action) => {
       state.yachtType = action.payload;
     },
+    setStartDateFilter: (state, action) => {
+      state.startDate = action.payload;
+    },
+    setNoNightsFilter: (state, action) => {
+      state.noNights = action.payload;
+    },
   },
 });
 
@@ -33,6 +42,8 @@ export const {
   setMaxPeopleFilter,
   setNoCabinsFilter,
   setYachtTypesFilter,
+  setStartDateFilter,
+  setNoNightsFilter,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

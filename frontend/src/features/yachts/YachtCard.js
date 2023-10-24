@@ -16,6 +16,8 @@ import {
 export const YachtCard = ({ yacht }) => {
   const dispatch = useDispatch();
 
+  const numberOfNights = useSelector((state) => state.filters.noNights);
+
   const yachtTypeStatus = useSelector((state) => state.yachtTypes.status);
   const yachtTypes = useSelector(selectAllYachtTypes);
 
@@ -43,7 +45,7 @@ export const YachtCard = ({ yacht }) => {
         marginTop: "5%",
       }}
     >
-      {console.log(yachtTypes)}
+      {console.log(numberOfNights)}
       <CardActionArea>
         <CardMedia
           component="img"
@@ -63,21 +65,23 @@ export const YachtCard = ({ yacht }) => {
           </Typography>
 
           <Grid container style={borderedGridItem}>
-            <Grid item xs={6} md={4}>
+            <Grid item xs={3} md={4}>
               <Typography> {yacht.max_people}</Typography>
               <PeopleIcon> </PeopleIcon>
             </Grid>
-            <Grid item xs={6} md={4}>
+            <Grid item xs={3} md={4}>
               <Typography> {yacht.no_cabins}</Typography>
               <HotelIcon> </HotelIcon>
             </Grid>
-            <Grid item xs={6} md={4}>
+            <Grid item xs={3} md={4}>
               <Typography> {yacht.length_in_feet}</Typography>length
             </Grid>
           </Grid>
         </CardContent>
         <Button variant="contained" color="primary" sx={{ marginBottom: "1%" }}>
-          Book Now
+          <Typography sx={{ textTransform: "none" }}>
+            Book for ${numberOfNights * yacht.price_per_night}
+          </Typography>
         </Button>
       </CardActionArea>
     </Card>

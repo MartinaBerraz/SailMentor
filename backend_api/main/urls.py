@@ -17,6 +17,7 @@ urlpatterns = [
     path('yachtType/<int:pk>/',views.YachtTypeDetail.as_view()),
     path('bookings/',views.BookingList.as_view()),
     path('booking/<int:pk>/',views.BookingDetail.as_view()),
+    path('availabilities/',views.AvailabilityList.as_view()),
     path('bookingStatus/',views.BookingStatusList.as_view()),
     path('bookingStatus/<int:pk>/',views.BookingStatusDetail.as_view()),
     path('yachts-fields/', views.YachtFields.as_view()),
