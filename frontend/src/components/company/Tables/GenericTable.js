@@ -9,7 +9,7 @@ const GenericTable = (props) => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
   const [columns, setColumns] = useState([]);
-  const columnsToExclude = ["image", "brief_description"]; // Add the column names you want to exclude
+  const columnsToExclude = ["id", "image", "brief_description"]; // Add the column names you want to exclude
 
   useEffect(() => {
     fetchData(baseUrl + `/${props.category}/`);
@@ -48,6 +48,7 @@ const GenericTable = (props) => {
       .then((response) => response.json())
       .then((data) => {
         setResources(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

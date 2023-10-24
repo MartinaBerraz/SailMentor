@@ -24,10 +24,8 @@ class SailorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Company.objects.all()
     serializer_class=serializers.SailorDetailSerializer
 
-
-
 class ExperienceList(generics.ListCreateAPIView):
-    queryset = models.Experience.objects.annotate(yachts_count=Count('yacht'))
+    queryset = models.Experience.objects.all()
     serializer_class=serializers.ExperienceSerializer
 
 

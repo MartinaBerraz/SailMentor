@@ -35,11 +35,12 @@ const theme = createTheme({
   },
 });
 
-export const InputAutocomplete = ({ label, options }) => {
+export const InputAutocomplete = ({ label, options, parentCallback }) => {
   const [selected, setSelected] = React.useState("");
 
   const handleChange = (event) => {
     setSelected(event.target.value);
+    parentCallback(event.target.value);
   };
 
   return (
@@ -54,7 +55,7 @@ export const InputAutocomplete = ({ label, options }) => {
           onChange={handleChange}
         >
           {options.map((option) => (
-            <MenuItem value={option}>{option}</MenuItem>
+            <MenuItem value={option.name}>{option.name}</MenuItem>
           ))}
         </Select>
       </FormControl>
