@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+import logging
+
 
 # Model for yacht company users
 class Company(models.Model):
@@ -8,7 +10,7 @@ class Company(models.Model):
     description = models.TextField(null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.first_name
 
 
 # Model for sailor users
@@ -16,11 +18,11 @@ class Sailor(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     year_sailing_since = models.IntegerField(null=True)
     skipper_license = models.BooleanField(null=True)
-    image = models.ImageField(upload_to='sailor_images/')
+    image = models.ImageField(upload_to='sailor_images/',null=True)
 
 
     def __str__(self):
-        return self.user.username
+        return self.user.first_name
     
 # Model for region
 class Region(models.Model):

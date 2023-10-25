@@ -4,7 +4,14 @@ from . import models
 from . import serializers
 from django.db.models import Count
 from rest_framework.views import APIView
+from django.apps import apps
+from django.http import Http404
+from rest_framework.response import Response
+from .utils import get_model_fields_info
+from .serializers import ModelFieldsInfoSerializer
+import logging
 
+logger = logging.getLogger('myapp.logger')
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
@@ -23,6 +30,7 @@ class SailorList(generics.ListCreateAPIView):
 class SailorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Company.objects.all()
     serializer_class=serializers.SailorDetailSerializer
+
 
 class ExperienceList(generics.ListCreateAPIView):
     queryset = models.Experience.objects.all()
@@ -102,3 +110,48 @@ class AvailabilityList(generics.ListCreateAPIView):
 class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilityDetailSerializer
+
+
+class ModelFieldsInfoView(APIView):
+    def get(self, request, model_name):
+        fields_info = get_model_fields_info(model_name)
+        if fields_info is not None:
+            serializer = ModelFieldsInfoSerializer(data={'model_name': model_name, 'fields_info': fields_info})
+            if serializer.is_valid():
+                return Response(serializer.data)
+        return Response({'error': 'Model not found'}, status=404)
+
+class SailorCreateView(generics.CreateAPIView):
+    queryset = models.Sailor.objects.all()
+    serializer_class = serializers.SailorSerializer
+
+
+    def perform_create(self, serializer):
+        # Create a new user
+        print("HOLAA")
+        print(self.request.data)
+        user_serializer = serializers.UserCreationSerializer(data=self.request.data)
+
+        logger.info("This is an info message")
+        if user_serializer.is_valid():
+            user = models.User.objects.create_user(**user_serializer.validated_data)
+            serializer.save(user=user)
+        else:
+            # Handle user creation validation errors
+            # For example, return a response with validation errors
+            return Response(user_serializer.errors, status=400)
+
+class UserCreateView(generics.CreateAPIView):
+    serializer_class = serializers.UserCreationSerializer
+
+    def get_serializer_context(self):
+        # Determine the user type based on the request data (e.g., "Sailor" or "Company").
+        user_type = self.request.data.get("user_type")
+        user_data = self.request.data.get(user_type.lower())  # Extract specific user data
+
+        print(self.request.data.get("user_type"))
+
+        context = super().get_serializer_context()
+        context.update({"user_type": user_type, "user_data": user_data})
+        return context
+

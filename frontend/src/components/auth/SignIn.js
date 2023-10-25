@@ -106,14 +106,6 @@ const SignIn = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              //   sx={{
-              //     "& .MuiInputLabel-root.Mui-focused": {
-              //       color: "blue", // Change the focused label color
-              //     },
-              //     "& .MuiOutlinedInput-root.Mui-focused fieldset": {
-              //       borderColor: "blue !important", // Change the focused border color
-              //     },
-              //   }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -123,7 +115,7 @@ const SignIn = () => {
               fullWidth
               variant="contained"
               color="primary"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, height: "6vh" }}
             >
               Sign In
             </Button>
@@ -139,7 +131,7 @@ const SignIn = () => {
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
+            <Copyright sx={{ mt: "30vh" }} />
           </Box>
         </Box>
       </Grid>

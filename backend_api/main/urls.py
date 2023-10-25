@@ -21,5 +21,11 @@ urlpatterns = [
     path('bookingStatus/',views.BookingStatusList.as_view()),
     path('bookingStatus/<int:pk>/',views.BookingStatusDetail.as_view()),
     path('yachts-fields/', views.YachtFields.as_view()),
+    path('fields-info/<str:model_name>/', views.ModelFieldsInfoView.as_view(), name='fields-info'),
+    path('sailors/', views.SailorCreateView.as_view(), name='sailor-create'),
+    path('create_user/', views.UserCreateView.as_view(), name='user-create'),
+
+
+
    
     ]

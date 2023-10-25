@@ -1,21 +1,13 @@
 from django.db import models as django_models
 
-def get_field_info(model_class):
-    fields = model_class._meta.fields
-    field_info = []
+from django.apps import apps
 
-    for field in fields:
-        if isinstance(field, django_models.ForeignKey):
-            field_type = "ForeignKey"
-        else:
-            if isinstance(field, django_models.BigAutoField):
-                field_type = "BigAutoField"
-            else:
-                field_type = field.get_internal_type()
-
-        field_info.append({
-            "name": field.name,
-            "type": field_type,
-        })
-
-    return field_info
+def get_model_fields_info(model_name):
+    try:
+        model = apps.get_model(app_label='main', model_name=model_name)
+        fields_info = {}
+        for field in model._meta.fields:
+            fields_info[field.name] = field.get_internal_type()
+        return fields_info
+    except LookupError:
+        return None

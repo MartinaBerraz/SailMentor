@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from . import models
 from django.db import models as django_models
-
+import logging
 
 # Company serializers
 class CompanySerializer(serializers.ModelSerializer):
@@ -22,12 +22,13 @@ class CompanyDetailSerializer(serializers.ModelSerializer):
 
 # Sailor serializers
 class SailorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model=models.Sailor
         fields=['user','year_sailing_since','skipper_license']
-    
+
     def __init__(self, *args, **kwargs):
-        super(CompanySerializer, self).__init__(*args, **kwargs)
+        super(SailorSerializer, self).__init__(*args, **kwargs)
 
 class SailorDetailSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=True)
@@ -278,3 +279,31 @@ class AvailabilityDetailSerializer(serializers.ModelSerializer):
     
     def __init__(self, *args, **kwargs):
         super(AvailabilityDetailSerializer, self).__init__(*args, **kwargs)
+
+class ModelFieldsInfoSerializer(serializers.Serializer):
+    fields_info = serializers.DictField(child=serializers.CharField())
+
+
+class UserCreationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = models.User
+        fields = ['first_name', 'last_name', 'password', 'email','username']
+
+    def create(self, validated_data):
+        # Create the user
+        user = models.User.objects.create_user(**validated_data)
+        
+        # Check if the request data contains the necessary information
+        user_type = self.context.get("user_type")  # 'Sailor' or 'Company'
+        user_data = self.context.get("user_data", {})  # Fields specific to Sailor or Company
+
+        if user_type == 'Sailor':
+            sailor = models.Sailor(user=user)
+            sailor.save()
+        elif user_type == 'Company':
+            company = models.Company(user=user)
+            company.save()
+
+        return user

@@ -6,6 +6,7 @@ import filtersReducer from "../features/filters/filtersSlice";
 import destinationsReducer from "../features/destinations/destinationsSlice";
 import yachtTypesReducer from "../features/yachtTypes/yachtTypesSlice";
 import availabilitiesReducer from "../features/availabilities/availabilitySlice";
+import fieldInfoReducer from "../features/fieldInfo/fieldInfoSlice";
 
 export default configureStore({
   reducer: {
@@ -15,5 +16,6 @@ export default configureStore({
     filters: filtersReducer,
     yachtTypes: yachtTypesReducer,
     availabilities: availabilitiesReducer,
+    fieldInfo: fieldInfoReducer,
   },
 });
