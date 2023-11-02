@@ -7,9 +7,39 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Paper from "@mui/material/Paper";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useDispatch, useSelector } from "react-redux";
+import { addYacht } from "../../../features/yachts/yachtsSlice";
+import {
+  fetchYachtTypes,
+  selectAllYachtTypes,
+} from "../../../features/yachtTypes/yachtTypesSlice";
+import { selectCurrentCompanyId } from "../../../features/companies/companiesSlice";
+import { selectCurrentUserFk } from "../../../features/auth/authSlice";
+import { selectAllDestinations } from "../../../features/destinations/destinationsSlice";
+import { fetchDestinations } from "../../../features/destinations/destinationsSlice";
 
 const DynamicForm = ({ formData }) => {
+  const yachtTypes = useSelector(selectAllYachtTypes);
+  const yachtTypeStatus = useSelector((state) => state.yachtTypes.status);
+  const error = useSelector((state) => state.yachtTypes.error);
+
   const currentYear = new Date().getFullYear();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (yachtTypeStatus === "idle") {
+      dispatch(fetchYachtTypes());
+    }
+  }, [yachtTypeStatus, dispatch]);
+
+  const destinations = useSelector(selectAllDestinations);
+  const destinationStatus = useSelector((state) => state.destinations.status);
+
+  React.useEffect(() => {
+    if (yachtTypeStatus === "idle") {
+      dispatch(fetchDestinations());
+    }
+  }, [destinationStatus, dispatch]);
 
   const [formValues, setFormValues] = useState({});
   const yearsRange = Array.from(
@@ -22,23 +52,35 @@ const DynamicForm = ({ formData }) => {
       [fieldName]: e.target.value,
     });
   };
+
+  const company = useSelector(selectCurrentUserFk);
+
   const handleFileUpload = (e, fieldName) => {
-    // Handle file upload here
+    // Handle file upload
+
+    var formData = new FormData();
+
     const file = e.target.files[0];
-    // You can process the file as needed
-    console.log("File uploaded:", file);
-    // You can also set it in the formValues state if necessary
-    setFormValues({
-      ...formValues,
-      [fieldName]: file,
-    });
+
+    formData.append(fieldName, file);
+    if (file) {
+      // Update your component state with the FormData object
+      setFormValues({
+        ...formValues,
+        [fieldName]: file,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission with the collected formValues
-    console.log(formValues);
+    const data = { ...formValues, company: company };
+    console.log(data);
+
+    dispatch(addYacht(data));
   };
+
   const customButtonStyle = {
     backgroundColor: "#3FB295", // Replace with your desired color
     color: "white", // Text color
@@ -85,6 +127,24 @@ const DynamicForm = ({ formData }) => {
                     </Select>
                   </FormControl>
                 );
+              case "FloatField":
+                return (
+                  <FormControl
+                    variant="standard"
+                    sx={{ m: 1, minWidth: 120, mt: "2%" }}
+                  >
+                    <TextField
+                      label={field.name.replace(/_/g, " ")}
+                      type="number" // Set the input type to "number" for float values
+                      value={formValues[field.name] || ""}
+                      onChange={(e) => handleChange(e, field.name)}
+                      inputProps={{
+                        step: "0.01", // Set the step attribute for float precision (e.g., 2 decimal places)
+                        min: field.minValue || 0, // Set a minimum value if needed
+                      }}
+                    />
+                  </FormControl>
+                );
               case "FileField":
                 return (
                   <FormControl
@@ -102,7 +162,7 @@ const DynamicForm = ({ formData }) => {
                         type="file"
                         accept="image/*" // You can specify the accepted file types
                         style={{ display: "none" }}
-                        onChange={(e) => handleFileUpload(e, "fileField")} // Replace "fileField" with the actual field name
+                        onChange={(e) => handleFileUpload(e, "image")} // Replace "fileField" with the actual field name
                       />
                     </Button>
                   </FormControl>
@@ -164,6 +224,62 @@ const DynamicForm = ({ formData }) => {
                     </>
                   );
                 }
+              case "ForeignKey": {
+                if (field.name === "yacht_type") {
+                  return (
+                    <FormControl
+                      variant="standard"
+                      sx={{ m: 1, minWidth: 120, mt: "2%" }}
+                    >
+                      <InputLabel id="input-label">
+                        {field.name.replace(/_/g, " ")}
+                      </InputLabel>
+
+                      <Select
+                        labelId="input-label"
+                        label={field.name.replace(/_/g, " ")}
+                        value={formValues[field.name] || ""}
+                        onChange={(e) => handleChange(e, field.name)}
+                      >
+                        {console.log(yachtTypes)}
+                        {yachtTypes.map((yachtType) => (
+                          <MenuItem key={yachtType.id} value={yachtType.id}>
+                            {yachtType.description}
+                          </MenuItem>
+                        ))}
+                        {console.log(field.name.replace(/_/g, " "))}
+                      </Select>
+                    </FormControl>
+                  );
+                } else if (field.name === "destination") {
+                  return (
+                    <FormControl
+                      variant="standard"
+                      sx={{ m: 1, minWidth: 120, mt: "2%" }}
+                    >
+                      <InputLabel id="input-label">
+                        {field.name.replace(/_/g, " ")}
+                      </InputLabel>
+
+                      <Select
+                        labelId="input-label"
+                        label={field.name.replace(/_/g, " ")}
+                        value={formValues[field.name] || ""}
+                        onChange={(e) => handleChange(e, field.name)}
+                      >
+                        {console.log(destinations)}
+                        {destinations.map((destination) => (
+                          <MenuItem key={destination.id} value={destination.id}>
+                            {destination.name}
+                          </MenuItem>
+                        ))}
+                        {console.log(field.name.replace(/_/g, " "))}
+                      </Select>
+                    </FormControl>
+                  );
+                }
+              }
+
               // Add more cases for other data types as needed
               default:
                 return null; // Default case

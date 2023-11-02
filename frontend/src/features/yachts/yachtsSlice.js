@@ -66,6 +66,30 @@ const yachtsSlice = createSlice({
   },
 });
 
+export const addYacht = createAsyncThunk("yachts/addYacht", async (data) => {
+  try {
+    const formData = new FormData();
+
+    // Iterate over the form values and append them to the FormData object
+    for (const fieldName in data) {
+      // Check if the field is a file (e.g., "image") and append it accordingly
+      if (fieldName === "image" && data[fieldName] instanceof File) {
+        formData.append(fieldName, data[fieldName], data[fieldName].name);
+      } else {
+        // Append other non-file fields
+        formData.append(fieldName, data[fieldName]);
+      }
+    }
+    console.log(formData.get("image"));
+
+    const response = await client.post("create_yacht/", formData);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding yacht:", error);
+    throw error;
+  }
+});
+
 export const selectAllYachts = (state) => state.yachts.yachts;
 
 export const selectYachtById = (state, yachtId) =>

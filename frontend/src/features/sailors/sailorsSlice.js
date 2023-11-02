@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../api/client";
+import bcrypt from "bcryptjs";
 
 const initialState = {
-  destinations: [],
+  sailors: [],
   status: "idle",
   error: null,
+  current: {},
 };
 
 export const fetchSailors = createAsyncThunk(
@@ -25,12 +27,24 @@ export const addSailor = createAsyncThunk(
   "sailors/addSailor",
   async (formData) => {
     try {
-      // Here, you can submit the formData to the server using the client or perform any other logic.
-      // Replace this with the actual API call or logic for adding a sailor.
+      // const { password, ...otherFormData } = formData;
 
-      // For example:
-      const response = await client.post("sailors/", formData);
+      // // Hash the password
+      // const hashedPassword = await bcrypt.hash(password, 10); // Use an appropriate number of rounds
 
+      // // Replace the password in the formData with the hashed password
+      // const formDataWithHashedPassword = {
+      //   ...otherFormData,
+      //   password: hashedPassword,
+      //   user_type: "Sailor",
+      // };
+
+      const formDataComplete = {
+        ...formData,
+        user_type: "Sailor",
+      };
+
+      const response = await client.post("create_user/", formDataComplete);
       // You can return the new sailor data from the response
       return response.data;
     } catch (error) {
@@ -66,6 +80,13 @@ const sailorsSlice = createSlice({
         existingSailor.content = content;
       }
     },
+    setCurrentSailor: (state, action) => {
+      state.current = state.sailors.find(
+        (sailor) => sailor.id === action.payload
+      );
+
+      console.log(action.payload);
+    },
   },
   extraReducers(builder) {
     builder
@@ -89,11 +110,12 @@ const sailorsSlice = createSlice({
 });
 
 export const selectAllSailors = (state) => state.sailors.sailors;
+export const selectSailorsStatus = (state) => state.sailors.status;
 
 export const selectSailorById = (state, sailorId) =>
   state.sailors.sailors.find((sailor) => sailor.id === sailorId);
 
-export const { sailorAdded, sailorUpdated, reactionAdded } =
+export const { sailorAdded, sailorUpdated, reactionAdded, setCurrentSailor } =
   sailorsSlice.actions;
 
 export const selectDestinationNameById = (state, sailorId) => {

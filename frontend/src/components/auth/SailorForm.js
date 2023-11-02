@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { addSailor } from "../../features/sailors/sailorsSlice"; // Adjust the import path accordingly
 import { useDispatch } from "react-redux";
+import { addCompany } from "../../features/companies/companiesSlice";
 
 const SailorForm = ({ userType }) => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const SailorForm = ({ userType }) => {
     if (userType === "Sailor") {
       dispatch(addSailor(formDataObject));
     } else {
+      dispatch(addCompany(formDataObject));
     }
   };
   return (
@@ -43,46 +45,17 @@ const SailorForm = ({ userType }) => {
         sx={{ marginTop: "7%" }}
       >
         <Grid container spacing={2}>
-          {userType === "Sailor" && (
-            <>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="first_name"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="last_name"
-                  autoComplete="family-name"
-                />
-              </Grid>
-            </>
-          )}
-          {userType === "Company" && (
-            <>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  name="name"
-                  autoComplete="name"
-                />
-              </Grid>
-            </>
-          )}
-
+          <Grid item xs={12} sm={12}>
+            <TextField
+              autoComplete="given-name"
+              name="username"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              autoFocus
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextField
               required

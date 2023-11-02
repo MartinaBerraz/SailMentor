@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from . import models
 from django.db import models as django_models
-import logging
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 # Company serializers
 class CompanySerializer(serializers.ModelSerializer):
@@ -159,34 +161,35 @@ class YachtTypeDetailSerializer(serializers.ModelSerializer):
 
 # Yacht serializers
 class YachtSerializer(serializers.ModelSerializer):
-    company_name = serializers.SerializerMethodField()
+    # company_name = serializers.SerializerMethodField()
 
     image = serializers.ImageField(required=True)
 
-    def get_company_name(self, obj):
-        # Access the related Company object from the Experience object
-        company = obj.company
+    # def get_company_name(self, obj):
+    #     # Access the related Company object from the Experience object
+    #     company = obj.company
 
-        # Call the __str__ method on the Company object to get its name
-        return str(company)
+    #     # Call the __str__ method on the Company object to get its name
+    #     return str(company)
 
     class Meta:
         model=models.Yacht
-        fields=['id','company_name','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type']
+        fields=['id','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type']
     
     def __init__(self, *args, **kwargs):
         super(YachtSerializer, self).__init__(*args, **kwargs)
 
 class YachtDetailSerializer(serializers.ModelSerializer):  
-    image = serializers.ImageField(required=True)
-
     class Meta:
-        model=models.Yacht
-        fields=['id','company','length_in_feet','no_cabins','price_per_night','max_people','yacht_type','image']
-    
-    def __init__(self, *args, **kwargs):
-        super(YachtDetailSerializer, self).__init__(*args, **kwargs)
+        model = models.Yacht
+        fields = '__all__'
 
+class YachtCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Yacht
+        fields = ['name', 'company', 'length_in_feet', 'no_cabins', 'price_per_night', 'max_people', 'yacht_type', 'image']
+
+    
 # serializer for form data
 class YachtFieldMetadataSerializer(serializers.ModelSerializer):
     yacht_type_choices = serializers.SerializerMethodField()
@@ -307,3 +310,43 @@ class UserCreationSerializer(serializers.ModelSerializer):
             company.save()
 
         return user
+
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        username = data.get("username")
+        password = data.get("password")
+
+        user = authenticate(username=username, password=password)
+
+
+        if user:
+            refresh = RefreshToken.for_user(user)
+
+            response = {}
+
+            response["user"] = {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,  # Add any other user fields you need
+            }
+
+            response["access_token"] = str(refresh.access_token)
+
+            company = models.Company.objects.filter(user=user).first()
+            if company:
+                response["user_type"] = "Company"
+                response["user_fk"]= company.id
+            else:
+                sailor = models.Sailor.objects.filter(user=user).first()
+                response["user_type"] = "Sailor"
+                response["user_fk"]= sailor.id
+
+
+
+        else:
+            raise serializers.ValidationError("Incorrect username or password.")
+
+        return response

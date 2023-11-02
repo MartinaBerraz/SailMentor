@@ -45,7 +45,7 @@ const DateAndNightsPicker = () => {
 
   return (
     <div>
-      <Grid container>
+      <Grid container sx={{ marginTop: "2vh" }}>
         <Grid item md={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker

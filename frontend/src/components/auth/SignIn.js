@@ -13,6 +13,22 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signInImage from "../images/signIn.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../features/auth/authSlice";
+import { selectAuthData } from "../../features/auth/authSlice";
+import { useEffect } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
+import {
+  fetchCompanies,
+  selectAllCompanies,
+  selectCompaniesStatus,
+  setCurrentCompany,
+} from "../../features/companies/companiesSlice";
+import {
+  fetchSailors,
+  selectSailorsStatus,
+  setCurrentSailor,
+} from "../../features/sailors/sailorsSlice";
 
 function Copyright(props) {
   return (
@@ -37,14 +53,59 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const authData = useSelector(selectAuthData);
+
+  const companiesStatus = useSelector(selectCompaniesStatus);
+
+  useEffect(() => {
+    if (companiesStatus === "idle") {
+      dispatch(fetchCompanies());
+    }
+  }, [companiesStatus, dispatch]);
+
+  const sailorsStatus = useSelector(selectSailorsStatus);
+
+  useEffect(() => {
+    if (sailorsStatus === "idle") {
+      dispatch(fetchSailors());
+    }
+  }, [sailorsStatus, dispatch]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    const formData = new FormData(event.currentTarget);
+
+    const formDataObject = {};
+    formData.forEach((value, key) => {
+      formDataObject[key] = value;
     });
+
+    dispatch(loginUser(formDataObject));
+    console.log(formDataObject);
   };
+
+  useEffect(() => {
+    if (authData && authData.user) {
+      console.log(authData);
+      if (authData.userType === "Sailor") {
+        console.log("funciona");
+        navigate("/home");
+        dispatch(setCurrentSailor(authData.userFk));
+      } else {
+        if (authData.userType === "Company") {
+          navigate("/yachts");
+          dispatch(setCurrentCompany(authData.userFk));
+        }
+      }
+    }
+  }, [authData.userType]);
+
+  if (authData && authData.error) {
+    console.log(authData.error);
+  }
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -91,10 +152,10 @@ const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -115,6 +176,7 @@ const SignIn = () => {
               fullWidth
               variant="contained"
               color="primary"
+              type="submit"
               sx={{ mt: 3, mb: 2, height: "6vh" }}
             >
               Sign In

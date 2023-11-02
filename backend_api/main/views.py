@@ -1,3 +1,4 @@
+import os
 from rest_framework import generics, response, permissions, pagination, viewsets
 from django.shortcuts import render
 from . import models
@@ -9,9 +10,14 @@ from django.http import Http404
 from rest_framework.response import Response
 from .utils import get_model_fields_info
 from .serializers import ModelFieldsInfoSerializer
-import logging
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import UserLoginSerializer
+from django.contrib.auth import logout
+from django.views import View
+from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import viewsets, status
 
-logger = logging.getLogger('myapp.logger')
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
@@ -128,11 +134,9 @@ class SailorCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         # Create a new user
-        print("HOLAA")
         print(self.request.data)
         user_serializer = serializers.UserCreationSerializer(data=self.request.data)
 
-        logger.info("This is an info message")
         if user_serializer.is_valid():
             user = models.User.objects.create_user(**user_serializer.validated_data)
             serializer.save(user=user)
@@ -155,3 +159,25 @@ class UserCreateView(generics.CreateAPIView):
         context.update({"user_type": user_type, "user_data": user_data})
         return context
 
+class YachtCreateView(generics.ListCreateAPIView):
+    queryset = models.Yacht.objects.all()
+    serializer_class = serializers.YachtDetailSerializer
+
+    parser_classes = [ MultiPartParser, FileUploadParser, ]
+
+    def perform_create(self, serializer):
+        print(self.request)
+
+        img = self.request.FILES['image']  
+        if img:
+            serializer.save(image=img)
+        else:
+            serializer.save()
+    
+class UserLoginView(TokenObtainPairView):
+    serializer_class = UserLoginSerializer
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        # Perform any custom logic before logging the user out, if needed
+        logout(request)

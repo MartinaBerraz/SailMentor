@@ -3,24 +3,34 @@
 const baseUrl = "http://127.0.0.1:8000/api/";
 
 export async function client(endpoint, { body, ...customConfig } = {}) {
-  const headers = { "Content-Type": "application/json" };
+  const headers = {
+    "Content-Type": "application/json",
+  };
 
   const config = {
     method: body ? "POST" : "GET",
     ...customConfig,
-    headers: {
-      ...headers,
-      ...customConfig.headers,
-    },
   };
 
   if (body) {
-    config.body = JSON.stringify(body);
+    if (!(body instanceof FormData)) {
+      // Add the "Content-Type" header only when the body is not FormData
+      config.headers = {
+        ...config.headers,
+        "Content-Type": "application/json",
+      };
+      // Stringify the body if it's not FormData
+      config.body = JSON.stringify(body);
+    } else {
+      config.body = body;
+      config.headers = {};
+    }
   }
 
   let data;
   try {
     const response = await window.fetch(baseUrl + endpoint, config);
+    console.log(baseUrl + endpoint);
     data = await response.json();
     if (response.ok) {
       // Return a result object similar to Axios

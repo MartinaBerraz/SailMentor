@@ -16,6 +16,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import sailmentor from "../../sailmentor.png";
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
@@ -32,6 +35,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const AppNavbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const imageStyle = {
     // maxWidth: "80%", // Set the maximum width
     // maxHeight: "100%", // Set the maximum height
@@ -62,6 +67,11 @@ export const AppNavbar = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLogOut = () => {
+    dispatch(clearToken());
+    navigate("/signIn");
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -81,6 +91,7 @@ export const AppNavbar = () => {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log out</MenuItem>
     </Menu>
   );
 

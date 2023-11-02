@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { Home } from "./components/sailor/Home.js";
+import Home from "./components/sailor/Home";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import GenericTable from "./components/company/Tables/GenericTable";
 import Dash from "./components/company/Dash";
@@ -11,6 +11,7 @@ import { AddForm } from "./components/company/forms/AddForm";
 import Yachts from "./components/sailor/Yachts";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
   const customTheme = createTheme({
@@ -105,9 +106,12 @@ function App() {
           <Route path="/yachts/add" element={<AddForm category="yachts" />} />
           <Route path="/yachts" element={<Dash category="yachts" />} />
           <Route path="/yachts/:destination_id" element={<Yachts />} />
-          <Route path="/home" element={<Home />} />
+
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
+
+          <Route path="/home" element={<Home />} />
+          <Route index element={<SignIn />} />
         </Routes>
       </ThemeProvider>
     </div>

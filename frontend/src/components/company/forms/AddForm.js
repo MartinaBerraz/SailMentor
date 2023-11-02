@@ -13,10 +13,6 @@ export const AddForm = (props) => {
       type: "BigAutoField",
     },
     {
-      name: "yacht_type",
-      type: "ForeignKey",
-    },
-    {
       name: "name",
       type: "CharField",
     },
@@ -40,8 +36,14 @@ export const AddForm = (props) => {
       name: "length_in_feet",
       type: "FloatField",
     },
+
     {
-      name: "experience",
+      name: "yacht_type",
+      type: "ForeignKey",
+    },
+
+    {
+      name: "destination",
       type: "ForeignKey",
     },
     {

@@ -28,7 +28,9 @@ const DestinationFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw", marginBottom: "2vh" }}>
+      <FormControl
+        sx={{ minWidth: "20vw", marginBottom: "2vh", marginTop: "4vh" }}
+      >
         <InputLabel id="demo-simple-select-label">Destinations</InputLabel>
 
         <Select

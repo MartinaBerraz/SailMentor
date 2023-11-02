@@ -66,16 +66,6 @@ export const YachtsList = () => {
     });
 
     return flag;
-
-    // Check if there is any overlap in date ranges
-    return yachtAvailabilities.some((availability) => {
-      isDateRangeOverlap(
-        startDate,
-        endDate,
-        new Date(availability.start_date),
-        new Date(availability.end_date)
-      );
-    });
   };
 
   // Helper function to check if two date ranges overlap

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-import logging
 
 
 # Model for yacht company users
@@ -89,7 +88,7 @@ class YachtType(models.Model):
 # Model for yacht
 class Yacht(models.Model):
     yacht_type = models.ForeignKey(YachtType,on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True)
+    image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True, verbose_name="image")
     name = models.CharField(max_length=30)
 
     max_people = models.IntegerField(null=True)

@@ -1,6 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('companies/',views.CompanyList.as_view()),
@@ -22,10 +24,11 @@ urlpatterns = [
     path('bookingStatus/<int:pk>/',views.BookingStatusDetail.as_view()),
     path('yachts-fields/', views.YachtFields.as_view()),
     path('fields-info/<str:model_name>/', views.ModelFieldsInfoView.as_view(), name='fields-info'),
-    path('sailors/', views.SailorCreateView.as_view(), name='sailor-create'),
+    path('sailors/', views.SailorList.as_view()),
     path('create_user/', views.UserCreateView.as_view(), name='user-create'),
+    path('create_yacht/',views.YachtCreateView.as_view(), name='yacht-create'),
+    path('login/', views.UserLoginView.as_view(), name='token_obtain_pair'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 
 
-
-   
     ]

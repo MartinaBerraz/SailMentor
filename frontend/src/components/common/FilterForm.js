@@ -9,30 +9,28 @@ import DateAndNightsPicker from "./filters/DateAndNightsPicker";
 const FilterForm = () => {
   return (
     <>
-      <Typography sx={{ color: "#3FB295" }}>
-        <h3>Plan Your Trip</h3>
-      </Typography>
       <Card
         sx={{
           marginInline: "2vw",
-          marginBlock: "2vh",
           paddingBlock: "2vh",
           borderColor: "#3FB295",
+          borderRadius: "20px",
+          backgroundColor: "white",
         }}
       >
-        <YachtTypesFilter sx={{ marginBottom: "2vh" }} />
-        <DestinationFilter sx={{ marginBottom: "2vh" }} />
-
         <Grid container>
-          <Grid item xs={6} md={6} sx={{ marginBottom: "2vh" }}>
-            <MaxPeopleFilter />
+          <Grid item xs={6} md={4} sx={{ marginBottom: "2vh" }}>
+            <MaxPeopleFilter sx={{ paddingBlock: "2px" }} />
+            <YachtTypesFilter sx={{ mt: "2vh" }} />
           </Grid>
-          <Grid item xs={6} md={6} sx={{ marginBottom: "2vh" }}>
+          <Grid item xs={6} md={4} sx={{ marginBottom: "2vh" }}>
+            <DestinationFilter sx={{ marginBottom: "2vh" }} />
+          </Grid>
+          <Grid item xs={6} md={4} sx={{ marginBottom: "2vh" }}>
             <NoCabinsFilter />
+            <DateAndNightsPicker />
           </Grid>
         </Grid>
-
-        <DateAndNightsPicker />
       </Card>
     </>
   );

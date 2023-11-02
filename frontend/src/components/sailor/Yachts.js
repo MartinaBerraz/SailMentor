@@ -28,25 +28,19 @@ export const Yachts = () => {
       <Box
         sx={{
           flexGrow: 1,
-          minHeight: "25vh",
+          minHeight: "35vh",
           backgroundColor: "#3FB295", // Replace with your desired color
           color: "white",
-          marginBottom: "4vh",
         }}
       >
         <AppNavbar />
-        <Typography sx={{ marginBottom: "10vh" }}>
+        <Typography sx={{ marginBottom: "3vh" }}>
           <h2>Find your perfect yacht</h2>
+          <p>Plan your trip</p>
         </Typography>
+        <FilterForm />
       </Box>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={5}>
-          <FilterForm />
-        </Grid>
-        <Grid item xs={12} sm={7}>
-          <YachtsList />
-        </Grid>
-      </Grid>
+      <YachtsList />
 
       {/* <Grid
           sx={{ marginLeft: "2%" }}

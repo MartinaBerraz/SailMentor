@@ -7,6 +7,9 @@ import destinationsReducer from "../features/destinations/destinationsSlice";
 import yachtTypesReducer from "../features/yachtTypes/yachtTypesSlice";
 import availabilitiesReducer from "../features/availabilities/availabilitySlice";
 import fieldInfoReducer from "../features/fieldInfo/fieldInfoSlice";
+import authReducer from "../features/auth/authSlice";
+import companiesReducer from "../features/companies/companiesSlice";
+import sailorsReducer from "../features/sailors/sailorsSlice";
 
 export default configureStore({
   reducer: {
@@ -17,5 +20,8 @@ export default configureStore({
     yachtTypes: yachtTypesReducer,
     availabilities: availabilitiesReducer,
     fieldInfo: fieldInfoReducer,
+    auth: authReducer,
+    companies: companiesReducer,
+    sailors: sailorsReducer,
   },
 });
