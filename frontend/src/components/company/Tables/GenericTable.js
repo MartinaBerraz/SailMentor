@@ -4,12 +4,13 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { AddForm } from "../forms/AddForm";
+import { Paper } from "@mui/material";
 
 const GenericTable = (props) => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
   const [columns, setColumns] = useState([]);
-  const columnsToExclude = ["id", "image", "brief_description"]; // Add the column names you want to exclude
+  const columnsToExclude = ["id", "image"]; // Add the column names you want to exclude
 
   useEffect(() => {
     fetchData(baseUrl + `/${props.category}/`);
@@ -98,19 +99,21 @@ const GenericTable = (props) => {
   }, [resources]);
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={resources}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        autoHeight
-      />
+    <>
+      <Paper elevation={16} sx={{ borderRadius: "20px" }}>
+        <DataGrid
+          sx={{ border: "none", paddingLeft: "1vw" }}
+          rows={resources}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          autoHeight
+        />
+      </Paper>
       {props.category !== "bookings" && (
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Button
@@ -128,7 +131,7 @@ const GenericTable = (props) => {
           </Button>
         </Box>
       )}
-    </div>
+    </>
   );
 };
 

@@ -9,17 +9,15 @@ export const Dash = (props) => {
   const drawerWidth = 240;
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "FEFEFE" }}>
+    <Box sx={{ display: "flex", backgroundColor: "#FEFEFE" }}>
       <SideBar />
       <Box
-        component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
         <GenericTable category={props.category} />
       </Box>
     </Box>

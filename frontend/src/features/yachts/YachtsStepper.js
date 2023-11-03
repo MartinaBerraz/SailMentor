@@ -33,11 +33,11 @@ export const YachtsStepper = ({ yachts }) => {
 
   return (
     <div>
-      <Stepper activeStep={activeStep} alternativeLabel>
+      {/* <Stepper activeStep={activeStep} alternativeLabel>
         {Array.from({ length: steps }).map((_, index) => (
           <Step key={index}></Step>
         ))}
-      </Stepper>
+      </Stepper> */}
       <Grid sx={{ justifyContent: "center" }} container spacing={3}>
         {displayedYachts.map((yacht, index) => (
           <Grid item key={yacht.id}>

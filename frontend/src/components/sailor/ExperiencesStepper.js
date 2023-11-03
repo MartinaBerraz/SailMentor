@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Experience from "./Experience";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import backgroundImage from "../images/background.jpg";
 
 export const ExperiencesStepper = ({ experiences }) => {
   const handleNext = () => {

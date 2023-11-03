@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Home from "./components/sailor/Home";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Switch } from "react-router-dom";
 import GenericTable from "./components/company/Tables/GenericTable";
 import Dash from "./components/company/Dash";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -12,6 +12,8 @@ import Yachts from "./components/sailor/Yachts";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { isAuthenticated } from "./features/auth/authSlice";
+import { useSelector } from "react-redux";
 
 function App() {
   const customTheme = createTheme({
@@ -98,19 +100,35 @@ function App() {
     <div className="App">
       <ThemeProvider theme={customTheme}>
         <Routes>
-          <Route
-            path="/experiences"
-            element={<Dash category="experiences" />}
-          />
-          <Route path="/bookings" element={<Dash category="bookings" />} />
-          <Route path="/yachts/add" element={<AddForm category="yachts" />} />
-          <Route path="/yachts" element={<Dash category="yachts" />} />
-          <Route path="/yachts/:destination_id" element={<Yachts />} />
-
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
-
-          <Route path="/home" element={<Home />} />
+          <Route
+            element={
+              <ProtectedRoute
+                typeAllowed="Sailor"
+                redirectPath="/yachtsDashboard"
+              />
+            }
+          >
+            <Route path="/home" element={<Home />} />
+            <Route path="/yachts" element={<Yachts />} />
+          </Route>
+          <Route
+            element={
+              <ProtectedRoute typeAllowed="Company" redirectPath="/home" />
+            }
+          >
+            <Route
+              path="/yachtsDashboard"
+              element={<Dash category="yachts" />}
+            />
+            <Route
+              path="/experiences"
+              element={<Dash category="experiences" />}
+            />
+            <Route path="/bookings" element={<Dash category="bookings" />} />
+            <Route path="/yachts/add" element={<AddForm category="yachts" />} />
+          </Route>
           <Route index element={<SignIn />} />
         </Routes>
       </ThemeProvider>

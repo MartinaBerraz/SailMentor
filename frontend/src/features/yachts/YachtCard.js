@@ -33,7 +33,7 @@ export const YachtCard = ({ yacht }) => {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: "5%",
+    marginTop: "10%",
   };
   return (
     <Card

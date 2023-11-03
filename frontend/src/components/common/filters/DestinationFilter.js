@@ -9,7 +9,7 @@ import {
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { FormControl } from "@mui/material";
+import { FormControl, Typography } from "@mui/material";
 
 const DestinationFilter = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,11 @@ const DestinationFilter = () => {
   return (
     <div>
       <FormControl
-        sx={{ minWidth: "20vw", marginBottom: "2vh", marginTop: "4vh" }}
+        sx={{
+          minWidth: "20vw",
+          marginTop: "4vh",
+          backgroundColor: "white",
+        }}
       >
         <InputLabel id="demo-simple-select-label">Destinations</InputLabel>
 

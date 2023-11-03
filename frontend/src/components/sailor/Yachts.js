@@ -9,6 +9,7 @@ import {
 } from "../../features/destinations/destinationsSlice";
 import YachtsList from "../../features/yachts/YachtsList";
 import FilterForm from "../common/FilterForm";
+import backgroundImage from "../images/background.jpg";
 
 export const Yachts = () => {
   const destinationStatus = useSelector((state) => state.destinations.status);
@@ -24,17 +25,26 @@ export const Yachts = () => {
   }, [destinationStatus, dispatch]);
 
   return (
-    <>
+    <Box
+      sx={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        height: "100vh",
+      }}
+    >
       <Box
         sx={{
           flexGrow: 1,
-          minHeight: "35vh",
+          maxHeight: "40vh",
           backgroundColor: "#3FB295", // Replace with your desired color
           color: "white",
+          marginBottom: "1vh",
         }}
       >
         <AppNavbar />
-        <Typography sx={{ marginBottom: "3vh" }}>
+        <Typography>
           <h2>Find your perfect yacht</h2>
           <p>Plan your trip</p>
         </Typography>
@@ -61,7 +71,7 @@ export const Yachts = () => {
             </FormGroup>
           </Grid>
         </Grid> */}
-    </>
+    </Box>
   );
 };
 

@@ -65,7 +65,7 @@ export const selectAuthData = (state) => state.auth;
 
 export const isAuthenticated = (state) => state.auth.token;
 
-export const selectUserType = (state) => state.auth.user.userType;
+export const selectUserType = (state) => state.auth.userType;
 
 export const { clearToken, setLoginError } = authSlice.actions;
 

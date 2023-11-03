@@ -23,9 +23,11 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import "../../common/styles.css";
-import logo from "../../../logo.png";
 import sailmentor from "../../../sailmentor.png";
+import logo from "../../images/blackLogo.png";
 import { Paper } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@emotion/react";
 
 const drawerWidth = 240;
 
@@ -40,81 +42,101 @@ export const SideBar = (props) => {
   const imageStyle = {
     // maxWidth: "80%", // Set the maximum width
     // maxHeight: "100%", // Set the maximum height
-    width: "35%",
-    float: "left",
+    width: "80%",
     alignSelf: "flex-start",
   };
 
   const drawer = (
     <div>
-      <Toolbar />
+      <Paper
+        elevation={6}
+        sx={{
+          marginTop: "5%",
+          marginLeft: "5%",
+          width: "90%",
+          height: "95vh",
+          backgroundColor: "#2D2D2E",
 
-      <Divider />
-      <List>
-        {[
-          { text: "Experiences", icon: <AnchorIcon /> },
-          { text: "Yachts", icon: <SailingIcon /> },
-        ].map((item, index) => (
-          <Link
-            to={`/` + item.text.toLowerCase()}
-            className="link-no-formatting"
-          >
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {[
-          { text: "Bookings", icon: <MenuBookIcon /> },
-          { text: "History", icon: <HistoryIcon /> },
-        ].map((item, index) => (
-          <Link
-            to={`/` + item.text.toLowerCase()}
-            className="link-no-formatting"
-          >
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-      <Divider sx={{ mt: "50vh" }} />
+          borderRadius: "12px 12px 12px 12px", // Adjust the border-radius as needed
+          overflow: "hidden", // Hide overflow content
+        }}
+      >
+        <Typography noWrap component="div" sx={{ marginBottom: "15%" }}>
+          <img src={logo} style={imageStyle} />
+        </Typography>
+        <List>
+          {[
+            { text: "Yachts", icon: <AnchorIcon /> },
+            { text: "Bookings", icon: <MenuBookIcon /> },
+            { text: "History", icon: <HistoryIcon /> },
+          ].map((item, index) => (
+            <Link
+              to={`/` + item.text.toLowerCase()}
+              className="link-no-formatting"
+            >
+              <ListItem
+                sx={{
+                  color: "white",
+                  paddingInline: "5%",
+                }}
+                key={item.text}
+                disablePadding
+              >
+                <ListItemButton
+                  sx={{
+                    borderRadius: "10px",
+                    "&.Mui-selected": {
+                      backgroundColor: "#3FB295",
+                    },
+                    "&.Mui-focusVisible": {
+                      backgroundColor: "#3FB295",
+                    },
+                    ":hover": {
+                      backgroundColor: "#3FB295",
+                    },
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      color: "white",
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          ))}
+        </List>
+      </Paper>
     </div>
   );
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "FEFEFE" }}>
+    <Box>
       <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
+          backgroundColor: "#3FB295",
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ backgroundColor: "#3FB295" }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography noWrap component="div">
-            <img src={sailmentor} style={imageStyle} />
-          </Typography>
-        </Toolbar>
+        <IconButton
+          color="#3FB295"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{
+            mr: 2,
+            display: { sm: "none" },
+            width: "100%",
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
       </AppBar>
       <Box
         component="nav"
@@ -130,7 +152,8 @@ export const SideBar = (props) => {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { xs: "none", sm: "none" },
+            border: "none",
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -144,8 +167,8 @@ export const SideBar = (props) => {
           sx={{
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
               width: drawerWidth,
+              border: "none",
             },
           }}
           open

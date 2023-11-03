@@ -49,6 +49,7 @@ const DateAndNightsPicker = () => {
         <Grid item md={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              sx={{ backgroundColor: "white" }}
               label="Departure date"
               selected={startDate}
               onChange={handleStartDateChange}
@@ -56,7 +57,7 @@ const DateAndNightsPicker = () => {
           </LocalizationProvider>
         </Grid>
         <Grid item md={6}>
-          <FormControl sx={{ minWidth: "10vw" }}>
+          <FormControl sx={{ minWidth: "10vw", backgroundColor: "white" }}>
             <InputLabel id="demo-simple-select-label">No. Nights</InputLabel>
 
             <Select

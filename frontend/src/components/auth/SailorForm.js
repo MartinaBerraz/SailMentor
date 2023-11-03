@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -16,9 +15,16 @@ import Paper from "@mui/material/Paper";
 import { addSailor } from "../../features/sailors/sailorsSlice"; // Adjust the import path accordingly
 import { useDispatch } from "react-redux";
 import { addCompany } from "../../features/companies/companiesSlice";
+import SignIn from "./SignIn";
+import { Link } from "react-router-dom";
 
 const SailorForm = ({ userType }) => {
   const dispatch = useDispatch();
+
+  const customStyles = {
+    textDecoration: "none", // Remove underline
+    color: "#3FB295", // Change the text color
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -42,7 +48,7 @@ const SailorForm = ({ userType }) => {
         component="form"
         noValidate
         onSubmit={handleSubmit}
-        sx={{ marginTop: "7%" }}
+        sx={{ marginTop: "7%", marginBlock: "1%" }}
       >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
@@ -88,7 +94,7 @@ const SailorForm = ({ userType }) => {
         </Button>
         <Grid container justifyContent="center">
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link style={customStyles} to="/signIn" variant="primary">
               Already have an account? Sign in
             </Link>
           </Grid>

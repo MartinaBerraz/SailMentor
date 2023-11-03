@@ -5,17 +5,24 @@ import MaxPeopleFilter from "./filters/MaxPeopleFilter";
 import NoCabinsFilter from "./filters/NoCabinsFilter";
 import YachtTypesFilter from "./filters/YachtTypeFilter";
 import DateAndNightsPicker from "./filters/DateAndNightsPicker";
+import background from "../images/background.jpg";
 
 const FilterForm = () => {
   return (
     <>
       <Card
         sx={{
-          marginInline: "2vw",
-          paddingBlock: "2vh",
+          marginInline: "1vw",
+          paddingTop: "2vh",
           borderColor: "#3FB295",
           borderRadius: "20px",
-          backgroundColor: "white",
+          backgroundImage: `url(${background})`, // Use the imported image
+          backgroundRepeat: "no-repeat",
+          backgroundColor: (t) =>
+            t.palette.mode === "light"
+              ? t.palette.grey[50]
+              : t.palette.grey[900],
+          backgroundSize: "cover",
         }}
       >
         <Grid container>

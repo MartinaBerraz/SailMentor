@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -17,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../features/auth/authSlice";
 import { selectAuthData } from "../../features/auth/authSlice";
 import { useEffect } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 import {
   fetchCompanies,
   selectAllCompanies,
@@ -29,6 +28,7 @@ import {
   selectSailorsStatus,
   setCurrentSailor,
 } from "../../features/sailors/sailorsSlice";
+import SignUp from "./SignUp";
 
 function Copyright(props) {
   return (
@@ -92,12 +92,12 @@ const SignIn = () => {
       console.log(authData);
       if (authData.userType === "Sailor") {
         console.log("funciona");
-        navigate("/home");
         dispatch(setCurrentSailor(authData.userFk));
+        navigate("/Home");
       } else {
         if (authData.userType === "Company") {
-          navigate("/yachts");
           dispatch(setCurrentCompany(authData.userFk));
+          navigate("/yachtsDashboard");
         }
       }
     }
@@ -106,6 +106,10 @@ const SignIn = () => {
   if (authData && authData.error) {
     console.log(authData.error);
   }
+  const customStyles = {
+    textDecoration: "none", // Remove underline
+    color: "#3FB295", // Change the text color
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -181,18 +185,9 @@ const SignIn = () => {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+            <Link to="/signUp" style={customStyles} variant="body2">
+              {"Don't have an account? Sign Up"}
+            </Link>
             <Copyright sx={{ mt: "30vh" }} />
           </Box>
         </Box>

@@ -27,7 +27,7 @@ const MaxPeopleFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw" }}>
+      <FormControl sx={{ minWidth: "10vw", backgroundColor: "white" }}>
         <InputLabel id="demo-simple-select-label">No. People</InputLabel>
 
         <Select

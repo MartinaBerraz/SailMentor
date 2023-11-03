@@ -1,22 +1,25 @@
 import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { isAuthenticated, selectUserType } from "../../features/auth/authSlice";
-const ProtectedRoute = ({
-  typeAllowed,
-  redirectPath = "/signIn",
-  children,
-}) => {
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import {
+  isAuthenticated,
+  selectAuthData,
+  selectUserType,
+} from "../../features/auth/authSlice";
+const ProtectedRoute = ({ typeAllowed, redirectPath }) => {
   const authenticated = useSelector(isAuthenticated) !== null;
   const userType = useSelector(selectUserType);
+  const navigate = useNavigate();
 
-  if (!authenticated || userType !== typeAllowed) {
-    return <Navigate to={redirectPath} replace />;
-  } else {
-    console.log("STRANGEE");
-    console.log(userType);
+  if (!authenticated) {
+    console.log("NOT AUTH");
+    return null; // Don't render anything if not authenticated
   }
 
-  return children ? children : <Outlet />;
+  if (userType !== typeAllowed) {
+    return navigate(redirectPath);
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
