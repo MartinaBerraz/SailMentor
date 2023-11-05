@@ -31,7 +31,6 @@ export const YachtsList = () => {
   const availabilities = useSelector(selectAllAvailabilities);
 
   useEffect(() => {
-    console.log(availabilityStatus);
     if (availabilityStatus === "idle") {
       dispatch(fetchAvailabilities());
     }

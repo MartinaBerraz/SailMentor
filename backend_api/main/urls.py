@@ -14,6 +14,7 @@ urlpatterns = [
     path('destinations/',views.DestinationList.as_view()),
     path('destination/<int:pk>/',views.DestinationDetail.as_view()),
     path('yachts/',views.YachtList.as_view()),
+    path('yachts/company/<int:company_fk>/', views.YachtCompanyList.as_view(), name='fetch_yachts_by_company_fk'),
     path('yacht/<int:pk>/',views.YachtDetail.as_view()),
     path('yachtTypes/',views.YachtTypeList.as_view()),
     path('yachtType/<int:pk>/',views.YachtTypeDetail.as_view()),

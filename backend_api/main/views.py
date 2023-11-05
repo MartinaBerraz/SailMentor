@@ -77,9 +77,21 @@ class YachtTypeDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class=serializers.YachtTypeDetailSerializer
 
 class YachtList(generics.ListCreateAPIView):
-    queryset = models.Yacht.objects.all()
     serializer_class=serializers.YachtSerializer
+    queryset = models.Yacht.objects.all()
 
+
+class YachtCompanyList(generics.ListAPIView):
+    queryset = models.Yacht.objects.all()  # Queryset for all yachts
+    serializer_class = serializers.YachtCompanySerializer  # Serializer for the response data
+
+    def get_queryset(self):
+        # Get the company's foreign key from the URL parameter 
+        company_fk = self.kwargs['company_fk']
+        
+        # Filter yachts based on the company's foreign key
+        return models.Yacht.objects.filter(company__id=company_fk)
+    
 
 class YachtDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Yacht.objects.all()

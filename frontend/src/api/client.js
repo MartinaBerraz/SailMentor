@@ -3,10 +3,6 @@
 const baseUrl = "http://127.0.0.1:8000/api/";
 
 export async function client(endpoint, { body, ...customConfig } = {}) {
-  const headers = {
-    "Content-Type": "application/json",
-  };
-
   const config = {
     method: body ? "POST" : "GET",
     ...customConfig,

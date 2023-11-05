@@ -18,6 +18,20 @@ export const fetchYachts = createAsyncThunk("yachts/fetchYachts", async () => {
   }
 });
 
+export const fetchCompanyYachts = createAsyncThunk(
+  "yachts/fetchCompanyYachts",
+  async (companyFk) => {
+    try {
+      const response = await client.get(`yachts/company/${companyFk}/`);
+      return response.data;
+    } catch (error) {
+      // Handle the error, e.g., log it or return a default value
+      console.error("Error fetching yachts:", error);
+      throw error; // Rethrow the error if needed
+    }
+  }
+);
+
 const yachtsSlice = createSlice({
   name: "yachts",
   initialState,
@@ -57,6 +71,18 @@ const yachtsSlice = createSlice({
         state.yachts = action.payload;
       })
       .addCase(fetchYachts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fetchCompanyYachts.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchCompanyYachts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Add any fetched posts to the array
+        state.yachts = action.payload;
+      })
+      .addCase(fetchCompanyYachts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

@@ -25,7 +25,12 @@ export const YachtCard = ({ yacht }) => {
     if (yachtTypeStatus === "idle") {
       dispatch(fetchYachtTypes());
     }
+    console.log(yachtTypes);
   }, [yachtTypeStatus, dispatch]);
+
+  React.useEffect(() => {
+    console.log(yachtTypes);
+  }, [yachtTypes]);
 
   const borderedGridItem = {
     border: "1px solid #ccc",
@@ -47,21 +52,14 @@ export const YachtCard = ({ yacht }) => {
     >
       {console.log(numberOfNights)}
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="200"
-          image={yacht.image}
-          alt="green iguana"
-        />
+        <CardMedia component="img" height="200" image={yacht.image} />
         <CardContent>
           <Typography variant="h5" component="div">
-            {yacht.company_name} - {yacht.length_in_feet}
+            {yacht.name} - {yacht.length_in_feet}
           </Typography>
           <Typography color="grey">
-            {
-              yachtTypes.find((type) => type.id === yacht.yacht_type)
-                .description
-            }
+            {yachtTypes.find((type) => type.id === yacht.yacht_type)
+              ?.description || "Description not found"}
           </Typography>
 
           <Grid container style={borderedGridItem}>

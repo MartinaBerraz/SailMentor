@@ -162,8 +162,13 @@ class YachtTypeDetailSerializer(serializers.ModelSerializer):
 # Yacht serializers
 class YachtSerializer(serializers.ModelSerializer):
     # company_name = serializers.SerializerMethodField()
+    class Meta:
+        model=models.Yacht
+        fields=['id','name','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type']
+   
 
     image = serializers.ImageField(required=True)
+
 
     # def get_company_name(self, obj):
     #     # Access the related Company object from the Experience object
@@ -172,12 +177,19 @@ class YachtSerializer(serializers.ModelSerializer):
     #     # Call the __str__ method on the Company object to get its name
     #     return str(company)
 
-    class Meta:
-        model=models.Yacht
-        fields=['id','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type']
     
     def __init__(self, *args, **kwargs):
         super(YachtSerializer, self).__init__(*args, **kwargs)
+
+# Yacht serializers
+class YachtCompanySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=models.Yacht
+        fields=['id','name','destination','price_per_night','max_people','yacht_type']
+    
+    def __init__(self, *args, **kwargs):
+        super(YachtCompanySerializer, self).__init__(*args, **kwargs)
 
 class YachtDetailSerializer(serializers.ModelSerializer):  
     class Meta:

@@ -6,15 +6,13 @@ import { Link } from "react-router-dom";
 import { AddForm } from "../forms/AddForm";
 import { Paper } from "@mui/material";
 
-const GenericTable = (props) => {
-  const baseUrl = "http://127.0.0.1:8000/api";
-  const [resources, setResources] = useState([]);
+const GenericTable = ({ items, category }) => {
   const [columns, setColumns] = useState([]);
   const columnsToExclude = ["id", "image"]; // Add the column names you want to exclude
 
   useEffect(() => {
-    fetchData(baseUrl + `/${props.category}/`);
-  }, [props.category]);
+    console.log(items);
+  }, [items]);
 
   const customButtonStyle = {
     backgroundColor: "#3FB295", // Replace with your desired color
@@ -44,24 +42,12 @@ const GenericTable = (props) => {
     console.log(`Add item`);
   };
 
-  const fetchData = (url) => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setResources(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-
   useEffect(() => {
-    if (resources && resources.length > 0) {
-      const newColumns = Object.keys(resources[0])
+    if (items && items.length > 0) {
+      const newColumns = Object.keys(items[0])
         .filter((key) => !columnsToExclude.includes(key))
         .map((key) => ({
-          headerName: key.toUpperCase(),
+          headerName: key.replace(/_/g, " ").toUpperCase(),
           field: key,
           width: 170,
         }));
@@ -72,7 +58,7 @@ const GenericTable = (props) => {
         width: 200,
         renderCell: (params) => (
           <>
-            {props.category !== "bookings" && (
+            {category !== "bookings" && (
               <Button
                 size="small"
                 style={customButtonStyle}
@@ -96,14 +82,14 @@ const GenericTable = (props) => {
 
       setColumns(newColumns);
     }
-  }, [resources]);
+  }, [items]);
 
   return (
     <>
       <Paper elevation={16} sx={{ borderRadius: "20px" }}>
         <DataGrid
           sx={{ border: "none", paddingLeft: "1vw" }}
-          rows={resources}
+          rows={items}
           columns={columns}
           initialState={{
             pagination: {
@@ -114,7 +100,7 @@ const GenericTable = (props) => {
           autoHeight
         />
       </Paper>
-      {props.category !== "bookings" && (
+      {category !== "bookings" && (
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Button
             style={addButtonStyle}
@@ -124,9 +110,9 @@ const GenericTable = (props) => {
             <Link
               style={{ textDecoration: "none", color: "white" }}
               sx={{ color: "white" }}
-              to={`/${props.category}/add/`}
+              to={`/${category}/add/`}
             >
-              Add {props.category}
+              Add {category}
             </Link>
           </Button>
         </Box>
