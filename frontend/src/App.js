@@ -120,6 +120,10 @@ function App() {
               path="/companyBookings"
               element={<Dash category="bookings" />}
             />
+            <Route
+              path="/companyHistory"
+              element={<Dash category="history" />}
+            />
 
             <Route path="/yachts/add" element={<AddForm category="yachts" />} />
           </Route>

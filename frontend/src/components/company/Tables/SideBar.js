@@ -72,7 +72,7 @@ export const SideBar = (props) => {
               icon: <MenuBookIcon />,
               link: "companyBookings",
             },
-            { text: "History", icon: <HistoryIcon /> },
+            { text: "History", icon: <HistoryIcon />, link: "companyHistory" },
           ].map((item, index) => (
             <Link to={`/` + item.link} className="link-no-formatting">
               <ListItem

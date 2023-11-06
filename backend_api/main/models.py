@@ -128,6 +128,9 @@ class Booking(models.Model):
     
     def yacht_name(self):
         return self.availability.yacht.name
+        
+    def sailor_name(self):
+        return self.sailor.user.username
 
     def start_date(self):
         return self.availability.start_date

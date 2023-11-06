@@ -30,7 +30,10 @@ export const Dash = (props) => {
       dispatch(fetchCompanyYachts(companyFk)).then(() => {
         setLoading(false);
       });
-    } else if (companyFk && props.category === "bookings") {
+    } else if (
+      (companyFk && props.category === "bookings") ||
+      props.category === "history"
+    ) {
       dispatch(fetchCompanyBookings(companyFk)).then(() => {
         setLoading(false);
       });
@@ -45,19 +48,25 @@ export const Dash = (props) => {
   const bookingStatus = useSelector((state) => state.bookings.status);
   const bookingsList = useSelector(selectAllBookings);
 
-  let items;
+  let items = [];
   if (props.category === "yachts") {
     console.log("WHAT");
     items = yachtsList; // Use yachtsList when the category is "yachts"
   } else if (props.category === "bookings") {
-    items = bookingsList; // Use bookingsList when the category is "bookings"
+    items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
+  } else if (props.category === "history") {
+    items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
+    console.log("fetched");
   }
   useEffect(() => {
     if (props.category === "yachts") {
       console.log("WHAT");
       items = yachtsList; // Use yachtsList when the category is "yachts"
     } else if (props.category === "bookings") {
-      items = bookingsList; // Use bookingsList when the category is "bookings"
+      items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
+    } else if (props.category === "history") {
+      items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
+      console.log("fetched");
     }
   });
 
@@ -68,7 +77,10 @@ export const Dash = (props) => {
         if (yachtStatus === "idle") {
           dispatch(fetchCompanyYachts(companyFk));
         }
-      } else if (props.category === "bookings") {
+      } else if (
+        props.category === "bookings" ||
+        props.category === "history"
+      ) {
         if (bookingStatus === "idle") {
           dispatch(fetchCompanyBookings(companyFk));
         }

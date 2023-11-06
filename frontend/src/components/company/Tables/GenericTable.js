@@ -52,33 +52,36 @@ const GenericTable = ({ items, category }) => {
           width: 170,
         }));
 
-      newColumns.push({
-        headerName: "ACTIONS",
-        field: "actions",
-        width: 200,
-        renderCell: (params) => (
-          <>
-            {category !== "bookings" && (
-              <Button
-                size="small"
-                style={customButtonStyle}
-                onClick={() => handleUpdate(params.row.id)}
-                variant="contained"
-              >
-                Update
-              </Button>
-            )}
-            <Button
-              size="small"
-              style={customButtonStyle}
-              onClick={() => handleDelete(params.row.id)}
-              variant="contained"
-            >
-              Delete
-            </Button>
-          </>
-        ),
-      });
+      {
+        category !== "history" &&
+          newColumns.push({
+            headerName: "ACTIONS",
+            field: "actions",
+            width: 200,
+            renderCell: (params) => (
+              <>
+                {category !== "bookings" && (
+                  <Button
+                    size="small"
+                    style={customButtonStyle}
+                    onClick={() => handleUpdate(params.row.id)}
+                    variant="contained"
+                  >
+                    Update
+                  </Button>
+                )}
+                <Button
+                  size="small"
+                  style={customButtonStyle}
+                  onClick={() => handleDelete(params.row.id)}
+                  variant="contained"
+                >
+                  Delete
+                </Button>
+              </>
+            ),
+          });
+      }
 
       setColumns(newColumns);
     } else {
@@ -102,7 +105,7 @@ const GenericTable = ({ items, category }) => {
           autoHeight
         />
       </Paper>
-      {category !== "bookings" && (
+      {category !== "bookings" && category !== "history" && (
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Button
             style={addButtonStyle}
