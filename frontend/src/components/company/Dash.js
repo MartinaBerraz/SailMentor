@@ -11,6 +11,10 @@ import {
 } from "../../features/yachts/yachtsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthData } from "../../features/auth/authSlice";
+import {
+  fetchCompanyBookings,
+  selectAllBookings,
+} from "../../features/bookings/bookingsSlice";
 
 export const Dash = (props) => {
   const dispatch = useDispatch();
@@ -22,10 +26,14 @@ export const Dash = (props) => {
   useEffect(() => {
     console.log(companyFk);
 
-    if (companyFk) {
+    if (companyFk && props.category === "yachts") {
       dispatch(fetchCompanyYachts(companyFk)).then(() => {
         setLoading(false);
-      }); // Pass the company foreign key as an argument
+      });
+    } else if (companyFk && props.category === "bookings") {
+      dispatch(fetchCompanyBookings(companyFk)).then(() => {
+        setLoading(false);
+      });
     }
   }, [companyFk, dispatch]);
 
@@ -34,14 +42,39 @@ export const Dash = (props) => {
   const yachtStatus = useSelector((state) => state.yachts.status);
   const yachtsList = useSelector(selectAllYachts);
 
+  const bookingStatus = useSelector((state) => state.bookings.status);
+  const bookingsList = useSelector(selectAllBookings);
+
+  let items;
+  if (props.category === "yachts") {
+    console.log("WHAT");
+    items = yachtsList; // Use yachtsList when the category is "yachts"
+  } else if (props.category === "bookings") {
+    items = bookingsList; // Use bookingsList when the category is "bookings"
+  }
   useEffect(() => {
-    if (props.category === "yachts" && !loading) {
-      console.log(yachtStatus);
-      if (yachtStatus === "idle") {
-        dispatch(fetchYachts());
+    if (props.category === "yachts") {
+      console.log("WHAT");
+      items = yachtsList; // Use yachtsList when the category is "yachts"
+    } else if (props.category === "bookings") {
+      items = bookingsList; // Use bookingsList when the category is "bookings"
+    }
+  });
+
+  useEffect(() => {
+    if (!loading) {
+      if (props.category === "yachts") {
+        console.log(yachtStatus);
+        if (yachtStatus === "idle") {
+          dispatch(fetchCompanyYachts(companyFk));
+        }
+      } else if (props.category === "bookings") {
+        if (bookingStatus === "idle") {
+          dispatch(fetchCompanyBookings(companyFk));
+        }
       }
     }
-  }, [props.category, yachtStatus, dispatch, loading]);
+  }, [props.category, yachtStatus, bookingStatus, dispatch, loading]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -57,7 +90,7 @@ export const Dash = (props) => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <GenericTable category={props.category} items={yachtsList} />
+        <GenericTable category={props.category} items={items} />
       </Box>
     </Box>
   );

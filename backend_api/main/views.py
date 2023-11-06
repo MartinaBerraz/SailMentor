@@ -114,7 +114,22 @@ class BookingList(generics.ListCreateAPIView):
     queryset = models.Booking.objects.all()
     serializer_class=serializers.BookingSerializer
 
+class BookingCompanyList(generics.ListAPIView):
+    queryset = models.Booking.objects.all()  # Queryset for all yachts
+    serializer_class = serializers.BookingCompanySerializer  # Serializer for the response data
 
+    def get_queryset(self):
+        # Get the company's foreign key from the URL parameter 
+        company_fk = self.kwargs['company_fk']
+        
+        # Step 1: Get the list of yacht IDs owned by the company
+        yacht_ids_owned_by_company = models.Yacht.objects.filter(company__id=company_fk).values_list('id', flat=True)
+
+        # Step 2: Filter the bookings based on the condition
+        queryset = models.Booking.objects.filter(availability__yacht__id__in=yacht_ids_owned_by_company)
+
+        return queryset
+    
 class BookingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Booking.objects.all()
     serializer_class=serializers.BookingDetailSerializer

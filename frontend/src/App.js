@@ -104,10 +104,7 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route
             element={
-              <ProtectedRoute
-                typeAllowed="Sailor"
-                redirectPath="/yachtsDashboard"
-              />
+              <ProtectedRoute typeAllowed="Sailor" redirectPath="/my%yachts" />
             }
           >
             <Route path="/home" element={<Home />} />
@@ -118,15 +115,12 @@ function App() {
               <ProtectedRoute typeAllowed="Company" redirectPath="/home" />
             }
           >
+            <Route path="/companyYachts" element={<Dash category="yachts" />} />
             <Route
-              path="/yachtsDashboard"
-              element={<Dash category="yachts" />}
+              path="/companyBookings"
+              element={<Dash category="bookings" />}
             />
-            <Route
-              path="/experiences"
-              element={<Dash category="experiences" />}
-            />
-            <Route path="/bookings" element={<Dash category="bookings" />} />
+
             <Route path="/yachts/add" element={<AddForm category="yachts" />} />
           </Route>
           <Route index element={<SignIn />} />

@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model=models.Company
-        fields=['user','year_built','description']
+        fields=['user','name','year_built','description']
     
     def __init__(self, *args, **kwargs):
         super(CompanySerializer, self).__init__(*args, **kwargs)
@@ -17,7 +17,7 @@ class CompanySerializer(serializers.ModelSerializer):
 class CompanyDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.Company
-        fields=['id','user','year_built','description']
+        fields=['id','name','user','year_built','description']
     
     def __init__(self, *args, **kwargs):
         super(CompanyDetailSerializer, self).__init__(*args, **kwargs)
@@ -277,6 +277,19 @@ class BookingDetailSerializer(serializers.ModelSerializer):
     
     def __init__(self, *args, **kwargs):
         super(BookingDetailSerializer, self).__init__(*args, **kwargs)
+
+class BookingCompanySerializer(serializers.ModelSerializer):
+    start_date = serializers.DateField(source='availability.start_date', read_only=True)
+    end_date = serializers.DateField(source='availability.end_date', read_only=True)
+    yacht_name = serializers.CharField(source="availability.yacht.name", read_only=True)
+    status = serializers.StringRelatedField(source="status.name", read_only=True)
+
+    class Meta:
+        model=models.Booking
+        fields=['id','sailor','start_date','end_date','yacht_name','status']
+    
+    def __init__(self, *args, **kwargs):
+        super(BookingCompanySerializer, self).__init__(*args, **kwargs)
 
 # Availability  serializers
 class AvailabilitySerializer(serializers.ModelSerializer):

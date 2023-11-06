@@ -97,7 +97,7 @@ const SignIn = () => {
       } else {
         if (authData.userType === "Company") {
           dispatch(setCurrentCompany(authData.userFk));
-          navigate("/yachtsDashboard");
+          navigate("/companyYachts");
         }
       }
     }

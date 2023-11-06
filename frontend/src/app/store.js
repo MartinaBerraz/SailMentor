@@ -10,6 +10,7 @@ import fieldInfoReducer from "../features/fieldInfo/fieldInfoSlice";
 import authReducer from "../features/auth/authSlice";
 import companiesReducer from "../features/companies/companiesSlice";
 import sailorsReducer from "../features/sailors/sailorsSlice";
+import bookingsReducer from "../features/bookings/bookingsSlice";
 
 export default configureStore({
   reducer: {
@@ -23,5 +24,6 @@ export default configureStore({
     auth: authReducer,
     companies: companiesReducer,
     sailors: sailorsReducer,
+    bookings: bookingsReducer,
   },
 });

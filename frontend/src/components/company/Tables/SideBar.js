@@ -66,14 +66,15 @@ export const SideBar = (props) => {
         </Typography>
         <List>
           {[
-            { text: "Yachts", icon: <AnchorIcon /> },
-            { text: "Bookings", icon: <MenuBookIcon /> },
+            { text: "Yachts", icon: <AnchorIcon />, link: "companyYachts" },
+            {
+              text: "Bookings",
+              icon: <MenuBookIcon />,
+              link: "companyBookings",
+            },
             { text: "History", icon: <HistoryIcon /> },
           ].map((item, index) => (
-            <Link
-              to={`/` + item.text.toLowerCase()}
-              className="link-no-formatting"
-            >
+            <Link to={`/` + item.link} className="link-no-formatting">
               <ListItem
                 sx={{
                   color: "white",

@@ -7,9 +7,10 @@ class Company(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     year_built = models.IntegerField(null=True)
     description = models.TextField(null=True)
+    name = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.user.first_name
+        return self.name
 
 
 # Model for sailor users

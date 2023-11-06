@@ -81,6 +81,8 @@ const GenericTable = ({ items, category }) => {
       });
 
       setColumns(newColumns);
+    } else {
+      setColumns([]);
     }
   }, [items]);
 
