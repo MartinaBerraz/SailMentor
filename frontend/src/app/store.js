@@ -11,6 +11,7 @@ import authReducer from "../features/auth/authSlice";
 import companiesReducer from "../features/companies/companiesSlice";
 import sailorsReducer from "../features/sailors/sailorsSlice";
 import bookingsReducer from "../features/bookings/bookingsSlice";
+import experiencesReducer from "../features/experiences/experiencesSlice";
 
 export default configureStore({
   reducer: {
@@ -25,5 +26,6 @@ export default configureStore({
     companies: companiesReducer,
     sailors: sailorsReducer,
     bookings: bookingsReducer,
+    experiences: experiencesReducer,
   },
 });

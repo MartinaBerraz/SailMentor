@@ -18,7 +18,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import sailmentor from "../../sailmentor.png";
 import { useDispatch } from "react-redux";
 import { clearToken } from "../../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AnchorIcon from "@mui/icons-material/Anchor";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
@@ -113,10 +114,13 @@ export const AppNavbar = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
+        <IconButton size="large" color="inherit">
+          <AnchorIcon />
+        </IconButton>
+      </MenuItem>
+      <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
+          <MailIcon />
         </IconButton>
         <p>Messages</p>
       </MenuItem>
@@ -178,6 +182,7 @@ export const AppNavbar = () => {
             <img src={sailmentor} style={imageStyle} />
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
+
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"

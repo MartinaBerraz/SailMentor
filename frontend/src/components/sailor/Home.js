@@ -11,6 +11,14 @@ import Yachts from "./Yachts";
 import { setDestinationFilter } from "../../features/filters/filtersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import backgroundImage from "../images/background.jpg";
+import {
+  fetchExperiences,
+  selectAllExperiences,
+} from "../../features/experiences/experiencesSlice";
+import {
+  fetchDestinations,
+  selectAllDestinations,
+} from "../../features/destinations/destinationsSlice";
 export const Home = () => {
   const baseUrl = "http://127.0.0.1:8000/api";
   const [resources, setResources] = useState([]);
@@ -21,18 +29,30 @@ export const Home = () => {
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(initialDestination);
 
+  const experiencesList = useSelector(selectAllExperiences);
+  const experiencesState = useSelector((state) => state.experiences.status);
+
+  const destinationsList = useSelector(selectAllDestinations);
+  const destinationsState = useSelector((state) => state.destinations.status);
+
   const handleCallback = (childData) => {
     // Update the name in the component's state
     setDisplayedResources(
-      resources.filter((item) => item.destination_name === childData)
+      experiencesList.filter((item) => item.destination_name === childData)
     );
     setSelectedOption(options.find((option) => option.name === childData));
   };
 
   useEffect(() => {
+    if (experiencesState === "idle") {
+      dispatch(fetchExperiences());
+    }
+    if (destinationsState === "idle") {
+      dispatch(fetchDestinations());
+    }
     fetchOptions(baseUrl + `/destinations/`);
     fetchData(baseUrl + `/experiences/`);
-  }, []);
+  }, [experiencesState, dispatch]);
 
   const fetchData = (url) => {
     fetch(url)
@@ -59,7 +79,6 @@ export const Home = () => {
 
   const handleOnClick = (e) => {
     if (selectedOption) {
-      console.log(selectedOption);
       dispatch(setDestinationFilter(selectedOption.id));
     }
   };
@@ -88,7 +107,7 @@ export const Home = () => {
           <p>Let's start by choosing a destination</p>
         </Typography>
         <InputAutocomplete
-          options={options}
+          options={destinationsList}
           label="Discover"
           parentCallback={handleCallback}
         />

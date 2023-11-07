@@ -47,6 +47,10 @@ class ExperienceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Experience.objects.all()
     serializer_class=serializers.ExperienceDetailSerializer
 
+class ExperienceDetailList(generics.ListCreateAPIView):
+    queryset = models.Experience.objects.all()
+    serializer_class=serializers.ExperienceDetailSerializer
+
 
 class DestinationList(generics.ListCreateAPIView):
     queryset = models.Destination.objects.all()

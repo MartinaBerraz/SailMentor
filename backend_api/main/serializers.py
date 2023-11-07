@@ -89,21 +89,26 @@ class ExperienceImageSerializer(serializers.ModelSerializer):
     
 
 class ExperienceDetailSerializer(serializers.ModelSerializer):
-    experience_imgs=ExperienceImageSerializer(many=True,read_only=True)
+    images = serializers.SerializerMethodField(method_name='get_images')
+    destination_name = serializers.CharField(source='destination.name', read_only=True)
+    sailor_last_name = serializers.CharField(source='sailor.last_name', read_only=True)
+    sailor_first_name = serializers.CharField(source='sailor.first_name', read_only=True)
 
+    def get_images(self, obj):
+        images = obj.experience_imgs.all()
+        if images:
+            return [image.image.url for image in images]
+        else:
+            return []
+
+    
     class Meta:
-        model=models.Experience
-        fields=['id','brief_description','precautions','destination','company','detailed_description','recommendation','experience_imgs']
-
+        model = models.Experience
+        fields = ['id', 'name', 'destination_name', 'sailor_last_name','sailor_first_name', 'images', 'brief_description', 'detailed_description', 'precautions','recommendation','experience_imgs']
     
     def __init__(self, *args, **kwargs):
         super(ExperienceDetailSerializer, self).__init__(*args, **kwargs)
-        # self.Meta.depth = 1 
-        
-    # def get_yachts(self, obj):
-    #     # Retrieve and serialize the boats associated with the current experience
-    #     yachts = models.Yacht.objects.filter(experience=obj)
-    #     return YachtSerializer(yachts, many=True).data
+
 
 # Region serializers
 class RegionSerializer(serializers.ModelSerializer):
