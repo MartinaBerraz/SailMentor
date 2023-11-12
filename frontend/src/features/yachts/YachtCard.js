@@ -12,9 +12,19 @@ import {
   fetchYachtTypes,
   selectAllYachtTypes,
 } from "../yachtTypes/yachtTypesSlice";
+import { selectSelectedYacht, selectYacht } from "./yachtsSlice";
 
 export const YachtCard = ({ yacht }) => {
   const dispatch = useDispatch();
+
+  const selectedYacht = useSelector(selectSelectedYacht);
+
+  // Function to handle yacht selection
+  const handleSelectYacht = () => {
+    dispatch(
+      selectYacht({ ...yacht, price: numberOfNights * yacht.price_per_night })
+    ); // Dispatch the selectYacht action with the selected yacht
+  };
 
   const numberOfNights = useSelector((state) => state.filters.noNights);
 
@@ -51,37 +61,48 @@ export const YachtCard = ({ yacht }) => {
       }}
     >
       {console.log(numberOfNights)}
-      <CardActionArea>
-        <CardMedia component="img" height="200" image={yacht.image} />
-        <CardContent>
-          <Typography variant="h5" component="div">
-            {yacht.name} - {yacht.length_in_feet}
-          </Typography>
-          <Typography color="grey">
-            {yachtTypes.find((type) => type.id === yacht.yacht_type)
-              ?.description || "Description not found"}
-          </Typography>
+      <CardMedia component="img" height="200" image={yacht.image} />
+      <CardContent>
+        <Typography variant="h5" component="div">
+          {yacht.name} - {yacht.length_in_feet}
+        </Typography>
+        <Typography color="grey">
+          {yachtTypes.find((type) => type.id === yacht.yacht_type)
+            ?.description || "Description not found"}
+        </Typography>
 
-          <Grid container style={borderedGridItem}>
-            <Grid item xs={3} md={4}>
-              <Typography> {yacht.max_people}</Typography>
-              <PeopleIcon> </PeopleIcon>
-            </Grid>
-            <Grid item xs={3} md={4}>
-              <Typography> {yacht.no_cabins}</Typography>
-              <HotelIcon> </HotelIcon>
-            </Grid>
-            <Grid item xs={3} md={4}>
-              <Typography> {yacht.length_in_feet}</Typography>length
-            </Grid>
+        <Grid container style={borderedGridItem}>
+          <Grid item xs={3} md={4}>
+            <Typography> {yacht.max_people}</Typography>
+            <PeopleIcon> </PeopleIcon>
           </Grid>
-        </CardContent>
-        <Button variant="contained" color="primary" sx={{ marginBottom: "1%" }}>
-          <Typography sx={{ textTransform: "none" }}>
-            Book for ${numberOfNights * yacht.price_per_night}
-          </Typography>
-        </Button>
-      </CardActionArea>
+          <Grid item xs={3} md={4}>
+            <Typography> {yacht.no_cabins}</Typography>
+            <HotelIcon> </HotelIcon>
+          </Grid>
+          <Grid item xs={3} md={4}>
+            <Typography>{yacht.length_in_feet}</Typography>
+
+            <Typography>length</Typography>
+          </Grid>
+        </Grid>
+      </CardContent>
+      <Button
+        variant="contained"
+        color={
+          selectedYacht && selectedYacht.id === yacht.id
+            ? "secondary"
+            : "primary"
+        }
+        onClick={handleSelectYacht}
+        sx={{ marginBottom: "2vh", minWidth: "20vw" }}
+      >
+        <Typography sx={{ textTransform: "none" }}>
+          {selectedYacht && selectedYacht.id === yacht.id
+            ? "Selected"
+            : `Select for $${numberOfNights * yacht.price_per_night}`}
+        </Typography>
+      </Button>
     </Card>
   );
 };

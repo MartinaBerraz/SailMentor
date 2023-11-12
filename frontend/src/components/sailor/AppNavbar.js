@@ -18,8 +18,10 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import sailmentor from "../../sailmentor.png";
 import { useDispatch } from "react-redux";
 import { clearToken } from "../../features/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AnchorIcon from "@mui/icons-material/Anchor";
+import EventIcon from "@mui/icons-material/Event";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
@@ -38,6 +40,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export const AppNavbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activeButton, setActiveButton] = React.useState(null);
+
+  React.useEffect(() => {
+    // Extract the button name from the URL path
+    const buttonName = location.pathname.split("/")[1];
+
+    // Set the activeButton state based on the extracted button name
+    setActiveButton(buttonName || null);
+  }, [location]);
   const imageStyle = {
     // maxWidth: "80%", // Set the maximum width
     // maxHeight: "100%", // Set the maximum height
@@ -50,6 +62,12 @@ export const AppNavbar = () => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleButtonClick = (buttonName) => {
+    console.log(buttonName);
+    setActiveButton(buttonName);
+    navigate(`/${buttonName}`);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -115,12 +133,23 @@ export const AppNavbar = () => {
     >
       <MenuItem>
         <IconButton size="large" color="inherit">
-          <AnchorIcon />
+          <AnchorIcon /> {/* Replace with LinkIcon */}
         </IconButton>
+        <p>Experiences</p>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/bookings">
+          <IconButton size="large" color="inherit">
+            <EventIcon /> {/* Replace with LinkIcon */}
+          </IconButton>
+          <p>Bookings</p>
+        </Link>
       </MenuItem>
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <MailIcon />
+          <Badge badgeContent={4} color="error">
+            <MailIcon />
+          </Badge>
         </IconButton>
         <p>Messages</p>
       </MenuItem>
@@ -186,21 +215,31 @@ export const AppNavbar = () => {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
+              aria-label="show 17 new notifications"
+              style={{
+                color: activeButton === "home" ? "#2AA27F" : "white",
+              }}
+              onClick={() => handleButtonClick("home")}
             >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
+              <HomeOutlinedIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+              style={{
+                color: activeButton === "bookings" ? "#2AA27F" : "white",
+              }}
+              onClick={() => handleButtonClick("bookings")}
+            >
+              <EventIcon />
             </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
+              <AnchorIcon />
             </IconButton>
             <IconButton
               size="large"

@@ -147,19 +147,19 @@ CORS_ALLOWED_ORIGINS = [
     # Add other allowed origins if needed
 ]
 
-# CORS_ALLOW_HEADERS = (
-#     'accept',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-requested-with',
-#     'content-disposition',  # Add content-disposition to the allowed headers
-#     'filename'
-# )
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'content-disposition',  # Add content-disposition to the allowed headers
+    'filename'
+)
 
 LOGIN_URL = '/login/'
 

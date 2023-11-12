@@ -70,6 +70,22 @@ const experiencesSlice = createSlice({
   },
 });
 
+export const selectFilteredExperiences = (state) => {
+  const destinationId = state.filters.destination; // assuming you have a filters slice
+
+  if (!destinationId) {
+    return state.experiences.experiences;
+  }
+  const destination = state.destinations.destinations.find(
+    (destination) => destination.id === destinationId
+  );
+  console.log(state.experiences.experiences[0]);
+
+  return state.experiences.experiences.filter(
+    (experience) => experience.destination_name === destination.name
+  );
+};
+
 export const selectAllExperiences = (state) => state.experiences.experiences;
 
 export const selectDestinationById = (state, experienceId) =>

@@ -14,6 +14,7 @@ import SignUp from "./components/auth/SignUp";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { isAuthenticated } from "./features/auth/authSlice";
 import { useSelector } from "react-redux";
+import Bookings from "./components/sailor/Bookings";
 
 function App() {
   const customTheme = createTheme({
@@ -91,6 +92,15 @@ function App() {
             margin: "1px",
             marginTop: "1%",
           },
+          containedInfo: {
+            backgroundColor: "grey",
+            color: "white", // Custom text color for primary contained button
+            "&:hover": {
+              backgroundColor: "#3FB295", // Custom background color on hover
+            },
+            margin: "1px",
+            marginTop: "1%",
+          },
         },
       },
     },
@@ -109,6 +119,7 @@ function App() {
           >
             <Route path="/home" element={<Home />} />
             <Route path="/yachts" element={<Yachts />} />
+            <Route path="/bookings" element={<Bookings />} />
           </Route>
           <Route
             element={

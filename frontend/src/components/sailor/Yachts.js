@@ -10,6 +10,7 @@ import {
 import YachtsList from "../../features/yachts/YachtsList";
 import FilterForm from "../common/FilterForm";
 import backgroundImage from "../images/background.jpg";
+import BookForm from "../common/BookForm";
 
 export const Yachts = () => {
   const destinationStatus = useSelector((state) => state.destinations.status);
@@ -27,7 +28,7 @@ export const Yachts = () => {
   return (
     <Box
       sx={{
-        backgroundImage: `url(${backgroundImage})`,
+        // backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -50,7 +51,14 @@ export const Yachts = () => {
         </Typography>
         <FilterForm />
       </Box>
-      <YachtsList />
+      <Grid container>
+        <Grid item md={5}>
+          <BookForm />
+        </Grid>
+        <Grid item md={7}>
+          <YachtsList />
+        </Grid>
+      </Grid>
 
       {/* <Grid
           sx={{ marginLeft: "2%" }}

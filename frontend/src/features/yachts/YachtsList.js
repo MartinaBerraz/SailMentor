@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import {
   selectAllYachts,
   fetchYachts,
+  deselectYacht,
 } from "../../features/yachts/yachtsSlice";
 import {
   selectAllYachtTypes,
@@ -60,6 +61,9 @@ export const YachtsList = () => {
       );
 
       if (!flag) {
+        console.log("not available");
+        console.log(!flag);
+
         return !flag;
       }
     });
@@ -115,6 +119,11 @@ export const YachtsList = () => {
       dispatch(fetchYachts());
     }
   }, [yachtStatus, dispatch]);
+
+  useEffect(() => {
+    // Dispatch the deselectYacht action whenever filter criteria are modified
+    dispatch(deselectYacht());
+  }, [filters, dispatch]);
 
   return (
     <>

@@ -276,6 +276,14 @@ class BookingSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(BookingSerializer, self).__init__(*args, **kwargs)
 
+
+# Booking  serializers
+class BookingCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Booking
+        fields = ['id', 'sailor', 'availability', 'status']
+    
+
 class BookingDetailSerializer(serializers.ModelSerializer):
       
     class Meta:
@@ -298,14 +306,40 @@ class BookingCompanySerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(BookingCompanySerializer, self).__init__(*args, **kwargs)
 
+class BookingSailorSerializer(serializers.ModelSerializer):
+    start_date = serializers.DateField(source='availability.start_date', read_only=True)
+    end_date = serializers.DateField(source='availability.end_date', read_only=True)
+    yacht_name = serializers.CharField(source="availability.yacht.name", read_only=True)
+    status = serializers.StringRelatedField(source="status.status", read_only=True)
+
+    class Meta:
+        model=models.Booking
+        fields=['id','sailor','start_date','end_date','yacht_name','status']
+    
+    def __init__(self, *args, **kwargs):
+        super(BookingSailorSerializer, self).__init__(*args, **kwargs)
+
 # Availability  serializers
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model=models.Availability
-        fields=['yacht','start_date','end_date']
-    
-    def __init__(self, *args, **kwargs):
-        super(AvailabilitySerializer, self).__init__(*args, **kwargs)
+        model = models.Availability
+        fields = ['yacht', 'start_date', 'end_date']
+
+    # def create(self, validated_data):
+    #     # Create availability
+    #     availability = models.Availability.objects.create(**validated_data)
+
+    #     # Assuming Booking model has a ForeignKey to Availability named 'availability'
+    #     booking_data = self.context.get("booking_data", {})
+    #     booking_data['availability'] = availability
+
+    #     # Create booking and associate it with the availability
+    #     booking_serializer = BookingCreateSerializer(data=booking_data)
+
+    #     if booking_serializer.is_valid():
+    #         booking_serializer.save()
+
+    #     return availability
 
 class AvailabilityDetailSerializer(serializers.ModelSerializer):  
     class Meta:

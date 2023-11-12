@@ -27,14 +27,13 @@ const NoCabinsFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw", backgroundColor: "white" }}>
-        <InputLabel id="demo-simple-select-label">No. Cabins</InputLabel>
+      <FormControl sx={{ minWidth: "10vw" }}>
+        {selected ? null : <InputLabel>No. Cabins</InputLabel>}
 
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          renderValue={(value) => (value ? `${value} cabins` : "No. Cabins")}
+          sx={{ backgroundColor: "white", borderRadius: "10px" }}
           value={selected}
-          label="Destinations"
           onChange={handleNoCabinsChange}
         >
           {NoCabinsOptions.map((no) => (

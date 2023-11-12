@@ -27,18 +27,24 @@ const MaxPeopleFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw", backgroundColor: "white" }}>
-        <InputLabel id="demo-simple-select-label">No. People</InputLabel>
+      <FormControl sx={{ minWidth: "10vw" }}>
+        {selected ? null : <InputLabel>No. People</InputLabel>}
 
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          sx={{
+            backgroundColor: "white",
+            "&.Mui-focused": {
+              borderColor: "red", // Set your desired border color here
+            },
+            borderRadius: "10px",
+          }}
           value={selected}
-          label="Destinations"
           onChange={handleMaxPeopleChange}
+          renderValue={(value) => (value ? `${value} people` : "No. People")}
         >
           {maxPeopleOptions.map((no) => (
             <MenuItem value={no}>{no}</MenuItem>
+            // {`${no}+ "people"`}
           ))}
         </Select>
       </FormControl>

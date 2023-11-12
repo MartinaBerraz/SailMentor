@@ -5,11 +5,13 @@ const initialState = {
   yachts: [],
   status: "idle",
   error: null,
+  selectedYacht: null,
 };
 
 export const fetchYachts = createAsyncThunk("yachts/fetchYachts", async () => {
   try {
     const response = await client.get("yachts/");
+    console.log("FETCHED");
     return response.data;
   } catch (error) {
     // Handle the error, e.g., log it or return a default value
@@ -43,6 +45,12 @@ const yachtsSlice = createSlice({
       prepare(title, content, userId) {
         // omit prepare logic
       },
+    },
+    selectYacht: (state, action) => {
+      state.selectedYacht = action.payload;
+    },
+    deselectYacht: (state) => {
+      state.selectedYacht = null; // Set selected yacht to null
     },
     reactionAdded(state, action) {
       const { yachtId, reaction } = action.payload;
@@ -116,11 +124,22 @@ export const addYacht = createAsyncThunk("yachts/addYacht", async (data) => {
   }
 });
 
+export const selectSelectedYacht = (state) => state.yachts.selectedYacht;
+
 export const selectAllYachts = (state) => state.yachts.yachts;
 
 export const selectYachtById = (state, yachtId) =>
   state.yachts.yachts.find((yacht) => yacht.id === yachtId);
 
-export const { yachtAdded, yachtUpdated, reactionAdded } = yachtsSlice.actions;
+export const selectYachtByName = (state, yachtName) =>
+  state.yachts.yachts.find((yacht) => yacht.name === yachtName);
+
+export const {
+  yachtAdded,
+  yachtUpdated,
+  reactionAdded,
+  selectYacht,
+  deselectYacht,
+} = yachtsSlice.actions;
 
 export default yachtsSlice.reducer;

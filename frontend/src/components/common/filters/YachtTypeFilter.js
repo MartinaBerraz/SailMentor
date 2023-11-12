@@ -35,17 +35,12 @@ const YachtTypesFilter = () => {
 
   return (
     <div>
-      <FormControl
-        sx={{ minWidth: "10vw", marginTop: "2vh", backgroundColor: "white" }}
-      >
-        <InputLabel id="demo-simple-select-label">Yacht Type</InputLabel>
-
+      <FormControl sx={{ minWidth: "10vw" }}>
+        {selected ? null : <InputLabel>Yacht Type</InputLabel>}
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
           value={selected}
-          label="Yacht Type"
           onChange={handleYachtTypeChange}
+          sx={{ backgroundColor: "white", borderRadius: "10px" }}
         >
           {yachtTypesOptions.map((yachtType) => (
             <MenuItem value={yachtType.id}>{yachtType.description}</MenuItem>

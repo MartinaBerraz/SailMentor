@@ -133,15 +133,57 @@ class BookingCompanyList(generics.ListAPIView):
         queryset = models.Booking.objects.filter(availability__yacht__id__in=yacht_ids_owned_by_company)
 
         return queryset
+
+class BookingSailorList(generics.ListAPIView):
+    queryset = models.Booking.objects.all()  # Queryset for all yachts
+    serializer_class = serializers.BookingSailorSerializer  # Serializer for the response data
+
+    def get_queryset(self):
+        sailor_fk = self.kwargs['sailor_fk']
+        queryset = models.Booking.objects.filter(sailor__id=sailor_fk)
+
+        return queryset
     
 class BookingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Booking.objects.all()
     serializer_class=serializers.BookingDetailSerializer
 
+class BookingCreateView(generics.CreateAPIView):
+    queryset = models.Booking.objects.all()
+    serializer_class = serializers.BookingCreateSerializer
+
+
 
 class AvailabilityList(generics.ListCreateAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilitySerializer
+
+class AvailabilityCreateView(generics.CreateAPIView):
+    queryset = models.Availability.objects.all()
+    serializer_class=serializers.AvailabilitySerializer
+
+    def perform_create(self, serializer):
+        # Extract sailor ID and availability data from the request
+        sailor_id = self.request.data.get("sailor_id")
+        availability_data = self.request.data.get("availability")
+
+        # Additional data for the booking
+        booking_data = {
+            'sailor': sailor_id,
+            'status': 1,  # Assuming 1 is the ID of the "pending" status
+            # Add more fields as needed
+        }
+
+        # Create availability and associate it with the booking
+        availability = serializer.save()
+        booking_serializer = serializers.BookingCreateSerializer(data={'availability': availability.id, **booking_data})
+
+        if booking_serializer.is_valid():
+            booking_serializer.save()
+            return Response(booking_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            availability.delete()  # Rollback availability creation if booking creation fails
+            return Response(booking_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):

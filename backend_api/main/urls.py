@@ -20,6 +20,7 @@ urlpatterns = [
     path('yachtType/<int:pk>/',views.YachtTypeDetail.as_view()),
     path('bookings/',views.BookingList.as_view()),
     path('bookings/company/<int:company_fk>/',views.BookingCompanyList.as_view()),
+    path('bookings/sailor/<int:sailor_fk>/',views.BookingSailorList.as_view()),
     path('booking/<int:pk>/',views.BookingDetail.as_view()),
     path('availabilities/',views.AvailabilityList.as_view()),
     path('bookingStatus/',views.BookingStatusList.as_view()),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('sailors/', views.SailorList.as_view()),
     path('create_user/', views.UserCreateView.as_view(), name='user-create'),
     path('create_yacht/',views.YachtCreateView.as_view(), name='yacht-create'),
+    path('create_booking/',views.AvailabilityCreateView.as_view(), name='booking-create'),
     path('login/', views.UserLoginView.as_view(), name='token_obtain_pair'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
 

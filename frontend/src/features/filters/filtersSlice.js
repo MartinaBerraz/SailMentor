@@ -37,6 +37,8 @@ const filtersSlice = createSlice({
   },
 });
 
+export const selectAllFilters = (state) => state.filters;
+
 export const {
   setDestinationFilter,
   setMaxPeopleFilter,

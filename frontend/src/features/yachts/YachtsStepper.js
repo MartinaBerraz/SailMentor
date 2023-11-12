@@ -38,20 +38,13 @@ export const YachtsStepper = ({ yachts }) => {
           <Step key={index}></Step>
         ))}
       </Stepper> */}
-      <Grid sx={{ justifyContent: "center" }} container spacing={3}>
-        {displayedYachts.map((yacht, index) => (
-          <Grid item key={yacht.id}>
+      <Grid sx={{ justifyContent: "center" }} container>
+        {yachts.map((yacht, index) => (
+          <Grid item md={6} key={yacht.id}>
             <YachtCard yacht={yacht} />
           </Grid>
         ))}
       </Grid>
-      <Button disabled={activeStep === 0} onClick={handleBack}>
-        <KeyboardArrowLeft />
-        Back
-      </Button>
-      <Button disabled={activeStep === steps - 1} onClick={handleNext}>
-        Next <KeyboardArrowRight />
-      </Button>
     </div>
   );
 };

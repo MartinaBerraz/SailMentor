@@ -21,6 +21,33 @@ export const fetchCompanyBookings = createAsyncThunk(
   }
 );
 
+export const fetchSailorBookings = createAsyncThunk(
+  "bookings/fetchSailorBookings",
+  async (sailorFk) => {
+    try {
+      const response = await client.get(`bookings/sailor/${sailorFk}/`);
+      return response.data;
+    } catch (error) {
+      // Handle the error, e.g., log it or return a default value
+      console.error("Error fetching bookings:", error);
+      throw error; // Rethrow the error if needed
+    }
+  }
+);
+
+export const addBooking = createAsyncThunk(
+  "bookings/addBooking",
+  async (data) => {
+    try {
+      const response = await client.post("create_booking/", data);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding booking:", error);
+      throw error;
+    }
+  }
+);
+
 const bookingsSlice = createSlice({
   name: "bookings",
   initialState,
@@ -62,6 +89,19 @@ const bookingsSlice = createSlice({
         state.bookings = action.payload;
       })
       .addCase(fetchCompanyBookings.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fetchSailorBookings.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchSailorBookings.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Add any fetched posts to the array
+        console.log(action.payload);
+        state.bookings = action.payload;
+      })
+      .addCase(fetchSailorBookings.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

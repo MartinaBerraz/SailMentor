@@ -31,17 +31,18 @@ const DestinationFilter = () => {
       <FormControl
         sx={{
           minWidth: "20vw",
-          marginTop: "4vh",
-          backgroundColor: "white",
         }}
       >
-        <InputLabel id="demo-simple-select-label">Destinations</InputLabel>
+        {selected ? null : (
+          <InputLabel id="demo-simple-select-label">Destinations</InputLabel>
+        )}
 
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "10px",
+          }}
           value={selected}
-          label="Destinations"
           onChange={handleDestinationChange}
         >
           {destinationOptions.map((destination) => (

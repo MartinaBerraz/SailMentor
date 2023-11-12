@@ -17,8 +17,7 @@ import { Grid } from "@mui/material";
 
 const today = dayjs();
 const yesterday = dayjs().subtract(1, "day");
-const todayStartOfTheDay = today.startOf("day");
-
+const todayStartOfTheDay = dayjs();
 const DateAndNightsPicker = () => {
   const MAX_NUMBER = 30;
 
@@ -53,14 +52,16 @@ const DateAndNightsPicker = () => {
               label="Departure date"
               selected={startDate}
               onChange={handleStartDateChange}
+              minDate={todayStartOfTheDay} // Set the maximum selectable date
             />
           </LocalizationProvider>
         </Grid>
         <Grid item md={6}>
-          <FormControl sx={{ minWidth: "10vw", backgroundColor: "white" }}>
+          <FormControl sx={{ minWidth: "10vw" }}>
             <InputLabel id="demo-simple-select-label">No. Nights</InputLabel>
 
             <Select
+              sx={{ backgroundColor: "white" }}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={numberOfNights}
