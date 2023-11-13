@@ -40,11 +40,14 @@ const yachtsSlice = createSlice({
   reducers: {
     yachtAdded: {
       reducer(state, action) {
-        state.posts.push(action.payload);
+        state.yachts.push(action.payload);
       },
       prepare(title, content, userId) {
         // omit prepare logic
       },
+    },
+    updateYachts: (state, action) => {
+      state.status = "idle";
     },
     selectYacht: (state, action) => {
       state.selectedYacht = action.payload;
@@ -140,6 +143,7 @@ export const {
   reactionAdded,
   selectYacht,
   deselectYacht,
+  updateYachts,
 } = yachtsSlice.actions;
 
 export default yachtsSlice.reducer;

@@ -17,11 +17,18 @@ import YachtTypesFilter from "./filters/YachtTypeFilter";
 import DateAndNightsPicker from "./filters/DateAndNightsPicker";
 import background from "../images/background.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSelectedYacht } from "../../features/yachts/yachtsSlice";
+import {
+  selectSelectedYacht,
+  updateYachts,
+} from "../../features/yachts/yachtsSlice";
 import { selectAllFilters } from "../../features/filters/filtersSlice";
 import { selectAuthData } from "../../features/auth/authSlice";
-import { addBooking } from "../../features/bookings/bookingsSlice";
+import {
+  addBooking,
+  updateBookings,
+} from "../../features/bookings/bookingsSlice";
 import { fetchAvailabilities } from "../../features/availabilities/availabilitySlice";
+import { useNavigate } from "react-router-dom";
 
 const BookForm = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -32,7 +39,7 @@ const BookForm = () => {
 
   const authData = useSelector(selectAuthData);
   const sailorFk = authData ? authData.userFk : null; // Replace with the correct path to the company foreign key in your Redux state
-
+  const navigate = useNavigate();
   const handleOnClick = (e) => {
     const info = {
       yacht: selectedYacht.id,
@@ -52,7 +59,13 @@ const BookForm = () => {
     try {
       dispatch(addBooking(info));
       // The dispatch was successful, show the success modal
+
       setShowSuccessModal(true);
+
+      dispatch(updateBookings());
+      dispatch(updateYachts());
+
+      navigate("/bookings");
 
       dispatch(fetchAvailabilities());
     } catch (error) {

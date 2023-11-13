@@ -52,9 +52,9 @@ export const Bookings = () => {
     >
       <Box
         sx={{
-          height: "25vh", // Set the height to 40% of the viewport height
+          height: "27vh", // Set the height to 40% of the viewport height
           flexGrow: 1,
-          marginBottom: "5vh",
+          marginBottom: "3vh",
           backgroundColor: "#3FB295", // Replace with your desired color
           color: "white",
         }}

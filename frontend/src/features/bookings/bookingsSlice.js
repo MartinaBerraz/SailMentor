@@ -66,6 +66,9 @@ const bookingsSlice = createSlice({
         existingBooking.reactions[reaction]++;
       }
     },
+    updateBookings: (state, action) => {
+      state.status = "idle";
+    },
     bookingUpdated(state, action) {
       const { id, title, content } = action.payload;
       const existingBooking = state.bookings.find(
@@ -116,7 +119,7 @@ export const selectAllBookings = (state) => state.bookings.bookings;
 export const selectDestinationById = (state, bookingId) =>
   state.bookings.bookings.find((booking) => booking.id === bookingId);
 
-export const { bookingAdded, bookingUpdated, reactionAdded } =
+export const { bookingAdded, bookingUpdated, reactionAdded, updateBookings } =
   bookingsSlice.actions;
 
 export default bookingsSlice.reducer;

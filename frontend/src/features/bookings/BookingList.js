@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Typography } from "@mui/material";
 import { fetchSailorBookings, selectAllBookings } from "./bookingsSlice";
-import BookingCard from "./BookingCard";
 import { selectAuthData } from "../auth/authSlice";
 import BookingStepper from "./BookingStepper";
 

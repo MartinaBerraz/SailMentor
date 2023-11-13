@@ -9,7 +9,7 @@ import {
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { FormControl, Typography } from "@mui/material";
+import { Box, FormControl, Typography } from "@mui/material";
 
 const DestinationFilter = () => {
   const dispatch = useDispatch();
@@ -28,28 +28,31 @@ const DestinationFilter = () => {
 
   return (
     <div>
-      <FormControl
-        sx={{
-          minWidth: "20vw",
-        }}
-      >
-        {selected ? null : (
-          <InputLabel id="demo-simple-select-label">Destinations</InputLabel>
-        )}
-
-        <Select
+      <Box>
+        <FormControl
           sx={{
-            backgroundColor: "white",
-            borderRadius: "10px",
+            minWidth: "20vw",
+            color: "white",
+            borderColor: "white",
+            borderBlock: 0,
           }}
-          value={selected}
-          onChange={handleDestinationChange}
         >
-          {destinationOptions.map((destination) => (
-            <MenuItem value={destination.id}>{destination.name}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          {selected ? null : <InputLabel>Destinations</InputLabel>}
+          <Select
+            sx={{
+              // backgroundColor: "#3FB295",
+              backgroundColor: "white",
+              borderRadius: "10px",
+            }}
+            value={selected}
+            onChange={handleDestinationChange}
+          >
+            {destinationOptions.map((destination) => (
+              <MenuItem value={destination.id}>{destination.name}</MenuItem>
+            ))}{" "}
+          </Select>
+        </FormControl>
+      </Box>
     </div>
   );
 };

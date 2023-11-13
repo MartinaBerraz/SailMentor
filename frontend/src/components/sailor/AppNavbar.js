@@ -226,6 +226,16 @@ export const AppNavbar = () => {
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
+              style={{
+                color: activeButton === "yachts" ? "#2AA27F" : "white",
+              }}
+              onClick={() => handleButtonClick("yachts")}
+            >
+              <SearchIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
               color="inherit"
               style={{
                 color: activeButton === "bookings" ? "#2AA27F" : "white",
