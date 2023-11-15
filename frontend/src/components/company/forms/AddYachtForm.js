@@ -231,23 +231,19 @@ const AddYachtForm = ({ formData }) => {
                       variant="standard"
                       sx={{ m: 1, minWidth: 120, mt: "2%" }}
                     >
-                      <InputLabel id="input-label">
-                        {field.name.replace(/_/g, " ")}
-                      </InputLabel>
+                      <InputLabel id="input-label">Yacht Type</InputLabel>
 
                       <Select
                         labelId="input-label"
-                        label={field.name.replace(/_/g, " ")}
-                        value={formValues[field.name] || ""}
-                        onChange={(e) => handleChange(e, field.name)}
+                        label="yacht_type"
+                        value={formValues["yacht_type"] || ""}
+                        onChange={(e) => handleChange(e, "yacht_type")}
                       >
-                        {console.log(yachtTypes)}
                         {yachtTypes.map((yachtType) => (
                           <MenuItem key={yachtType.id} value={yachtType.id}>
                             {yachtType.description}
                           </MenuItem>
                         ))}
-                        {console.log(field.name.replace(/_/g, " "))}
                       </Select>
                     </FormControl>
                   );
@@ -294,4 +290,4 @@ const AddYachtForm = ({ formData }) => {
   );
 };
 
-export default DynamicForm;
+export default AddYachtForm;

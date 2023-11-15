@@ -3,6 +3,8 @@ import DynamicForm from "./DynamicForm";
 import Box from "@mui/material/Box";
 import SideBar from "../Tables/SideBar";
 import Toolbar from "@mui/material/Toolbar";
+import AddYachtForm from "./AddYachtForm";
+import AddYacht from "./AddYacht";
 
 export const AddForm = (props) => {
   const baseUrl = "http://127.0.0.1:8000/api";
@@ -81,8 +83,7 @@ export const AddForm = (props) => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
-        <DynamicForm formData={formData}></DynamicForm>;
+        <AddYacht />
       </Box>
     </Box>
   );
