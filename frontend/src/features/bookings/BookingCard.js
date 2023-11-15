@@ -79,7 +79,7 @@ export const BookingCard = ({ booking }) => {
         >
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Typography component="div" variant="h5">
-              {yacht.name}
+              {yacht.destination}
             </Typography>
             <Typography
               variant="subtitle1"

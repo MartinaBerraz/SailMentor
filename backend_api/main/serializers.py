@@ -166,6 +166,9 @@ class YachtTypeDetailSerializer(serializers.ModelSerializer):
 
 # Yacht serializers
 class YachtSerializer(serializers.ModelSerializer):
+    destination = serializers.CharField(source="destination.name", read_only=True)
+    yacht_type = serializers.CharField(source='yacht_type.description', read_only=True)
+
     # company_name = serializers.SerializerMethodField()
     class Meta:
         model=models.Yacht
@@ -312,6 +315,7 @@ class BookingSailorSerializer(serializers.ModelSerializer):
     end_date = serializers.DateField(source='availability.end_date', read_only=True)
     yacht_name = serializers.CharField(source="availability.yacht.name", read_only=True)
     status = serializers.StringRelatedField(source="status.status", read_only=True)
+
 
     class Meta:
         model=models.Booking

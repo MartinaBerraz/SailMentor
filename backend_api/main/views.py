@@ -17,6 +17,7 @@ from django.views import View
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, status
+from django.core.mail import send_mail
 
 
 class CompanyList(generics.ListCreateAPIView):
@@ -158,6 +159,20 @@ class AvailabilityList(generics.ListCreateAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilitySerializer
 
+def send_booking_confirmation_email(availability, user):
+    # Get sailor email using sailor_id
+    sailor_email = user.email
+
+    # Compose and send the email
+    subject = 'Booking Confirmation'
+    message = f'Thank you for your booking. Your booking ID is {availability.id}.'
+    from_email = 'your@email.com'  # Replace with your sender email address
+    recipient_list = [sailor_email]
+
+    send_mail(subject, message, from_email, recipient_list)
+
+
+
 class AvailabilityCreateView(generics.CreateAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilitySerializer
@@ -180,6 +195,8 @@ class AvailabilityCreateView(generics.CreateAPIView):
 
         if booking_serializer.is_valid():
             booking_serializer.save()
+            send_booking_confirmation_email(availability, models.Sailor.objects.get(id=sailor_id).user)
+
             return Response(booking_serializer.data, status=status.HTTP_201_CREATED)
         else:
             availability.delete()  # Rollback availability creation if booking creation fails
