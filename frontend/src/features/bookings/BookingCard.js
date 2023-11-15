@@ -13,16 +13,27 @@ import {
   fetchAvailabilities,
   selectAllAvailabilities,
 } from "../availabilities/availabilitySlice";
-import { fetchSailorBookings, selectAllBookings } from "./bookingsSlice";
+import {
+  deleteBooking,
+  fetchSailorBookings,
+  selectAllBookings,
+  updateBookings,
+} from "./bookingsSlice";
 import { fetchYachts, selectYachtByName } from "../yachts/yachtsSlice";
+import { useNavigate } from "react-router-dom";
 
 export const BookingCard = ({ booking }) => {
   const bookingStatus = useSelector((state) => state.bookings.status);
   const error = useSelector((state) => state.bookings.error);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const yachtsStatus = useSelector((state) => state.yachts.status);
 
+  const handleOnClick = (e) => {
+    dispatch(deleteBooking(booking.availability));
+    dispatch(updateBookings());
+    navigate("/bookings");
+  };
   useEffect(() => {
     if (yachtsStatus === "idle") {
       dispatch(fetchYachts());
@@ -32,7 +43,7 @@ export const BookingCard = ({ booking }) => {
   const yacht = useSelector((state) =>
     selectYachtByName(state, booking.yacht_name)
   );
-  console.log(booking.yacht_name);
+  console.log(booking);
   console.log(yacht);
 
   if (!yacht) {
@@ -101,6 +112,7 @@ export const BookingCard = ({ booking }) => {
               variant="contained"
               color="primary"
               sx={{ height: "5vh", width: "10vw" }}
+              onClick={handleOnClick}
             >
               Cancel
             </Button>

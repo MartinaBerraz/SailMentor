@@ -22,6 +22,10 @@ export const BookingList = () => {
     }
   }, [userFk, authData, dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchSailorBookings(userFk));
+  }, []);
+
   return (
     <>
       {console.log(bookingList)}

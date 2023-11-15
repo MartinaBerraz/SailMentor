@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import BookingCard from "./BookingCard";
+import { useDispatch } from "react-redux";
 
 export const BookingStepper = ({ bookings }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -14,6 +15,7 @@ export const BookingStepper = ({ bookings }) => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+  const dispatch = useDispatch();
 
   const startIndex = activeStep * cardsPerPage;
   const endIndex = startIndex + cardsPerPage;

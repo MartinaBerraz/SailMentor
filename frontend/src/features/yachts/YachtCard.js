@@ -13,8 +13,19 @@ import {
   selectAllYachtTypes,
 } from "../yachtTypes/yachtTypesSlice";
 import { selectSelectedYacht, selectYacht } from "./yachtsSlice";
+import YachtModal from "./YachtModal";
 
 export const YachtCard = ({ yacht }) => {
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   const dispatch = useDispatch();
 
   const selectedYacht = useSelector(selectSelectedYacht);
@@ -51,59 +62,70 @@ export const YachtCard = ({ yacht }) => {
     marginTop: "10%",
   };
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        minHeight: "40vh",
-        minWidth: "25vw",
-        margin: "2%",
-        marginTop: "5%",
-      }}
-    >
-      {console.log(numberOfNights)}
-      <CardMedia component="img" height="200" image={yacht.image} />
-      <CardContent>
-        <Typography variant="h5" component="div">
-          {yacht.name} - {yacht.length_in_feet}
-        </Typography>
-        <Typography color="grey">
-          {yachtTypes.find((type) => type.id === yacht.yacht_type)
-            ?.description || "Description not found"}
-        </Typography>
-
-        <Grid container style={borderedGridItem}>
-          <Grid item xs={3} md={4}>
-            <Typography> {yacht.max_people}</Typography>
-            <PeopleIcon> </PeopleIcon>
-          </Grid>
-          <Grid item xs={3} md={4}>
-            <Typography> {yacht.no_cabins}</Typography>
-            <HotelIcon> </HotelIcon>
-          </Grid>
-          <Grid item xs={3} md={4}>
-            <Typography>{yacht.length_in_feet}</Typography>
-
-            <Typography>length</Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-      <Button
-        variant="contained"
-        color={
-          selectedYacht && selectedYacht.id === yacht.id
-            ? "secondary"
-            : "primary"
-        }
-        onClick={handleSelectYacht}
-        sx={{ marginBottom: "2vh", minWidth: "20vw" }}
+    <>
+      <Card
+        sx={{
+          maxWidth: 345,
+          minHeight: "40vh",
+          minWidth: "25vw",
+          margin: "4%",
+          marginTop: "5%",
+        }}
       >
-        <Typography sx={{ textTransform: "none" }}>
-          {selectedYacht && selectedYacht.id === yacht.id
-            ? "Selected"
-            : `Select for $${numberOfNights * yacht.price_per_night}`}
-        </Typography>
-      </Button>
-    </Card>
+        <CardActionArea onClick={handleOpenModal}>
+          {console.log(numberOfNights)}
+          <CardMedia component="img" height="200" image={yacht.image} />
+          <CardContent>
+            <Typography variant="h5" component="div">
+              {yacht.name} - {yacht.length_in_feet}
+            </Typography>
+            <Typography color="grey">
+              {yachtTypes.find((type) => type.id === yacht.yacht_type)
+                ?.description || "Description not found"}
+            </Typography>
+
+            <Grid container style={borderedGridItem}>
+              <Grid item xs={3} md={4}>
+                <Typography> {yacht.max_people}</Typography>
+                <PeopleIcon> </PeopleIcon>
+              </Grid>
+              <Grid item xs={3} md={4}>
+                <Typography> {yacht.no_cabins}</Typography>
+                <HotelIcon> </HotelIcon>
+              </Grid>
+              <Grid item xs={3} md={4}>
+                <Typography>{yacht.length_in_feet}</Typography>
+
+                <Typography>length</Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </CardActionArea>
+
+        <Button
+          variant="contained"
+          color={
+            selectedYacht && selectedYacht.id === yacht.id
+              ? "secondary"
+              : "primary"
+          }
+          onClick={handleSelectYacht}
+          sx={{ marginBottom: "1vh", minWidth: "95%" }}
+        >
+          <Typography sx={{ textTransform: "none" }}>
+            {selectedYacht && selectedYacht.id === yacht.id
+              ? "Selected"
+              : `Select for $${numberOfNights * yacht.price_per_night}`}
+          </Typography>
+        </Button>
+      </Card>
+
+      <YachtModal
+        yacht={yacht}
+        modalOpen={modalOpen}
+        handleCloseModal={handleCloseModal}
+      />
+    </>
   );
 };
 

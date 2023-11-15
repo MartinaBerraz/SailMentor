@@ -202,6 +202,7 @@ class YachtDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Yacht
         fields = '__all__'
+        
 
 class YachtCreationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -314,7 +315,7 @@ class BookingSailorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Booking
-        fields=['id','sailor','start_date','end_date','yacht_name','status']
+        fields=['id','sailor','start_date','end_date','yacht_name','status','availability']
     
     def __init__(self, *args, **kwargs):
         super(BookingSailorSerializer, self).__init__(*args, **kwargs)

@@ -12,6 +12,7 @@ export const fetchCompanyBookings = createAsyncThunk(
   async (companyId) => {
     try {
       const response = await client.get(`bookings/company/${companyId}/`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       // Handle the error, e.g., log it or return a default value
@@ -40,6 +41,19 @@ export const addBooking = createAsyncThunk(
   async (data) => {
     try {
       const response = await client.post("create_booking/", data);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding booking:", error);
+      throw error;
+    }
+  }
+);
+
+export const deleteBooking = createAsyncThunk(
+  "bookings/deleteBooking",
+  async (availabilityFk) => {
+    try {
+      const response = await client.delete(`availabilities/${availabilityFk}/`);
       return response.data;
     } catch (error) {
       console.error("Error adding booking:", error);
@@ -106,6 +120,17 @@ const bookingsSlice = createSlice({
       })
       .addCase(fetchSailorBookings.rejected, (state, action) => {
         state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(deleteBooking.pending, (state, action) => {
+        state.status = "idle";
+      })
+      .addCase(deleteBooking.fulfilled, (state, action) => {
+        // Add any fetched posts to the array
+        console.log(action.payload);
+        state.status = "idle";
+      })
+      .addCase(deleteBooking.rejected, (state, action) => {
         state.error = action.error.message;
       });
     // .addCase(addNewDestination.fulfilled, (state, action) => {
