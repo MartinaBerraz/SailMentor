@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signInImage from "../images/signIn.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../features/auth/authSlice";
+import { loginUser, selectAuthStatus } from "../../features/auth/authSlice";
 import { selectAuthData } from "../../features/auth/authSlice";
 import { useEffect } from "react";
 import { useNavigate, Navigate, Link } from "react-router-dom";
@@ -29,6 +30,13 @@ import {
   setCurrentSailor,
 } from "../../features/sailors/sailorsSlice";
 import SignUp from "./SignUp";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -54,9 +62,18 @@ const defaultTheme = createTheme();
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [errorDialogTitle, setErrorDialogTitle] = useState("");
+  const [errorDialogContent, setErrorDialogContent] = useState("");
+
+  const handleDialogClose = () => {
+    setErrorDialogOpen(false);
+  };
 
   const dispatch = useDispatch();
   const authData = useSelector(selectAuthData);
+
+  const authStatus = useSelector(selectAuthStatus);
 
   const companiesStatus = useSelector(selectCompaniesStatus);
 
@@ -74,6 +91,14 @@ const SignIn = () => {
     }
   }, [sailorsStatus, dispatch]);
 
+  useEffect(() => {
+    if (authStatus === "failed") {
+      setErrorDialogTitle("Error");
+      setErrorDialogContent("Invalid Credentials");
+      setErrorDialogOpen(true);
+    }
+  }, [authStatus]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -83,8 +108,16 @@ const SignIn = () => {
       formDataObject[key] = value;
     });
 
-    dispatch(loginUser(formDataObject));
-    console.log(formDataObject);
+    if (
+      formDataObject["username"] !== "" &&
+      formDataObject["password"] !== ""
+    ) {
+      dispatch(loginUser(formDataObject));
+    } else {
+      setErrorDialogTitle("Error");
+      setErrorDialogContent("Invalid Credentials");
+      setErrorDialogOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -190,6 +223,25 @@ const SignIn = () => {
           </Box>
         </Box>
       </Grid>
+      <Dialog open={errorDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle sx={{ marginInline: "3vw" }}>
+          {errorDialogTitle}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>{errorDialogContent}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            sx={{ width: "100%" }}
+            color="primary"
+            autoFocus
+            onClick={handleDialogClose}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 };

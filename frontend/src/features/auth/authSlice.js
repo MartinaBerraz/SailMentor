@@ -10,6 +10,7 @@ const initialState = {
   token: null, // Initial token state
   error: "",
   userFk: null,
+  status: "idle",
 };
 
 export const loginUser = createAsyncThunk(
@@ -42,7 +43,7 @@ const authSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(loginUser.pending, (state, action) => {
-        console.log("PENDING");
+        state.status = "pending";
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         // Add any fetched posts to the array
@@ -52,14 +53,18 @@ const authSlice = createSlice({
         state.error = "";
         state.userType = action.payload.user_type;
         state.userFk = action.payload.user_fk;
+        state.status = "success";
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.error.message;
+        state.status = "failed";
       });
   },
 });
 
 export const selectCurrentUserFk = (state) => state.auth.userFk;
+
+export const selectAuthStatus = (state) => state.auth.status;
 
 export const selectAuthData = (state) => state.auth;
 
