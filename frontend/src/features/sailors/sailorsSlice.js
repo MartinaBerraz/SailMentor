@@ -27,18 +27,6 @@ export const addSailor = createAsyncThunk(
   "sailors/addSailor",
   async (formData) => {
     try {
-      // const { password, ...otherFormData } = formData;
-
-      // // Hash the password
-      // const hashedPassword = await bcrypt.hash(password, 10); // Use an appropriate number of rounds
-
-      // // Replace the password in the formData with the hashed password
-      // const formDataWithHashedPassword = {
-      //   ...otherFormData,
-      //   password: hashedPassword,
-      //   user_type: "Sailor",
-      // };
-
       const formDataComplete = {
         ...formData,
         user_type: "Sailor",
@@ -102,15 +90,21 @@ const sailorsSlice = createSlice({
       .addCase(fetchSailors.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(addSailor.pending, (state, action) => {})
+      .addCase(addSailor.fulfilled, (state, action) => {
+        // Add any fetched posts to the array
+        console.log(action.payload);
+      })
+      .addCase(addSailor.rejected, (state, action) => {
+        state.error = action.error.message;
       });
-    // .addCase(addNewDestination.fulfilled, (state, action) => {
-    //   state.destinations.push(action.payload);
-    // });
   },
 });
 
 export const selectAllSailors = (state) => state.sailors.sailors;
 export const selectSailorsStatus = (state) => state.sailors.status;
+export const selectSailorsErrors = (state) => state.sailors.error;
 
 export const selectSailorById = (state, sailorId) =>
   state.sailors.sailors.find((sailor) => sailor.id === sailorId);

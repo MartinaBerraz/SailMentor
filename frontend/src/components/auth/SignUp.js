@@ -16,8 +16,9 @@ import Paper from "@mui/material/Paper";
 import signUpImage from "../images/signUp.jpg";
 
 import backgroundImage from "../images/background.jpg";
-import SailorForm from "./SailorForm";
+import SailorForm from "./SignUpForm";
 import CompanyForm from "./CompanyForm";
+import SignUpForm from "./SignUpForm";
 
 function Copyright(props) {
   return (
@@ -109,8 +110,8 @@ const SignUp = () => {
               </Button>
             </Grid>
           </Grid>
-          {activeButton === "Sailor" && <SailorForm userType={"Sailor"} />}
-          {activeButton === "Company" && <SailorForm userType={"Company"} />}
+          {activeButton === "Sailor" && <SignUpForm userType={"Sailor"} />}
+          {activeButton === "Company" && <SignUpForm userType={"Company"} />}
         </Box>
         <Copyright />
       </Grid>

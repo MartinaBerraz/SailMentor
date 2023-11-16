@@ -125,6 +125,8 @@ class Booking(models.Model):
     status = models.ForeignKey(BookingStatus, on_delete=models.CASCADE)
     sailor = models.ForeignKey(Sailor, on_delete=models.CASCADE)
     availability = models.ForeignKey(Availability, on_delete=models.CASCADE)
+    confirmation_token = models.CharField(max_length=50, unique=True, null=True, blank=True)
+
 
     def __str__(self):
         return self.availability.yacht.name

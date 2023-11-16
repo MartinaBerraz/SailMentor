@@ -89,9 +89,7 @@ const SignIn = () => {
 
   useEffect(() => {
     if (authData && authData.user) {
-      console.log(authData);
       if (authData.userType === "Sailor") {
-        console.log("funciona");
         dispatch(setCurrentSailor(authData.userFk));
         navigate("/Home");
       } else {

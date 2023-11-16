@@ -166,13 +166,13 @@ class YachtTypeDetailSerializer(serializers.ModelSerializer):
 
 # Yacht serializers
 class YachtSerializer(serializers.ModelSerializer):
-    destination = serializers.CharField(source="destination.name", read_only=True)
-    yacht_type = serializers.CharField(source='yacht_type.description', read_only=True)
+    destination_name = serializers.CharField(source="destination.name", read_only=True)
+    yacht_type_description = serializers.CharField(source='yacht_type.description', read_only=True)
 
     # company_name = serializers.SerializerMethodField()
     class Meta:
         model=models.Yacht
-        fields=['id','name','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type']
+        fields=['id','name','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type','destination_name','yacht_type_description']
    
 
     image = serializers.ImageField(required=True)
@@ -285,7 +285,7 @@ class BookingSerializer(serializers.ModelSerializer):
 class BookingCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Booking
-        fields = ['id', 'sailor', 'availability', 'status']
+        fields = ['id', 'sailor', 'availability', 'status','confirmation_token']
     
 
 class BookingDetailSerializer(serializers.ModelSerializer):

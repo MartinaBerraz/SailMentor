@@ -18,7 +18,11 @@ from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, status
 from django.core.mail import send_mail
-
+import secrets
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from rest_framework.request import Request
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
@@ -159,19 +163,45 @@ class AvailabilityList(generics.ListCreateAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilitySerializer
 
-def send_booking_confirmation_email(availability, user):
+def send_booking_confirmation_email(booking, user):
     # Get sailor email using sailor_id
     sailor_email = user.email
+    confirmation_url = f'http://localhost:8000/api/confirm_booking/{booking.confirmation_token}/'
 
-    # Compose and send the email
+
+ # Compose and send the email with the booking token
     subject = 'Booking Confirmation'
-    message = f'Thank you for your booking. Your booking ID is {availability.id}.'
+    message = f'Thank you for your booking. Your booking ID is {booking.id}. ' \
+            f'Use the following link to confirm your booking: {confirmation_url}'
+
     from_email = 'your@email.com'  # Replace with your sender email address
     recipient_list = [sailor_email]
 
+
     send_mail(subject, message, from_email, recipient_list)
 
+@api_view(('GET',))
+@renderer_classes([TemplateHTMLRenderer, JSONRenderer])  # Set the appropriate renderer
+def confirm_booking(request, token):
+    # Find the booking associated with the token
 
+    booking = get_object_or_404(models.Booking, confirmation_token=token)
+
+        # Assuming 'confirmed' is a status in your BookingStatus model
+    confirmed_status = models.BookingStatus.objects.get(status='Confirmed')
+    
+    # Perform the booking confirmation logic (e.g., change status)
+    booking.status = confirmed_status
+    booking.save()
+    
+
+    response_data = {'success': True, 'bookingId': booking.id}
+
+    if 'text/html' in request.headers.get('Accept', ''):
+        return Response(response_data, template_name='confirmation_template.html')
+    else:
+        # Otherwise, return JSON response
+        return Response(response_data, status=status.HTTP_200_OK)
 
 class AvailabilityCreateView(generics.CreateAPIView):
     queryset = models.Availability.objects.all()
@@ -186,7 +216,7 @@ class AvailabilityCreateView(generics.CreateAPIView):
         booking_data = {
             'sailor': sailor_id,
             'status': 1,  # Assuming 1 is the ID of the "pending" status
-            # Add more fields as needed
+            'confirmation_token': secrets.token_urlsafe(32),
         }
 
         # Create availability and associate it with the booking
@@ -194,8 +224,8 @@ class AvailabilityCreateView(generics.CreateAPIView):
         booking_serializer = serializers.BookingCreateSerializer(data={'availability': availability.id, **booking_data})
 
         if booking_serializer.is_valid():
-            booking_serializer.save()
-            send_booking_confirmation_email(availability, models.Sailor.objects.get(id=sailor_id).user)
+            booking = booking_serializer.save()
+            send_booking_confirmation_email(booking, models.Sailor.objects.get(id=sailor_id).user)
 
             return Response(booking_serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -237,6 +267,17 @@ class SailorCreateView(generics.CreateAPIView):
 
 class UserCreateView(generics.CreateAPIView):
     serializer_class = serializers.UserCreationSerializer
+
+    def perform_create(self, serializer):
+        # Check if the username already exists
+        username = self.request.data.get("username")
+        if models.User.objects.filter(username=username).exists():
+            return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # If the username does not exist, proceed with user creation
+        serializer.save()
+        return Response({"success": "User created successfully"}, status=status.HTTP_201_CREATED)
+
 
     def get_serializer_context(self):
         # Determine the user type based on the request data (e.g., "Sailor" or "Company").
