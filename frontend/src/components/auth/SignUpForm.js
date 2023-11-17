@@ -91,19 +91,19 @@ const SignUpForm = ({ userType }) => {
       if (userType === "Sailor") {
         dispatch(addSailor(formDataObject)).then((response) => {
           console.log("API Response:", response);
-          if (response.error.message) {
+          if (response.error) {
             showDialog("Error", `Username already in use`);
           } else {
-            showDialog("Success", "Sailor added successfully");
+            showDialog("Success", "Check your mailbox to confirm your user");
           }
         });
       } else {
         dispatch(addCompany(formDataObject)).then((response) => {
           console.log("API Response:", response);
-          if (response.error.message) {
+          if (response.error) {
             showDialog("Error", `Username already in use`);
           } else {
-            showDialog("Success", "Sailor added successfully");
+            showDialog("Success", "Check your mailbox to confirm your user");
           }
         });
       }
@@ -169,7 +169,7 @@ const SignUpForm = ({ userType }) => {
           Sign Up
         </Button>
         <Dialog open={dialogOpen} onClose={handleDialogClose}>
-          <DialogTitle sx={{ marginInline: "3vw" }}>{dialogTitle}</DialogTitle>
+          <DialogTitle sx={{ marginInline: "12vw" }}>{dialogTitle}</DialogTitle>
           <DialogContent>
             <DialogContentText>{dialogContent}</DialogContentText>
           </DialogContent>

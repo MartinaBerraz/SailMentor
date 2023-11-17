@@ -23,6 +23,16 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.request import Request
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
+from django.contrib import messages
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
@@ -264,6 +274,37 @@ class SailorCreateView(generics.CreateAPIView):
             # Handle user creation validation errors
             # For example, return a response with validation errors
             return Response(user_serializer.errors, status=400)
+        
+
+class ActivateUser(View):
+    template_name = 'activation_status.html'  # Change this to your template path
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['activation_status'] = self.activation_status
+        return context
+
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = models.User.objects.get(pk=uid)
+
+            if user is not None and default_token_generator.check_token(user, token):
+                # Activate the user
+                user.is_active = True
+                user.save()
+
+                self.activation_status = 'success'
+                messages.success(request, 'User activated successfully')
+            else:
+                self.activation_status = 'error'
+                messages.error(request, 'Invalid activation link')
+
+        except Exception as e:
+            self.activation_status = 'error'
+            messages.error(request, str(e))
+
+        return render(request, self.template_name, self.get_context_data())
 
 class UserCreateView(generics.CreateAPIView):
     serializer_class = serializers.UserCreationSerializer
@@ -275,8 +316,20 @@ class UserCreateView(generics.CreateAPIView):
             return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
         # If the username does not exist, proceed with user creation
-        serializer.save()
+        user = serializer.save(is_active=False)  # Set is_active to False by default
+
+        # Send activation email
+        self.send_activation_email(user)
         return Response({"success": "User created successfully"}, status=status.HTTP_201_CREATED)
+    
+    def send_activation_email(self, user):
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        activation_link = f"http://localhost:8000/api/activate/{uid}/{token}/"
+
+        subject = 'Activate your account'
+        message = f'Thank you for signing up. Use the following link to activate your account: {activation_link}'
+        send_mail(subject, message, 'from@example.com', [user.email])
 
 
     def get_serializer_context(self):
