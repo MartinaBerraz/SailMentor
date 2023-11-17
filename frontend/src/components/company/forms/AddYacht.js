@@ -32,6 +32,7 @@ const AddYacht = ({ formData }) => {
     if (yachtTypeStatus === "idle") {
       dispatch(fetchYachtTypes());
     }
+    console.log(formData);
   }, [yachtTypeStatus, dispatch]);
 
   const destinations = useSelector(selectAllDestinations);
@@ -43,7 +44,7 @@ const AddYacht = ({ formData }) => {
     }
   }, [destinationStatus, dispatch]);
 
-  const [formValues, setFormValues] = useState({});
+  const [formValues, setFormValues] = useState(formData || {});
   const yearsRange = Array.from(
     { length: currentYear - 1849 },
     (_, index) => currentYear - index
@@ -53,6 +54,8 @@ const AddYacht = ({ formData }) => {
       ...formValues,
       [fieldName]: e.target.value,
     });
+
+    console.log(formData);
   };
 
   const company = useSelector(selectCurrentUserFk);
@@ -91,9 +94,12 @@ const AddYacht = ({ formData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission with the collected formValues
-    const data = { ...formValues, company: company };
-    console.log(data);
+    // Exclude unwanted fields from formValues
+    const { destination_name, yacht_type_description, ...filteredFormValues } =
+      formValues;
+
+    // Add the company field to the filtered form values
+    const data = { ...filteredFormValues, company: company };
 
     dispatch(addYacht(data));
   };
@@ -162,7 +168,7 @@ const AddYacht = ({ formData }) => {
                 />
               ) : (
                 <img
-                  src={placeholderImage} // Replace with the path to your default image
+                  src={formValues["image"] || placeholderImage}
                   alt="Default Image"
                   style={{
                     maxWidth: "200px",
@@ -186,7 +192,7 @@ const AddYacht = ({ formData }) => {
                   type="file"
                   accept="image/*" // You can specify the accepted file types
                   style={{ display: "none" }}
-                  onChange={(e) => handleFileUpload(e, "image")} // Replace "fileField" with the actual field name
+                  onChange={(e) => handleFileUpload(e, "newImage")} // Replace "fileField" with the actual field name
                 />
               </Button>
             </FormControl>

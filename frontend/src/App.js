@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { isAuthenticated } from "./features/auth/authSlice";
 import { useSelector } from "react-redux";
 import Bookings from "./components/sailor/Bookings";
+import { UpdateForm } from "./components/company/forms/UpdateForm";
 
 function App() {
   const customTheme = createTheme({
@@ -126,6 +127,7 @@ function App() {
               <ProtectedRoute typeAllowed="Company" redirectPath="/home" />
             }
           >
+            <Route path="/:category/update/:id" element={<UpdateForm />} />
             <Route path="/companyYachts" element={<Dash category="yachts" />} />
             <Route
               path="/companyBookings"

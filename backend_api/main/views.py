@@ -290,21 +290,42 @@ class UserCreateView(generics.CreateAPIView):
         context.update({"user_type": user_type, "user_data": user_data})
         return context
 
-class YachtCreateView(generics.ListCreateAPIView):
+class YachtCreateView(generics.ListCreateAPIView, generics.UpdateAPIView):
     queryset = models.Yacht.objects.all()
     serializer_class = serializers.YachtDetailSerializer
 
     parser_classes = [ MultiPartParser, FileUploadParser, ]
 
     def perform_create(self, serializer):
-        print(self.request)
+        yacht_id = self.request.data.get('id')
+        
+        if yacht_id:
+            # If an ID is provided, call the perform_update logic
+            return self.perform_update(serializer)
+        
+        img = self.request.FILES.get('image')
+        serializer.save(image=img)
+    
+    def perform_update(self, serializer):
+        img = self.request.FILES.get('image')
+        serializer.save(image=img)
 
-        img = self.request.FILES['image']  
-        if img:
+class YachtUpdateView(generics.UpdateAPIView):
+    queryset = models.Yacht.objects.all()
+    serializer_class = serializers.YachtDetailSerializer
+
+    parser_classes = [ MultiPartParser, FileUploadParser, ]
+    
+    def perform_update(self, serializer):
+        img = self.request.FILES.get('image', None)
+
+        # Check if the image field is present in the request
+        if img is not None:
             serializer.save(image=img)
         else:
+            # If image field is not present, update other fields without modifying the image
             serializer.save()
-    
+
 class UserLoginView(TokenObtainPairView):
     serializer_class = UserLoginSerializer
 

@@ -7,6 +7,11 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Typography,
 } from "@mui/material";
 import {
@@ -29,11 +34,23 @@ export const BookingCard = ({ booking }) => {
   const dispatch = useDispatch();
   const yachtsStatus = useSelector((state) => state.yachts.status);
 
-  const handleOnClick = (e) => {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleCancelClick = () => {
+    setOpenDialog(true);
+  };
+
+  const handleConfirmCancel = () => {
     dispatch(deleteBooking(booking.availability));
     dispatch(updateBookings());
-    navigate("/bookings");
+    navigate("/home");
+    setOpenDialog(false);
   };
+
+  const handleCancelDialogClose = () => {
+    setOpenDialog(false);
+  };
+
   useEffect(() => {
     if (yachtsStatus === "idle") {
       dispatch(fetchYachts());
@@ -108,14 +125,44 @@ export const BookingCard = ({ booking }) => {
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <Typography>Status: {booking.status}</Typography>
             </Box>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ height: "5vh", width: "10vw" }}
-              onClick={handleOnClick}
-            >
-              Cancel
-            </Button>
+            {booking.status !== "Confirmed" && (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ height: "5vh", width: "10vw" }}
+                  onClick={handleCancelClick}
+                >
+                  Cancel
+                </Button>
+                <Dialog open={openDialog} onClose={handleCancelDialogClose}>
+                  <DialogTitle sx={{ marginInline: "5vw" }}>
+                    Cancel Booking
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      Are you sure you want to cancel the booking?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        width: "80%",
+                        marginInline: "5vw",
+                      }}
+                      color="primary"
+                      align="center"
+                      autoFocus
+                      onClick={handleConfirmCancel}
+                      onClose={handleCancelDialogClose}
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </>
+            )}
           </CardContent>
         </Box>
       </Card>

@@ -33,6 +33,8 @@ urlpatterns = [
     path('sailors/', views.SailorList.as_view()),
     path('create_user/', views.UserCreateView.as_view(), name='user-create'),
     path('create_yacht/',views.YachtCreateView.as_view(), name='yacht-create'),
+    path('update_yacht/<int:pk>/',views.YachtUpdateView.as_view(), name='yacht-update'),
+
     path('create_booking/',views.AvailabilityCreateView.as_view(), name='booking-create'),
     path('login/', views.UserLoginView.as_view(), name='token_obtain_pair'),
     path('logout/', views.LogoutView.as_view(), name='logout'),

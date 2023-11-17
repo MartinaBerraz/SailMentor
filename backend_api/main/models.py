@@ -98,6 +98,8 @@ class Yacht(models.Model):
     max_people = models.IntegerField(null=True)
     price_per_night = models.FloatField(null=True)
     no_cabins = models.IntegerField(null=True)
+    year_built = models.IntegerField(null=True)
+
     length_in_feet = models.FloatField(null=True)
     company = models.ForeignKey(Company,on_delete=models.PROTECT)
     destination = models.ForeignKey(Destination,on_delete=models.PROTECT)

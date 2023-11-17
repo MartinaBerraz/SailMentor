@@ -168,11 +168,13 @@ class YachtTypeDetailSerializer(serializers.ModelSerializer):
 class YachtSerializer(serializers.ModelSerializer):
     destination_name = serializers.CharField(source="destination.name", read_only=True)
     yacht_type_description = serializers.CharField(source='yacht_type.description', read_only=True)
+    company_name = serializers.CharField(source='company.user.username', read_only=True)
+
 
     # company_name = serializers.SerializerMethodField()
     class Meta:
         model=models.Yacht
-        fields=['id','name','destination','image','length_in_feet','no_cabins','price_per_night','max_people','yacht_type','destination_name','yacht_type_description']
+        fields=['id','name','company_name','destination','image','length_in_feet','no_cabins','price_per_night','year_built','max_people','yacht_type','destination_name','yacht_type_description']
    
 
     image = serializers.ImageField(required=True)
@@ -191,12 +193,12 @@ class YachtSerializer(serializers.ModelSerializer):
 
 # Yacht serializers
 class YachtCompanySerializer(serializers.ModelSerializer):
-    destination = serializers.CharField(source='destination.name', read_only=True)
-    yacht_type = serializers.CharField(source='yacht_type.description', read_only=True)
+    destination_name = serializers.CharField(source='destination.name', read_only=True)
+    yacht_type_description = serializers.CharField(source='yacht_type.description', read_only=True)
 
     class Meta:
         model=models.Yacht
-        fields=['id','name','destination','price_per_night','max_people','yacht_type']
+        fields=['id','name','image','destination','destination_name','yacht_type_description','price_per_night','max_people','yacht_type','year_built',"no_cabins","length_in_feet"]
     
     def __init__(self, *args, **kwargs):
         super(YachtCompanySerializer, self).__init__(*args, **kwargs)
@@ -210,7 +212,7 @@ class YachtDetailSerializer(serializers.ModelSerializer):
 class YachtCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Yacht
-        fields = ['name', 'company', 'length_in_feet', 'no_cabins', 'price_per_night', 'max_people', 'yacht_type', 'image']
+        fields = ['name', 'company', 'length_in_feet', 'no_cabins', 'price_per_night', 'max_people', 'yacht_type', 'image','year_built']
 
     
 # serializer for form data

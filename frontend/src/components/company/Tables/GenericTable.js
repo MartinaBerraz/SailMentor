@@ -2,17 +2,33 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AddForm } from "../forms/AddForm";
 import { Paper } from "@mui/material";
+import { selectYacht } from "../../../features/yachts/yachtsSlice";
+import { useDispatch } from "react-redux";
 
 const GenericTable = ({ items, category }) => {
   const [columns, setColumns] = useState([]);
-  const columnsToExclude = ["id", "image"]; // Add the column names you want to exclude
+  const columnsToExclude = [
+    "id",
+    "image",
+    "year_built",
+    "destination",
+    "yacht_type",
+    "max_people",
+    "length_in_feet",
+  ]; // Add the column names you want to exclude
+  const [updateMode, setUpdateMode] = useState(false); // Step 1
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // ... other code ...
 
-  useEffect(() => {
-    console.log(items);
-  }, [items]);
+  const handleUpdate = (id) => {
+    const yacht = items.find((item) => item.id === id);
+    dispatch(selectYacht(yacht));
+    navigate(`/${category}/update/${id}`);
+  };
 
   const customButtonStyle = {
     backgroundColor: "#3FB295", // Replace with your desired color
@@ -25,11 +41,6 @@ const GenericTable = ({ items, category }) => {
     color: "white", // Text color
     marginTop: "5px",
     alignContent: "start",
-  };
-
-  const handleUpdate = (id) => {
-    // Implement your update logic here
-    console.log(`Update item with ID ${id}`);
   };
 
   const handleDelete = (id) => {
@@ -98,7 +109,7 @@ const GenericTable = ({ items, category }) => {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 10 },
             },
           }}
           pageSizeOptions={[5, 10]}
@@ -109,7 +120,10 @@ const GenericTable = ({ items, category }) => {
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Button
             style={addButtonStyle}
-            onClick={() => handleAdd()}
+            onClick={() => {
+              handleAdd();
+              setUpdateMode(false);
+            }} // Reset update mode when adding}
             variant="contained"
           >
             <Link

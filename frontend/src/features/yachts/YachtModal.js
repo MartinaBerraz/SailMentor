@@ -16,6 +16,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Grid } from "@mui/material";
 
 const YachtModal = ({ yacht, modalOpen, handleCloseModal }) => {
   return (
@@ -29,11 +30,12 @@ const YachtModal = ({ yacht, modalOpen, handleCloseModal }) => {
         sx={{
           marginInline: "18vw",
           marginBlock: "3vh",
-          maxHeight: "90vh",
+          height: "50vh",
           width: "64vw",
           alignContent: "center",
           alignItems: "center",
           justifyContent: "center",
+          marginTop: "20vh",
           flexDirection: "column",
           overflowY: "auto", // Enable vertical scrolling
         }}
@@ -46,38 +48,86 @@ const YachtModal = ({ yacht, modalOpen, handleCloseModal }) => {
             color: "white",
             textAlign: "center",
           }}
-          title={`${yacht.name}`}
-          subheader="Author"
+          title={yacht.destination_name}
+          subheader={yacht.yacht_type_description}
         />
         {console.log(yacht)}
 
         <CardContent
           sx={{
-            paddingInline: "3vw",
-            paddingBlock: "4vh",
+            paddingBlock: "5vh",
           }}
         >
-          <Typography
-            sx={{
-              color: "#3FB295",
-              justifyContent: "center",
-              display: "flex",
-            }}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            {yacht.destination_name}
-          </Typography>
           <CardMedia
             sx={{
               justifyContent: "center",
               display: "flex",
-              marginBottom: "4vh",
             }}
           >
             {/* <Carrousel images={yacht.images} /> */}
           </CardMedia>
+          <Grid container>
+            <Grid item md={6}>
+              <div>
+                <Box
+                  component="img"
+                  sx={{
+                    height: 200,
+                    display: "block",
+                    maxWidth: 400,
+                    overflow: "hidden",
+                    width: "100%",
+                    borderRadius: "10px",
+                  }}
+                  src={yacht.image}
+                />
+              </div>
+            </Grid>
+            <Grid item md={6}>
+              <Typography
+                sx={{
+                  color: "#3FB295",
+                  justifyContent: "center",
+                  display: "flex",
+                }}
+                id="modal-modal-title"
+              >
+                <h2 style={{ lineHeight: "0.5" }}>{yacht.name}</h2>{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  justifyContent: "center",
+                  display: "flex",
+                }}
+                id="modal-modal-title"
+              >
+                <p style={{ lineHeight: "0" }}>{yacht.company_name}</p>
+              </Typography>
+              <Typography
+                sx={{
+                  justifyContent: "center",
+                  display: "flex",
+                }}
+              >
+                <p style={{ lineHeight: "0", color: "grey" }}>
+                  Price per night: ${yacht.price_per_night}
+                </p>
+              </Typography>
+
+              <Typography
+                sx={{
+                  color: "grey",
+                  justifyContent: "center",
+                  display: "flex",
+                  textAlign: "center",
+                  marginInline: "3vw",
+                }}
+                id="modal-modal-subtitle"
+              >
+                <p>{`This yacht was built in ${yacht.year_built} and it is ${yacht.length_in_feet} ft. long. It has ${yacht.no_cabins} cabins and up to ${yacht.max_people} people can be on board.`}</p>
+              </Typography>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
     </Modal>
