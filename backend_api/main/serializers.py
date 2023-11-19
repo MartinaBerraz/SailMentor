@@ -304,10 +304,12 @@ class BookingCompanySerializer(serializers.ModelSerializer):
     end_date = serializers.DateField(source='availability.end_date', read_only=True)
     yacht_name = serializers.CharField(source="availability.yacht.name", read_only=True)
     status = serializers.StringRelatedField(source="status.status", read_only=True)
+    yacht_id = serializers.CharField(source="availability.yacht.id", read_only=True)
+
 
     class Meta:
         model=models.Booking
-        fields=['id','sailor_name','start_date','end_date','yacht_name','status']
+        fields=['id','sailor_name','start_date','end_date','yacht_name','status','yacht_id']
     
     def __init__(self, *args, **kwargs):
         super(BookingCompanySerializer, self).__init__(*args, **kwargs)

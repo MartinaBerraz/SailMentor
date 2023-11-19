@@ -144,6 +144,9 @@ export const selectAllBookings = (state) => state.bookings.bookings;
 export const selectDestinationById = (state, bookingId) =>
   state.bookings.bookings.find((booking) => booking.id === bookingId);
 
+export const selectBookingsByYachtId = (state, yachtId) =>
+  state.bookings.bookings.find((booking) => booking.id === yachtId);
+
 export const { bookingAdded, bookingUpdated, reactionAdded, updateBookings } =
   bookingsSlice.actions;
 

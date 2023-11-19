@@ -8,7 +8,7 @@ import { Paper } from "@mui/material";
 import { selectYacht } from "../../../features/yachts/yachtsSlice";
 import { useDispatch } from "react-redux";
 
-const GenericTable = ({ items, category }) => {
+const GenericTable = ({ items, category, onSelect }) => {
   const [columns, setColumns] = useState([]);
   const columnsToExclude = [
     "id",
@@ -18,8 +18,8 @@ const GenericTable = ({ items, category }) => {
     "yacht_type",
     "max_people",
     "length_in_feet",
+    "yacht_id",
   ]; // Add the column names you want to exclude
-  const [updateMode, setUpdateMode] = useState(false); // Step 1
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // ... other code ...
@@ -51,6 +51,12 @@ const GenericTable = ({ items, category }) => {
   const handleAdd = () => {
     // Implement your delete logic here
     console.log(`Add item`);
+  };
+
+  const handleRowClick = (params) => {
+    const selectedYachtData = params.row;
+    console.log(selectedYachtData);
+    onSelect(selectedYachtData); // Call the callback function with selected yacht data
   };
 
   useEffect(() => {
@@ -102,7 +108,10 @@ const GenericTable = ({ items, category }) => {
 
   return (
     <>
-      <Paper elevation={16} sx={{ borderRadius: "20px" }}>
+      <Paper
+        elevation={16}
+        sx={{ display: "flex", borderRadius: "20px", marginBottom: "3vh" }}
+      >
         <DataGrid
           sx={{ border: "none", paddingLeft: "1vw" }}
           rows={items}
@@ -114,20 +123,31 @@ const GenericTable = ({ items, category }) => {
           }}
           pageSizeOptions={[5, 10]}
           autoHeight
+          onRowClick={handleRowClick}
         />
       </Paper>
       {category !== "bookings" && category !== "history" && (
-        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+          }}
+        >
           <Button
             style={addButtonStyle}
             onClick={() => {
               handleAdd();
-              setUpdateMode(false);
             }} // Reset update mode when adding}
             variant="contained"
+            sx={{
+              marginBottom: "3vh",
+            }}
           >
             <Link
-              style={{ textDecoration: "none", color: "white" }}
+              style={{
+                textDecoration: "none",
+                color: "white",
+              }}
               sx={{ color: "white" }}
               to={`/${category}/add/`}
             >

@@ -12,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
+import { CircularProgress } from "@mui/material";
 
 function isStrongPassword(password) {
   // Password should be at least 8 characters long
@@ -28,6 +29,8 @@ function isValidEmail(email) {
 }
 
 const SignUpForm = ({ userType }) => {
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -46,6 +49,8 @@ const SignUpForm = ({ userType }) => {
   };
 
   const showDialog = (title, content) => {
+    setLoading(false);
+
     setDialogTitle(title);
     setDialogContent(content);
     setDialogOpen(true);
@@ -86,14 +91,20 @@ const SignUpForm = ({ userType }) => {
 
     const { email, password, username } = formDataObject;
 
+    setLoading(true);
+
     if (isValidEmail(email) && isStrongPassword(password) && username) {
       console.log(formDataObject);
       if (userType === "Sailor") {
         dispatch(addSailor(formDataObject)).then((response) => {
           console.log("API Response:", response);
           if (response.error) {
+            setLoading(false);
+
             showDialog("Error", `Username already in use`);
           } else {
+            setLoading(false);
+
             showDialog("Success", "Check your mailbox to confirm your user");
           }
         });
@@ -101,8 +112,12 @@ const SignUpForm = ({ userType }) => {
         dispatch(addCompany(formDataObject)).then((response) => {
           console.log("API Response:", response);
           if (response.error) {
+            setLoading(false);
+
             showDialog("Error", `Username already in use`);
           } else {
+            setLoading(false);
+
             showDialog("Success", "Check your mailbox to confirm your user");
           }
         });
@@ -192,6 +207,8 @@ const SignUpForm = ({ userType }) => {
             </Link>
           </Grid>
         </Grid>
+        {/* Display CircularProgress while loading */}
+        {loading && <CircularProgress sx={{ color: "#3FB295" }} />}
       </Box>
     </>
   );

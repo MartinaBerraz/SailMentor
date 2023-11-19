@@ -58,17 +58,6 @@ export const Dash = (props) => {
     items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
     console.log("fetched");
   }
-  useEffect(() => {
-    if (props.category === "yachts") {
-      console.log("WHAT");
-      items = yachtsList; // Use yachtsList when the category is "yachts"
-    } else if (props.category === "bookings") {
-      items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
-    } else if (props.category === "history") {
-      items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
-      console.log("fetched");
-    }
-  });
 
   useEffect(() => {
     if (!loading) {
