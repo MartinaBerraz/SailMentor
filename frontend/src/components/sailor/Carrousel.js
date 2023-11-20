@@ -33,7 +33,7 @@ function Carrousel({ images }) {
   return (
     <Box
       sx={{
-        maxWidth: 400,
+        maxWidth: "100%",
         flexGrow: 1,
         display: "flex",
         alignItems: "center",
@@ -54,11 +54,8 @@ function Carrousel({ images }) {
                   <Box
                     component="img"
                     sx={{
-                      height: 255,
-                      display: "block",
-                      maxWidth: 400,
+                      height: "50vh",
                       overflow: "hidden",
-                      width: "100%",
                     }}
                     src={`${baseUrl}${step}`}
                   />

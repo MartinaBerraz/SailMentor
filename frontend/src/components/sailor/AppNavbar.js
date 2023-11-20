@@ -108,7 +108,11 @@ export const AppNavbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/profile">
+          <Typography>Profile</Typography>
+        </Link>
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem onClick={handleLogOut}>Log out</MenuItem>
     </Menu>
@@ -132,10 +136,12 @@ export const AppNavbar = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" color="inherit">
-          <AnchorIcon /> {/* Replace with LinkIcon */}
-        </IconButton>
-        <p>Experiences</p>
+        <Link to="/sailorExperiences">
+          <IconButton size="large" color="inherit">
+            <AnchorIcon /> {/* Replace with LinkIcon */}
+          </IconButton>
+          <p>Experiences</p>
+        </Link>
       </MenuItem>
       <MenuItem>
         <Link to="/bookings">
@@ -175,7 +181,9 @@ export const AppNavbar = () => {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <Link to="/profile">
+          <p>Profile</p>
+        </Link>
       </MenuItem>
     </Menu>
   );
@@ -246,8 +254,12 @@ export const AppNavbar = () => {
             </IconButton>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
               color="inherit"
+              onClick={() => handleButtonClick("sailorExperiences")}
+              style={{
+                color:
+                  activeButton === "sailorExperiences" ? "#2AA27F" : "white",
+              }}
             >
               <AnchorIcon />
             </IconButton>

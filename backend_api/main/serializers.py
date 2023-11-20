@@ -33,14 +33,15 @@ class SailorSerializer(serializers.ModelSerializer):
         super(SailorSerializer, self).__init__(*args, **kwargs)
 
 class SailorDetailSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
     image = serializers.ImageField(required=True)
 
     class Meta:
         model=models.Sailor
-        fields=['user','year_sailing_since','skipper_license','image']
+        fields=['user','year_sailing_since','skipper_license','image','username']
     
     def __init__(self, *args, **kwargs):
-        super(CompanyDetailSerializer, self).__init__(*args, **kwargs)
+        super(SailorDetailSerializer, self).__init__(*args, **kwargs)
 
 
 # Experience serializers

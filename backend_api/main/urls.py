@@ -31,6 +31,7 @@ urlpatterns = [
     path('yachts-fields/', views.YachtFields.as_view()),
     path('fields-info/<str:model_name>/', views.ModelFieldsInfoView.as_view(), name='fields-info'),
     path('sailors/', views.SailorList.as_view()),
+    path('sailors/<int:pk>/',views.SailorDetail.as_view()),
     path('create_user/', views.UserCreateView.as_view(), name='user-create'),
     path('create_yacht/',views.YachtCreateView.as_view(), name='yacht-create'),
     path('update_yacht/<int:pk>/',views.YachtUpdateView.as_view(), name='yacht-update'),

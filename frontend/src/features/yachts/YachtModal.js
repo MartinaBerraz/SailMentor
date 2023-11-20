@@ -2,7 +2,6 @@ import React from "react";
 import Modal from "@mui/material/Modal";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import Carrousel from "../../components/sailor/Carrousel";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -63,9 +62,7 @@ const YachtModal = ({ yacht, modalOpen, handleCloseModal }) => {
               justifyContent: "center",
               display: "flex",
             }}
-          >
-            {/* <Carrousel images={yacht.images} /> */}
-          </CardMedia>
+          ></CardMedia>
           <Grid container>
             <Grid item md={6}>
               <div>

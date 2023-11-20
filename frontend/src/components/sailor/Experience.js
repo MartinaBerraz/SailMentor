@@ -16,7 +16,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState, useEffect } from "react";
 import { Box, Grid, Paper } from "@mui/material";
-import Carrousel from "./Carrousel";
 import ExperienceModal from "./ExperienceModal";
 
 const Experience = ({ experience }) => {

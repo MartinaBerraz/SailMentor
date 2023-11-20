@@ -23,6 +23,20 @@ export const fetchSailors = createAsyncThunk(
   }
 );
 
+export const fetchCurrentSailor = createAsyncThunk(
+  "sailors/fetchCurrentSailor",
+  async (sailorId) => {
+    try {
+      const response = await client.get(`sailors/${sailorId}/`);
+      return response.data;
+    } catch (error) {
+      // Handle the error, e.g., log it or return a default value
+      console.error("Error fetching sailor:", error);
+      throw error; // Rethrow the error if needed
+    }
+  }
+);
+
 export const addSailor = createAsyncThunk(
   "sailors/addSailor",
   async (formData) => {
@@ -69,6 +83,8 @@ const sailorsSlice = createSlice({
       }
     },
     setCurrentSailor: (state, action) => {
+      console.log(action.payload);
+      console.log(state.sailors);
       state.current = state.sailors.find(
         (sailor) => sailor.id === action.payload
       );
@@ -98,6 +114,14 @@ const sailorsSlice = createSlice({
       })
       .addCase(addSailor.rejected, (state, action) => {
         state.error = action.error.message;
+      })
+      .addCase(fetchCurrentSailor.pending, (state, action) => {})
+      .addCase(fetchCurrentSailor.fulfilled, (state, action) => {
+        // Add any fetched posts to the array
+        state.current = action.payload;
+      })
+      .addCase(fetchCurrentSailor.rejected, (state, action) => {
+        state.error = action.error.message;
       });
   },
 });
@@ -105,6 +129,8 @@ const sailorsSlice = createSlice({
 export const selectAllSailors = (state) => state.sailors.sailors;
 export const selectSailorsStatus = (state) => state.sailors.status;
 export const selectSailorsErrors = (state) => state.sailors.error;
+
+export const selectCurrentSailor = (state) => state.sailors.current;
 
 export const selectSailorById = (state, sailorId) =>
   state.sailors.sailors.find((sailor) => sailor.id === sailorId);

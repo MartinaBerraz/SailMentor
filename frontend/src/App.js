@@ -17,6 +17,9 @@ import { useSelector } from "react-redux";
 import Bookings from "./components/sailor/Bookings";
 import { UpdateForm } from "./components/company/forms/UpdateForm";
 import YachtsDashboard from "./components/company/YachtsDashboard";
+import Profile, {
+  SailorExperiences,
+} from "./components/sailor/SailorExperiences";
 
 function App() {
   const customTheme = createTheme({
@@ -119,6 +122,8 @@ function App() {
               <ProtectedRoute typeAllowed="Sailor" redirectPath="/my%yachts" />
             }
           >
+            <Route path="/sailorExperiences" element={<SailorExperiences />} />
+
             <Route path="/home" element={<Home />} />
             <Route path="/yachts" element={<Yachts />} />
             <Route path="/bookings" element={<Bookings />} />

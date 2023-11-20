@@ -86,6 +86,26 @@ export const selectFilteredExperiences = (state) => {
   );
 };
 
+export const selectSailorFilteredExperiences = (state, sailorId) => {
+  const destinationId = state.filters.destination; // assuming you have a filters slice
+
+  if (!destinationId) {
+    return state.experiences.experiences.filter(
+      (experience) => experience.sailor_id === sailorId
+    );
+  }
+  const destination = state.destinations.destinations.find(
+    (destination) => destination.id === destinationId
+  );
+  console.log(state.experiences.experiences[0]);
+
+  return state.experiences.experiences.filter(
+    (experience) =>
+      experience.destination_name === destination.name &&
+      experience.sailor_id === sailorId
+  );
+};
+
 export const selectAllExperiences = (state) => state.experiences.experiences;
 
 export const selectDestinationById = (state, experienceId) =>

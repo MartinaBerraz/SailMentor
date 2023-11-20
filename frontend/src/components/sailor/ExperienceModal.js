@@ -25,76 +25,12 @@ const ExperienceModal = ({ experience, modalOpen, handleCloseModal }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      {/* <div style={{ marginInline: "20vw", marginBlock: "5vh" }}>
-        <Paper
-          container
-          elevation={16}
-          sx={{
-            maxHeight: "80vh",
-            width: "57vw",
-            alignContent: "center",
-            alignItems: "center",
-            paddingInline: "3vw",
-            paddingBlock: "4vh",
-            borderRadius: "20px",
-            justifyContent: "center",
-            flexDirection: "column",
-            overflowY: "auto", // Enable vertical scrolling
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#3FB295",
-              justifyContent: "center",
-              display: "flex",
-            }}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            {experience.name}
-          </Typography>
-          <Typography
-            sx={{
-              justifyContent: "center",
-              display: "flex",
-              marginBottom: "4vh",
-            }}
-            id="modal-modal-description"
-          >
-            in {experience.destination_name}
-          </Typography>
-          <Carrousel images={experience.images} />
-          <Typography id="modal-modal-description" sx={{ marginBottom: "2vh" }}>
-            {experience.detailed_description}
-          </Typography>
-          <Typography
-            id="modal-modal-description"
-            sx={{ marginBottom: "2vh", fontWeight: "bold" }}
-          >
-            Precautions:
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ marginBottom: "2vh" }}>
-            {experience.precautions}
-          </Typography>
-          <Typography
-            id="modal-modal-description"
-            sx={{ marginBottom: "2vh", fontWeight: "bold" }}
-          >
-            Recommendation:
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ marginBottom: "2vh" }}>
-            {experience.recommendation}
-          </Typography>
-        </Paper>
-      </div> */}
-
       <Card
         sx={{
-          marginInline: "18vw",
+          marginInline: "25vw",
           marginBlock: "3vh",
           maxHeight: "90vh",
-          width: "64vw",
+          width: "50vw",
           alignContent: "center",
           alignItems: "center",
           justifyContent: "center",
@@ -124,7 +60,6 @@ const ExperienceModal = ({ experience, modalOpen, handleCloseModal }) => {
         />
         <CardContent
           sx={{
-            paddingInline: "3vw",
             paddingBlock: "4vh",
           }}
         >

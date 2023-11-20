@@ -49,7 +49,7 @@ class SailorList(generics.ListCreateAPIView):
 
     
 class SailorDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = models.Company.objects.all()
+    queryset = models.Sailor.objects.all()
     serializer_class=serializers.SailorDetailSerializer
 
 
