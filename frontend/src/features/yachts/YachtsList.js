@@ -73,7 +73,6 @@ export const YachtsList = () => {
 
   // Helper function to check if two date ranges overlap
   function isDateRangeOverlap(start1, end1, start2, end2) {
-    console.log(start1 <= end2 && start2 <= end1);
     return start1 <= end2 && start2 <= end1;
   }
 

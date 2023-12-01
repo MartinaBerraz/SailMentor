@@ -5,6 +5,7 @@ const initialState = {
   availabilities: [],
   status: "idle",
   error: null,
+  unbookedAvailabilities: [],
 };
 
 export const fetchAvailabilities = createAsyncThunk(
@@ -17,6 +18,47 @@ export const fetchAvailabilities = createAsyncThunk(
       // Handle the error, e.g., log it or return a default value
       console.error("Error fetching availabilities:", error);
       throw error; // Rethrow the error if needed
+    }
+  }
+);
+
+export const deleteUnbookedAvailability = createAsyncThunk(
+  "availabilities/deleteUnbookedAvailability",
+  async (availabilityId) => {
+    try {
+      await client.delete(`availabilities/${availabilityId}/`);
+      return availabilityId;
+    } catch (error) {
+      console.error("Error deleting unbooked availability:", error);
+      throw error;
+    }
+  }
+);
+
+export const fetchUnbookedAvailabilities = createAsyncThunk(
+  "availabilities/fetchUnbookedAvailabilities",
+  async (yachtId) => {
+    try {
+      const response = await client.get(
+        `yachts/${yachtId}/unbooked-availabilities/`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching unbooked availabilities:", error);
+      throw error;
+    }
+  }
+);
+
+export const addUnbookedAvailability = createAsyncThunk(
+  "availabilities/addUnbookedAvailability",
+  async (availabilityData) => {
+    try {
+      const response = await client.post("availabilities/", availabilityData);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding unbooked availability:", error);
+      throw error;
     }
   }
 );
@@ -49,6 +91,14 @@ const availabilitiesSlice = createSlice({
         existingAvailability.content = content;
       }
     },
+    availabilityDeleted: {
+      reducer(state, action) {
+        const availabilityId = action.payload;
+        state.unbookedAvailabilities = state.unbookedAvailabilities.filter(
+          (availability) => availability.id !== availabilityId
+        );
+      },
+    },
   },
   extraReducers(builder) {
     builder
@@ -64,22 +114,51 @@ const availabilitiesSlice = createSlice({
       .addCase(fetchAvailabilities.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchUnbookedAvailabilities.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUnbookedAvailabilities.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.unbookedAvailabilities = action.payload;
+      })
+      .addCase(fetchUnbookedAvailabilities.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(addUnbookedAvailability.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.unbookedAvailabilities.push(action.payload);
+      })
+      .addCase(deleteUnbookedAvailability.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteUnbookedAvailability.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const availabilityId = action.payload;
+        state.unbookedAvailabilities = state.unbookedAvailabilities.filter(
+          (availability) => availability.id !== availabilityId
+        );
       });
-    // .addCase(addNewDestination.fulfilled, (state, action) => {
-    //   state.availabilities.push(action.payload);
-    // });
   },
 });
 
 export const selectAllAvailabilities = (state) =>
   state.availabilities.availabilities;
 
+export const selectUnbookedAvailabilities = (state) =>
+  state.availabilities.unbookedAvailabilities;
+
 export const selectDestinationById = (state, availabilityId) =>
   state.availabilities.availabilities.find(
     (availability) => availability.id === availabilityId
   );
 
-export const { availabilityAdded, availabilityUpdated, reactionAdded } =
-  availabilitiesSlice.actions;
+export const {
+  availabilityAdded,
+  availabilityUpdated,
+  reactionAdded,
+  availabilityDeleted,
+} = availabilitiesSlice.actions;
 
 export default availabilitiesSlice.reducer;

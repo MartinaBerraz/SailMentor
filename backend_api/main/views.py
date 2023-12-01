@@ -251,7 +251,24 @@ class AvailabilityDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilityDetailSerializer
 
+class UnbookedAvailabilitiesList(generics.ListAPIView):
+    serializer_class = serializers.AvailabilitySerializer
 
+    def get_queryset(self):
+        # Assuming you have a URL parameter 'yacht_id' to specify the yacht
+        yacht_id = self.kwargs['yacht_id']
+
+        # Get all availabilities for the specified yacht
+        all_availabilities = models.Availability.objects.filter(yacht_id=yacht_id)
+
+        # Get the availability IDs that are attached to a booking
+        booked_availability_ids = all_availabilities.filter(booking__isnull=False).values_list('id', flat=True)
+
+        # Filter out the availabilities that are attached to a booking
+        unbooked_availabilities = all_availabilities.exclude(id__in=booked_availability_ids)
+
+        return unbooked_availabilities
+    
 class ModelFieldsInfoView(APIView):
     def get(self, request, model_name):
         fields_info = get_model_fields_info(model_name)

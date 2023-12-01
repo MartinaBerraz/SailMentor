@@ -348,23 +348,8 @@ class BookingSailorSerializer(serializers.ModelSerializer):
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Availability
-        fields = ['yacht', 'start_date', 'end_date']
+        fields = ['id','yacht', 'start_date', 'end_date']
 
-    # def create(self, validated_data):
-    #     # Create availability
-    #     availability = models.Availability.objects.create(**validated_data)
-
-    #     # Assuming Booking model has a ForeignKey to Availability named 'availability'
-    #     booking_data = self.context.get("booking_data", {})
-    #     booking_data['availability'] = availability
-
-    #     # Create booking and associate it with the availability
-    #     booking_serializer = BookingCreateSerializer(data=booking_data)
-
-    #     if booking_serializer.is_valid():
-    #         booking_serializer.save()
-
-    #     return availability
 
 class AvailabilityDetailSerializer(serializers.ModelSerializer):  
     class Meta:

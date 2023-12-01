@@ -354,25 +354,27 @@ const AddYacht = ({ formData }) => {
         </Button>
       </Paper>
       {/* Conditionally render the AvailabilityCalendar modal */}
-      {showCalendarModal && (
-        <Modal onClose={handleCloseCalendarModal} open={showCalendarModal}>
-          {/* Container element with necessary styles */}
-          <Paper
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              padding: "10px",
-              transform: "translate(-50%, -50%)",
-              borderRadius: "5px",
-              display: "flex",
-            }}
-          >
-            {/* You can pass any props or content to your modal */}
-            <AvailabilityCalendar />
-          </Paper>
-        </Modal>
-      )}
+      {
+        //   showCalendarModal && (
+        //     <Modal onClose={handleCloseCalendarModal} open={showCalendarModal}>
+        //       {/* Container element with necessary styles */}
+        //       <Paper
+        //         sx={{
+        //           position: "absolute",
+        //           top: "50%",
+        //           left: "50%",
+        //           padding: "10px",
+        //           transform: "translate(-50%, -50%)",
+        //           borderRadius: "5px",
+        //           display: "flex",
+        //         }}
+        //       >
+        //         {/* You can pass any props or content to your modal */}
+        //         <AvailabilityCalendar />
+        //       </Paper>
+        //     </Modal>
+        //   )
+      }
     </form>
   );
 };

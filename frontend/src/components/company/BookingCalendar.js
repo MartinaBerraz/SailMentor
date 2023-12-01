@@ -5,19 +5,34 @@ import {
   fetchCompanyBookings,
   selectAllBookings,
 } from "../../features/bookings/bookingsSlice";
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { addDays, subDays } from "date-fns";
+import {
+  addUnbookedAvailability,
+  deleteUnbookedAvailability,
+  fetchUnbookedAvailabilities,
+  selectUnbookedAvailabilities,
+} from "../../features/availabilities/availabilitySlice";
+import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 
 export const BookingsCalendar = (props) => {
+  const dispatch = useDispatch();
+
   const initialDateRange = {
     startDate: subDays(new Date(), 1),
     endDate: addDays(new Date(), 1),
     key: "selection",
   };
-  const [bookedPeriods, setBookedPeriods] = useState([]);
   const [unavailablePeriods, setUnavailablePeriods] = useState([]);
   const [state, setState] = useState([initialDateRange]);
 
@@ -25,15 +40,44 @@ export const BookingsCalendar = (props) => {
     const { selection } = ranges;
     setState([selection]);
   };
+  const unbookedAvailabilities = useSelector(selectUnbookedAvailabilities);
+
+  // Fetch unbooked availabilities when the component mounts
+  useEffect(() => {
+    setUnavailablePeriods([]);
+
+    dispatch(fetchUnbookedAvailabilities(props.id));
+  }, [dispatch, props.id]);
+
+  useEffect(() => {
+    if (unbookedAvailabilities.length > 0) {
+      const periods = unbookedAvailabilities.map((period) => ({
+        startDate: new Date(period.start_date),
+        endDate: new Date(period.end_date),
+        key: period.id,
+        color: "#FF6347", // Red color for unavailable periods
+      }));
+      console.log(unbookedAvailabilities);
+      setUnavailablePeriods(periods);
+    }
+  }, [unbookedAvailabilities]);
+
+  console.log(unbookedAvailabilities);
 
   const handleOnButtonClick = () => {
     if (state[0].startDate !== null && state[0].endDate !== null) {
       setUnavailablePeriods([...unavailablePeriods, state[0]]);
       setState([initialDateRange]);
+
+      const availabilityData = {
+        yacht: props.id,
+        start_date: state[0].startDate.toISOString().split("T")[0],
+        end_date: state[0].endDate.toISOString().split("T")[0],
+      };
+      dispatch(addUnbookedAvailability(availabilityData));
     }
   };
 
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
   const authData = useSelector(selectAuthData);
@@ -55,6 +99,18 @@ export const BookingsCalendar = (props) => {
     );
   }
 
+  const handleDeleteAvailability = (availabilityId) => {
+    dispatch(deleteUnbookedAvailability(availabilityId))
+      .then(() => {
+        // Fetch updated unbooked availabilities after deletion
+        dispatch(fetchUnbookedAvailabilities(props.id));
+      })
+      .catch((error) => {
+        // Handle errors if necessary
+        console.error("Error deleting unbooked availability:", error);
+      });
+  };
+
   useEffect(() => {
     if (!loading && bookingStatus === "idle") {
       dispatch(fetchCompanyBookings(companyFk));
@@ -70,8 +126,8 @@ export const BookingsCalendar = (props) => {
     const endDate = new Date(booking.end_date);
 
     // Add 1 day to both startDate and endDate
-    startDate.setDate(startDate.getDate() + 1);
-    endDate.setDate(endDate.getDate() + 1);
+    startDate.setDate(startDate.getDate());
+    endDate.setDate(endDate.getDate());
 
     return {
       startDate,
@@ -144,6 +200,7 @@ export const BookingsCalendar = (props) => {
                   {ranges.range.sailorName}
                 </Typography>
               )}
+              minDate={new Date()} // Set minDate to the current date
               editableDateInputs={false}
               rangeColors={["#3FB295", "#FF6347"]}
             />
@@ -168,56 +225,65 @@ export const BookingsCalendar = (props) => {
               Add Unavailable Period
             </Button>
             {unavailablePeriods.map((period, index) => (
-              <Grid
-                container
-                display={"flex"}
-                component={Paper}
-                elevation={1}
-                sx={{
-                  flexDirection: "row",
-                  width: "30vw",
-                  height: "5vh",
-                  marginBottom: "0.5vh",
-                }}
-                key={index}
-              >
+              <>
                 <Grid
-                  item
-                  md={6}
+                  container
+                  display={"flex"}
+                  component={Paper}
+                  elevation={1}
                   sx={{
-                    backgroundColor: "#3FB295",
-                    color: "white",
-                    opacity: "0.9",
-                    paddingTop: "1vh",
+                    flexDirection: "row",
+                    width: "30vw",
+                    height: "5vh",
+                    marginBottom: "0.5vh",
                   }}
+                  key={index}
                 >
-                  <Typography>
-                    {`${period.startDate.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}`}
-                  </Typography>
+                  <Grid
+                    item
+                    md={5.5}
+                    sx={{
+                      backgroundColor: "#3FB295",
+                      color: "white",
+                      opacity: "0.9",
+                      paddingTop: "1vh",
+                    }}
+                  >
+                    <Typography>
+                      {`${period.startDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}`}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    md={5.5}
+                    sx={{
+                      backgroundColor: "white",
+                      color: "black",
+                      opacity: "0.5",
+                      paddingTop: "1vh",
+                    }}
+                  >
+                    <Typography>
+                      {`${period.endDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}`}
+                    </Typography>
+                  </Grid>
+                  <Grid item md={1}>
+                    <IconButton
+                      onClick={() => handleDeleteAvailability(period.key)}
+                    >
+                      <DisabledByDefaultIcon sx={{ color: "grey" }} />
+                    </IconButton>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  md={6}
-                  sx={{
-                    backgroundColor: "white",
-                    color: "black",
-                    opacity: "0.5",
-                    paddingTop: "1vh",
-                  }}
-                >
-                  <Typography>
-                    {`${period.endDate.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}`}
-                  </Typography>
-                </Grid>
-              </Grid>
+              </>
             ))}
           </Grid>
         </Grid>
