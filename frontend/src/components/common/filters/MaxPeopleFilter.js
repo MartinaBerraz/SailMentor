@@ -28,7 +28,7 @@ const MaxPeopleFilter = () => {
   return (
     <div>
       <FormControl sx={{ minWidth: "10vw" }}>
-        {selected ? null : <InputLabel>No. People</InputLabel>}
+        {!selected && <InputLabel shrink={false}>No. People</InputLabel>}
 
         <Select
           sx={{

@@ -31,6 +31,21 @@ export const BookingsDashboard = (props) => {
   const bookingsList = useSelector(selectAllBookings);
 
   let items = [];
+  useEffect(() => {
+    if (props.category === "bookings") {
+      console.log(`props id: ${props.id}`);
+      if (props.id) {
+        items = bookingsList.filter(
+          (booking) => booking.yacht_id === props.id.toString()
+        );
+      } else {
+        items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
+      }
+    } else if (props.category === "history") {
+      items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
+    }
+  }, [props.id]);
+
   if (props.category === "bookings") {
     if (props.id) {
       items = bookingsList.filter(
@@ -55,23 +70,17 @@ export const BookingsDashboard = (props) => {
 
   return (
     // BookingsDashboard.js
-    items.length > 0 ? (
-      <Box
-        sx={{
-          flexGrow: 1,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          display: "flex",
-          flexDirection: "column", // Set the flex direction to column
-          alignItems: "flex-start", // Adjust alignment as needed
-        }}
-      >
-        <GenericTable category={props.category} items={items} />
-      </Box>
-    ) : (
-      <>
-        <Typography>No bookings found yet...</Typography>
-      </>
-    )
+    <Box
+      sx={{
+        flexGrow: 1,
+        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        display: "flex",
+        flexDirection: "column", // Set the flex direction to column
+        alignItems: "flex-start", // Adjust alignment as needed
+      }}
+    >
+      <GenericTable category={props.category} items={items} />
+    </Box>
   );
 };
 

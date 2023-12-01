@@ -167,6 +167,10 @@ class BookingCreateView(generics.CreateAPIView):
     queryset = models.Booking.objects.all()
     serializer_class = serializers.BookingCreateSerializer
 
+class ExperienceCreateView(generics.CreateAPIView):
+    queryset = models.Experience.objects.all()
+    serializer_class = serializers.ExperienceCreateSerializer
+
 
 
 class AvailabilityList(generics.ListCreateAPIView):

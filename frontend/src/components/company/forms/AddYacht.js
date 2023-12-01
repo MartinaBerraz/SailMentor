@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Paper from "@mui/material/Paper";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useDispatch, useSelector } from "react-redux";
 import { addYacht } from "../../../features/yachts/yachtsSlice";
 import {
@@ -17,8 +16,10 @@ import { selectCurrentCompanyId } from "../../../features/companies/companiesSli
 import { selectCurrentUserFk } from "../../../features/auth/authSlice";
 import { selectAllDestinations } from "../../../features/destinations/destinationsSlice";
 import { fetchDestinations } from "../../../features/destinations/destinationsSlice";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Modal, Typography } from "@mui/material";
 import placeholderImage from "../../images/placeholder.png";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import AvailabilityCalendar from "../AvailabilityCalendar";
 
 const AddYacht = ({ formData }) => {
   const yachtTypes = useSelector(selectAllYachtTypes);
@@ -27,6 +28,8 @@ const AddYacht = ({ formData }) => {
 
   const currentYear = new Date().getFullYear();
   const dispatch = useDispatch();
+
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   React.useEffect(() => {
     if (yachtTypeStatus === "idle") {
@@ -100,8 +103,14 @@ const AddYacht = ({ formData }) => {
 
     // Add the company field to the filtered form values
     const data = { ...filteredFormValues, company: company };
+    console.log(data);
 
     dispatch(addYacht(data));
+    setShowCalendarModal(true);
+  };
+
+  const handleCloseCalendarModal = () => {
+    setShowCalendarModal(false);
   };
 
   const customButtonStyle = {
@@ -344,6 +353,26 @@ const AddYacht = ({ formData }) => {
           Submit
         </Button>
       </Paper>
+      {/* Conditionally render the AvailabilityCalendar modal */}
+      {showCalendarModal && (
+        <Modal onClose={handleCloseCalendarModal} open={showCalendarModal}>
+          {/* Container element with necessary styles */}
+          <Paper
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              padding: "10px",
+              transform: "translate(-50%, -50%)",
+              borderRadius: "5px",
+              display: "flex",
+            }}
+          >
+            {/* You can pass any props or content to your modal */}
+            <AvailabilityCalendar />
+          </Paper>
+        </Modal>
+      )}
     </form>
   );
 };

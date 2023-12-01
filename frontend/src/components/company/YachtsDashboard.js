@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthData } from "../../features/auth/authSlice";
 import BookingsDashboard from "./BookingsDashboard";
+import BookingCalendar from "./BookingCalendar";
 
 export const YachtsDashboard = (props) => {
   const dispatch = useDispatch();
@@ -66,10 +67,12 @@ export const YachtsDashboard = (props) => {
         />
 
         {selectedYacht && (
-          <BookingsDashboard
-            category="bookings"
-            id={selectedYacht}
-          ></BookingsDashboard>
+          <>
+            <BookingsDashboard
+              category="bookings"
+              id={selectedYacht}
+            ></BookingsDashboard>
+          </>
         )}
       </Box>
     </Box>

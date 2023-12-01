@@ -27,7 +27,7 @@ class SailorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Sailor
-        fields=['user','year_sailing_since','skipper_license']
+        fields=['id','user','year_sailing_since','skipper_license']
 
     def __init__(self, *args, **kwargs):
         super(SailorSerializer, self).__init__(*args, **kwargs)
@@ -38,7 +38,7 @@ class SailorDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Sailor
-        fields=['user','year_sailing_since','skipper_license','image','username']
+        fields=['id','user','year_sailing_since','skipper_license','image','username']
     
     def __init__(self, *args, **kwargs):
         super(SailorDetailSerializer, self).__init__(*args, **kwargs)
@@ -87,7 +87,22 @@ class ExperienceImageSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.ExperienceImage
         fields=['id','experience','image']
-    
+
+class ExperienceCreateSerializer(serializers.ModelSerializer):
+    images = ExperienceImageSerializer(many=True, required=False)
+
+    class Meta:
+        model = models.Experience
+        fields = ['id', 'name', 'destination', 'sailor', 'brief_description', 'detailed_description', 'recommendation', 'precautions', 'images']
+
+    def create(self, validated_data):
+        images_data = validated_data.pop('images', [])
+        experience = models.Experience.objects.create(**validated_data)
+
+        for image_data in images_data:
+            models.ExperienceImage.objects.create(experience=experience, **image_data)
+
+        return experience
 
 class ExperienceDetailSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField(method_name='get_images')

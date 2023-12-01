@@ -36,7 +36,7 @@ const YachtTypesFilter = () => {
   return (
     <div>
       <FormControl sx={{ minWidth: "10vw" }}>
-        {selected ? null : <InputLabel>Yacht Type</InputLabel>}
+        {selected ? null : <InputLabel shrink={false}>Yacht Type</InputLabel>}
         <Select
           value={selected}
           onChange={handleYachtTypeChange}

@@ -21,6 +21,19 @@ export const fetchExperiences = createAsyncThunk(
   }
 );
 
+export const addExperience = createAsyncThunk(
+  "experiences/addExperience",
+  async (experienceData) => {
+    try {
+      const response = await client.post("create_experience/", experienceData);
+      return response.data;
+    } catch (error) {
+      console.error("Error adding experience:", error);
+      throw error;
+    }
+  }
+);
+
 const experiencesSlice = createSlice({
   name: "experiences",
   initialState,
@@ -63,10 +76,18 @@ const experiencesSlice = createSlice({
       .addCase(fetchExperiences.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(addExperience.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addExperience.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.experiences.push(action.payload);
+      })
+      .addCase(addExperience.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
-    // .addCase(addNewDestination.fulfilled, (state, action) => {
-    //   state.destinations.push(action.payload);
-    // });
   },
 });
 

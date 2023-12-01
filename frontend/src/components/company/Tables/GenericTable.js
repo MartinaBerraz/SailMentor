@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import { AddForm } from "../forms/AddForm";
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { selectYacht } from "../../../features/yachts/yachtsSlice";
 import { useDispatch } from "react-redux";
 
@@ -56,7 +56,9 @@ const GenericTable = ({ items, category, onSelect }) => {
   const handleRowClick = (params) => {
     const selectedYachtData = params.row;
     console.log(selectedYachtData);
-    onSelect(selectedYachtData); // Call the callback function with selected yacht data
+    if (onSelect) {
+      onSelect(selectedYachtData); // Call the callback function with selected yacht data
+    }
   };
 
   useEffect(() => {
@@ -106,7 +108,7 @@ const GenericTable = ({ items, category, onSelect }) => {
     }
   }, [items]);
 
-  return (
+  return items.length > 1 ? (
     <>
       <Paper
         elevation={16}
@@ -118,7 +120,7 @@ const GenericTable = ({ items, category, onSelect }) => {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
+              paginationModel: { page: 0, pageSize: 3 },
             },
           }}
           pageSizeOptions={[5, 10]}
@@ -156,6 +158,28 @@ const GenericTable = ({ items, category, onSelect }) => {
           </Button>
         </Box>
       )}
+    </>
+  ) : (
+    <>
+      <Paper
+        elevation={12}
+        sx={{
+          width: "72vw",
+          height: "32vh",
+          justifyContent: "center",
+          marginBottom: "2vh",
+          borderRadius: "20px",
+          // backgroundColor: "#3FB295",
+          opacity: "0.3",
+        }}
+      >
+        <Typography
+          sx={{
+            justifyContent: "center",
+            paddingTop: "10vh",
+          }}
+        >{`No ${category} found`}</Typography>
+      </Paper>
     </>
   );
 };

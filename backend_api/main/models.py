@@ -45,15 +45,10 @@ class Destination(models.Model):
     def __str__(self):
         return self.name
 
-class ExperienceManager(models.Manager):
-    def get_experience_choices(self):
-        return tuple((yt.name, yt.name) for yt in self.all())
-
 # Model for experience
 class Experience(models.Model):
     name = models.CharField(max_length=30)
 
-    objects = ExperienceManager()
     brief_description = models.CharField(max_length=150)
     detailed_description = models.TextField(null=True)
     recommendation = models.TextField(null=True)

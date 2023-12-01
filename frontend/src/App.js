@@ -20,6 +20,7 @@ import YachtsDashboard from "./components/company/YachtsDashboard";
 import Profile, {
   SailorExperiences,
 } from "./components/sailor/SailorExperiences";
+import Availability from "./components/company/Availability";
 
 function App() {
   const customTheme = createTheme({
@@ -145,6 +146,7 @@ function App() {
             />
 
             <Route path="/yachts/add" element={<AddForm category="yachts" />} />
+            <Route path="/companyAvailability" element={<Availability />} />
           </Route>
           <Route index element={<SignIn />} />
         </Routes>

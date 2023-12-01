@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('companies/',views.CompanyList.as_view()),
     path('company/<int:pk>/',views.CompanyDetail.as_view()),
+    path('create_experience/',views.ExperienceCreateView.as_view()),
     path('experiences/',views.ExperienceDetailList.as_view()),
     path('experience/<int:pk>/',views.ExperienceDetail.as_view()),
     path('regions/',views.RegionList.as_view()),

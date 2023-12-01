@@ -28,6 +28,7 @@ import logo from "../../images/blackLogo.png";
 import { Paper } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const drawerWidth = 240;
 
@@ -73,6 +74,11 @@ export const SideBar = (props) => {
               link: "companyBookings",
             },
             { text: "History", icon: <HistoryIcon />, link: "companyHistory" },
+            {
+              text: "Availability",
+              icon: <CalendarMonthIcon />,
+              link: "companyAvailability",
+            },
           ].map((item, index) => (
             <Link to={`/` + item.link} className="link-no-formatting">
               <ListItem

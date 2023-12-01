@@ -137,15 +137,17 @@ export const addYacht = createAsyncThunk("yachts/addYacht", async (data) => {
 
     // Iterate over the form values and append them to the FormData object
     for (const fieldName in data) {
-      // Check if the field is a file (e.g., "image") and append it accordingly
+      // Check if the field is a file (e.g., "newImage") and append it accordingly
       if (fieldName === "newImage" && data[fieldName] instanceof File) {
-        formData.append("image", data["image"], data["image"].name);
+        formData.append("image", data["newImage"], data["newImage"].name);
       } else if (fieldName === "image") {
+        // If you want to handle "image" separately, you can add specific logic here
       } else {
         // Append other non-file fields
         formData.append(fieldName, data[fieldName]);
       }
     }
+
     if (formData.get("id")) {
       const response = await client.put(
         `update_yacht/${formData.get("id")}/`,

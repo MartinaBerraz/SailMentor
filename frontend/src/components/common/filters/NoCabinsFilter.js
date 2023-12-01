@@ -1,12 +1,11 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAllDestinations } from "../../../features/destinations/destinationsSlice";
+import { useDispatch } from "react-redux";
 import { setNoCabinsFilter } from "../../../features/filters/filtersSlice";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { FormControl } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
 
 const NoCabinsFilter = () => {
   const dispatch = useDispatch();
@@ -28,16 +27,24 @@ const NoCabinsFilter = () => {
   return (
     <div>
       <FormControl sx={{ minWidth: "10vw" }}>
-        {selected ? null : <InputLabel>No. Cabins</InputLabel>}
+        {!selected ? (
+          <InputLabel shrink={false} id="demo-simple-select-label">
+            No. Cabins
+          </InputLabel>
+        ) : null}
 
         <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
           renderValue={(value) => (value ? `${value} cabins` : "No. Cabins")}
           sx={{ backgroundColor: "white", borderRadius: "10px" }}
           value={selected}
           onChange={handleNoCabinsChange}
         >
           {NoCabinsOptions.map((no) => (
-            <MenuItem value={no}>{no}</MenuItem>
+            <MenuItem key={no} value={no}>
+              {no}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

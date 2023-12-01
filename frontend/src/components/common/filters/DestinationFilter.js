@@ -37,7 +37,9 @@ const DestinationFilter = () => {
             borderBlock: 0,
           }}
         >
-          {selected ? null : <InputLabel>Destinations</InputLabel>}
+          {selected ? null : (
+            <InputLabel shrink={false}>Destinations</InputLabel>
+          )}
           <Select
             sx={{
               // backgroundColor: "#3FB295",
