@@ -236,6 +236,45 @@ class PasswordResetCodeCreateView(generics.CreateAPIView):
         else:
             # Handle serializer validation errors
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class VerifyResetCodeAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        verification_code = request.data.get('verificationCode')
+        new_password = request.data.get('newPassword')
+
+
+
+        # Validate email and verification code
+        if not email or not verification_code:
+            return Response({'error': 'Verification code is required.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+                # Validate email and verification code
+        if not new_password:
+            return Response({'error': 'You need to provide a new Password.'}, status=status.HTTP_400_BAD_REQUEST)
+ 
+
+        try:
+            user_code = models.PasswordResetCode.objects.get(user__email=email, code=verification_code)
+            
+        except models.PasswordResetCode.DoesNotExist:
+            return Response({'error': 'Invalid verification code or email.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the code has expired
+        if user_code.expires_at < timezone.now():
+            return Response({'error': 'Verification code has expired.'}, status=status.HTTP_400_BAD_REQUEST)
+
+         # Get the user associated with the reset code
+        user = user_code.user
+
+        # Set the new password for the user
+        user.set_password(new_password)
+        user.save()
+
+        # Optionally, you may want to invalidate the code to prevent reuse
+        user_code.delete()
+
+        return Response({'message': 'Verification and password reset successful.'}, status=status.HTTP_200_OK)
     
 def send_booking_confirmation_email(booking, user):
     # Get sailor email using sailor_id

@@ -137,7 +137,7 @@ const VerificationCode = () => {
         }}
         onClick={handleSubmit}
       >
-        SUBMIT{" "}
+        SUBMIT
       </Button>
     </Paper>
   );

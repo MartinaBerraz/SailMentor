@@ -37,6 +37,23 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
+export const verifyCodeAndResetPassword = createAsyncThunk(
+  "auth/verifyCodeAndResetPassword",
+  async (data) => {
+    try {
+      // Call your API or service to verify the code and reset the password
+      const response = await client.post("verify_code/", data);
+
+      // Return the response data or handle it as needed
+      return response.data;
+    } catch (error) {
+      // Handle errors and reject the promise with an error message
+      console.error(error);
+      return error.response.data;
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -81,6 +98,12 @@ const authSlice = createSlice({
       .addCase(resetPassword.rejected, (state, action) => {
         state.error = action.error.message;
         state.status = "failed";
+      })
+      .addCase(verifyCodeAndResetPassword.fulfilled, (state, action) => {
+        // Handle success if needed
+      })
+      .addCase(verifyCodeAndResetPassword.rejected, (state, action) => {
+        // Handle error if needed
       });
   },
 });

@@ -38,7 +38,7 @@ import {
   DialogTitle,
   Modal,
 } from "@mui/material";
-import ResetPassword from "./ResetPassword";
+import ResetPasswordStepper from "./ResetPasswordStepper";
 
 function Copyright(props) {
   return (
@@ -263,7 +263,7 @@ const SignIn = () => {
       </Grid>
       {showModal && (
         <Modal onClose={handleCloseModal} open={showModal}>
-          <ResetPassword />
+          <ResetPasswordStepper />
         </Modal>
       )}
     </>
