@@ -101,7 +101,7 @@ const SignUpForm = ({ userType }) => {
           if (response.error) {
             setLoading(false);
 
-            showDialog("Error", `Username already in use`);
+            showDialog("Error", `Username or email already exists`);
           } else {
             setLoading(false);
 
@@ -114,7 +114,7 @@ const SignUpForm = ({ userType }) => {
           if (response.error) {
             setLoading(false);
 
-            showDialog("Error", `Username already in use`);
+            showDialog("Error", `Username or email already exists`);
           } else {
             setLoading(false);
 

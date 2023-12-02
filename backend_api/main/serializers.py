@@ -43,6 +43,11 @@ class SailorDetailSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(SailorDetailSerializer, self).__init__(*args, **kwargs)
 
+class PasswordResetCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PasswordResetCode
+        fields = ['user', 'code', 'expires_at']
+
 
 # Experience serializers
 class ExperienceSerializer(serializers.ModelSerializer):
@@ -322,7 +327,6 @@ class BookingCompanySerializer(serializers.ModelSerializer):
     status = serializers.StringRelatedField(source="status.status", read_only=True)
     yacht_id = serializers.CharField(source="availability.yacht.id", read_only=True)
 
-
     class Meta:
         model=models.Booking
         fields=['id','sailor_name','start_date','end_date','yacht_name','status','yacht_id']
@@ -369,6 +373,14 @@ class UserCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ['first_name', 'last_name', 'password', 'email','username']
+
+    def validate_email(self, value):
+        """
+        Check if the email is unique.
+        """
+        if models.User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email address is already in use.")
+        return value
 
     def create(self, validated_data):
         # Create the user

@@ -42,6 +42,7 @@ urlpatterns = [
     path('login/', views.UserLoginView.as_view(), name='token_obtain_pair'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('confirm_booking/<str:token>/', views.confirm_booking, name='confirm_booking'),
+    path('send_reset_password_code/', views.PasswordResetCodeCreateView.as_view(), name='send_reset_password_code'),
 
 
     ]

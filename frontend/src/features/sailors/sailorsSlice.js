@@ -50,7 +50,7 @@ export const addSailor = createAsyncThunk(
       // You can return the new sailor data from the response
       return response.data;
     } catch (error) {
-      console.error("Error adding sailor:", error);
+      console.log(error);
       throw error;
     }
   }

@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
 import { client } from "../../api/client";
-import { selectAllCompanies } from "../companies/companiesSlice";
-import { getUserType } from "./authActions"; // Import the calculateUserType function
 
 const initialState = {
   user: {},
@@ -22,6 +19,20 @@ export const loginUser = createAsyncThunk(
       return response.data;
     } catch (error) {
       throw error.message; // Throw an error to be handled in the rejected action
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (email) => {
+    try {
+      // Assume you have an API endpoint for password reset
+      const response = await client.post("send_reset_password_code/", email);
+      return response;
+    } catch (error) {
+      // Handle network errors or other exceptions
+      console.error("Error during password reset initiation:", error);
     }
   }
 );
@@ -56,6 +67,18 @@ const authSlice = createSlice({
         state.status = "success";
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.error = action.error.message;
+        state.status = "failed";
+      })
+      .addCase(resetPassword.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        // Add any fetched posts to the array
+
+        state.status = "success";
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.error = action.error.message;
         state.status = "failed";
       });

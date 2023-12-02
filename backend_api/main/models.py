@@ -1,5 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+import random
+import string
+
+class PasswordResetCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    code = models.CharField(max_length=6)
+    expires_at = models.DateTimeField()
+
 
 
 # Model for yacht company users

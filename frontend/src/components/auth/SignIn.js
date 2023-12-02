@@ -36,7 +36,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Modal,
 } from "@mui/material";
+import ResetPassword from "./ResetPassword";
 
 function Copyright(props) {
   return (
@@ -65,6 +67,7 @@ const SignIn = () => {
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState("");
   const [errorDialogContent, setErrorDialogContent] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleDialogClose = () => {
     setErrorDialogOpen(false);
@@ -142,107 +145,128 @@ const SignIn = () => {
     color: "#3FB295", // Change the text color
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
-      <CssBaseline />
-      <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        sx={{
-          backgroundImage: `url(${signInImage})`, // Use the imported image
-          backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <Box
+    <>
+      <Grid container component="main" sx={{ height: "100vh" }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
           sx={{
-            my: 8,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            backgroundImage: `url(${signInImage})`, // Use the imported image
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "#3FB295" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              type="submit"
-              sx={{ mt: 3, mb: 2, height: "6vh" }}
+            <Avatar sx={{ m: 1, bgcolor: "#3FB295" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
             >
-              Sign In
-            </Button>
-            <Link to="/signUp" style={customStyles} variant="body2">
-              {"Don't have an account? Sign Up"}
-            </Link>
-            <Copyright sx={{ mt: "30vh" }} />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{ mt: 3, mb: 2, height: "6vh" }}
+              >
+                Sign In
+              </Button>
+              <Link to="/signUp" style={customStyles} variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+              <Typography sx={{ fontSize: "13px" }}>
+                <Link
+                  onClick={() => setShowModal(true)}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                  style={customStyles}
+                  variant="body2"
+                >
+                  {"Reset Password"}
+                </Link>
+              </Typography>
+              <Copyright sx={{ mt: "30vh" }} />
+            </Box>
           </Box>
-        </Box>
+        </Grid>
+        <Dialog open={errorDialogOpen} onClose={handleDialogClose}>
+          <DialogTitle sx={{ marginInline: "3vw" }}>
+            {errorDialogTitle}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>{errorDialogContent}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              sx={{ width: "100%" }}
+              color="primary"
+              autoFocus
+              onClick={handleDialogClose}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Grid>
-      <Dialog open={errorDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle sx={{ marginInline: "3vw" }}>
-          {errorDialogTitle}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>{errorDialogContent}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            sx={{ width: "100%" }}
-            color="primary"
-            autoFocus
-            onClick={handleDialogClose}
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Grid>
+      {showModal && (
+        <Modal onClose={handleCloseModal} open={showModal}>
+          <ResetPassword />
+        </Modal>
+      )}
+    </>
   );
 };
 

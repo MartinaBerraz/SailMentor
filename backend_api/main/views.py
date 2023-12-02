@@ -33,6 +33,14 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 from django.contrib import messages
+import random
+import string
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.forms import PasswordResetForm
+from django.utils import timezone
+from datetime import timedelta
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 class CompanyList(generics.ListCreateAPIView):
     queryset = models.Company.objects.all()
@@ -137,6 +145,8 @@ class BookingCompanyList(generics.ListAPIView):
     queryset = models.Booking.objects.all()  # Queryset for all yachts
     serializer_class = serializers.BookingCompanySerializer  # Serializer for the response data
 
+    
+
     def get_queryset(self):
         # Get the company's foreign key from the URL parameter 
         company_fk = self.kwargs['company_fk']
@@ -177,6 +187,56 @@ class AvailabilityList(generics.ListCreateAPIView):
     queryset = models.Availability.objects.all()
     serializer_class=serializers.AvailabilitySerializer
 
+
+def send_reset_password_code(email, code, expires_at):
+
+ # Compose and send the email with the verification code
+    subject = 'Reset Password Validation'
+    message = f'Use the following code to reset your password: {code}'
+    f'take into account it expires at {expires_at}'
+
+
+    from_email = 'your@email.com'  # Replace with your sender email address
+    recipient_list = [email]
+
+
+    send_mail(subject, message, from_email, recipient_list)
+
+class PasswordResetCodeCreateView(generics.CreateAPIView):
+    queryset = models.PasswordResetCode.objects.all()
+    serializer_class = serializers.PasswordResetCodeSerializer
+
+    def create(self, serializer):
+        # Extract email from the request data
+        email = self.request.data.get('email')
+
+        # Check if the user with the provided email exists
+        try:
+            user = models.User.objects.get(email=email)
+        except models.User.DoesNotExist:
+            # Handle the case where the user does not exist
+            return Response({'error': 'User with this email does not exist.'}, status=400)
+        except models.User.MultipleObjectsReturned:
+            # Handle the case where multiple users have the same email
+            return Response({'error': 'Multiple users with this email.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Generate code and set expiration time
+        code = ''.join(random.choices(string.digits, k=6))
+        expires_at = timezone.now() + timedelta(minutes=5)
+        serializer = serializers.PasswordResetCodeSerializer(data={'user': user.id, 'code': code, 'expires_at': expires_at})
+
+        if serializer.is_valid():
+            serializer.save()
+
+            # Send the reset password code via email
+            send_reset_password_code(email, code, expires_at)
+
+            # You might want to include additional logic or response data here
+            return Response({'message': 'Reset code created and sent successfully.'})
+        else:
+            # Handle serializer validation errors
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 def send_booking_confirmation_email(booking, user):
     # Get sailor email using sailor_id
     sailor_email = user.email
