@@ -1,31 +1,62 @@
-// ResetPasswordStep2.jsx
-import React, { useState } from "react";
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { verifyCodeAndResetPassword } from "../../features/auth/authSlice";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAuthError,
+  selectAuthStatus,
+  verifyCodeAndResetPassword,
+} from "../../features/auth/authSlice";
 
-const ResetPasswordStep2 = ({ email, onReset }) => {
+const ResetPasswordStep2 = ({ email, onNext }) => {
   const [codes, setCodes] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
 
   const dispatch = useDispatch();
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const authStatus = useSelector(selectAuthStatus);
+  const authError = useSelector(selectAuthError);
+
+  useEffect(() => {
+    if (authStatus === "failed") {
+      console.log(authError);
+      setOpenAlert(true);
+    } else if (authStatus === "success") {
+      onNext();
+      setOpenAlert(false);
+    }
+  }, [authStatus]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const verificationCode = codes.join(""); // Combine individual digits
 
-    // Dispatch an action to verify the code and reset the password
-    dispatch(
-      verifyCodeAndResetPassword({
-        email: email,
-        verificationCode: verificationCode,
-        newPassword: newPassword,
-      })
-    );
+    try {
+      // Dispatch an action to verify the code and reset the password
+      dispatch(
+        verifyCodeAndResetPassword({
+          email: email,
+          verificationCode: verificationCode,
+          newPassword: newPassword,
+        })
+      );
 
-    // Optionally, you can navigate to a different route or perform other actions
-    onReset();
+      // If the dispatch is successful, proceed to the next step
+    } catch (error) {
+      // Handle errors here, you can set an error state and display a message
+      console.error("Error:", error);
+      // Optionally, you can show an error message to the user
+      // setErrorState(true);
+    }
   };
 
   const handleCodeChange = (index, value) => {
@@ -34,6 +65,8 @@ const ResetPasswordStep2 = ({ email, onReset }) => {
     newCodes[index] = value;
     setCodes(newCodes);
 
+    setOpenAlert(false);
+
     // Focus on the next input field after entering a digit
     if (value !== "" && index < codes.length - 1) {
       document.getElementById(`code-${index + 1}`).focus();
@@ -41,7 +74,7 @@ const ResetPasswordStep2 = ({ email, onReset }) => {
   };
 
   return (
-    <Box sx={{ textAlign: "center", paddingTop: "3vh" }}>
+    <Box sx={{ textAlign: "center", paddingTop: "2vh" }}>
       <Typography
         sx={{
           justifyContent: "center",
@@ -100,8 +133,17 @@ const ResetPasswordStep2 = ({ email, onReset }) => {
         }}
         onClick={handleSubmit}
       >
-        Reset Password
+        {authStatus === "pending" ? (
+          <CircularProgress sx={{ color: "#3FB295" }} />
+        ) : (
+          "Reset Password"
+        )}
       </Button>
+      {openAlert && (
+        <Alert severity="error" sx={{ marginTop: "2vh" }}>
+          Invalid code
+        </Alert>
+      )}
     </Box>
   );
 };

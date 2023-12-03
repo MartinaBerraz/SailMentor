@@ -1,22 +1,49 @@
-// ResetPasswordStep1.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import LockResetIcon from "@mui/icons-material/LockReset";
-import { useDispatch } from "react-redux";
-import { resetPassword } from "../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  resetPassword,
+  resetStatus,
+  selectAuthData,
+  selectAuthStatus,
+} from "../../features/auth/authSlice";
 
 const ResetPasswordStep1 = ({ onNext }) => {
   const [emailError, setEmailError] = useState("");
   const [email, setEmail] = useState("");
+  const [showProgress, setShowProgress] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const dispatch = useDispatch();
+  const authStatus = useSelector(selectAuthStatus);
+
+  useEffect(() => {
+    if (authStatus === "pending") {
+      setShowProgress(true);
+      setOpenAlert(false);
+      console.log("pending");
+    } else if (authStatus === "failed") {
+      setOpenAlert(true);
+
+      setShowProgress(false);
+    } else if (authStatus === "success") {
+      setShowProgress(false);
+      setOpenAlert(false);
+
+      dispatch(resetStatus());
+      onNext(email);
+    }
+  }, [authStatus, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,9 +51,9 @@ const ResetPasswordStep1 = ({ onNext }) => {
     if (isValidEmail(email)) {
       // Dispatch an action to send the verification code to the provided email
       dispatch(resetPassword({ email: email }));
-      // // Proceed to the next step
-      onNext(email);
+      setOpenAlert(false);
     }
+    setOpenAlert(true);
   };
 
   function isValidEmail(email) {
@@ -36,20 +63,22 @@ const ResetPasswordStep1 = ({ onNext }) => {
   }
 
   const handleEmailChange = (e) => {
-    const email = e.target.value;
+    const newEmail = e.target.value;
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(newEmail)) {
       setEmailError("Invalid email format.");
     } else {
       setEmailError("");
-      setEmail(email);
     }
+    setEmail(newEmail);
+
+    setOpenAlert(false);
   };
 
   return (
     <>
       <Box
-        sx={{ display: "flex", flexDirection: "column", paddingTop: "15vh" }}
+        sx={{ display: "flex", flexDirection: "column", paddingTop: "10vh" }}
       >
         <TextField
           required
@@ -78,8 +107,17 @@ const ResetPasswordStep1 = ({ onNext }) => {
           }}
           onClick={handleSubmit}
         >
-          Send Verification Code
+          {showProgress ? (
+            <CircularProgress sx={{ color: "#3FB295" }} />
+          ) : (
+            "Send Verification Code"
+          )}
         </Button>
+        {openAlert && (
+          <Alert severity="error" sx={{ marginTop: "3vh" }}>
+            Account not found
+          </Alert>
+        )}
       </Box>
     </>
   );

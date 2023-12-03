@@ -25,21 +25,21 @@ export const loginUser = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
-  async (email) => {
+  async (email, { rejectWithValue }) => {
     try {
       // Assume you have an API endpoint for password reset
       const response = await client.post("send_reset_password_code/", email);
       return response;
     } catch (error) {
       // Handle network errors or other exceptions
-      console.error("Error during password reset initiation:", error);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const verifyCodeAndResetPassword = createAsyncThunk(
   "auth/verifyCodeAndResetPassword",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       // Call your API or service to verify the code and reset the password
       const response = await client.post("verify_code/", data);
@@ -47,9 +47,9 @@ export const verifyCodeAndResetPassword = createAsyncThunk(
       // Return the response data or handle it as needed
       return response.data;
     } catch (error) {
-      // Handle errors and reject the promise with an error message
-      console.error(error);
-      return error.response.data;
+      console.log(error.message);
+      // Use rejectWithValue to include the error message in the rejected action
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -66,6 +66,9 @@ const authSlice = createSlice({
     },
     setLoginError: (state, error) => {
       state.error = error; // Clear the token
+    },
+    resetStatus: (state, error) => {
+      state.status = "idle";
     },
   },
   extraReducers(builder) {
@@ -100,10 +103,15 @@ const authSlice = createSlice({
         state.status = "failed";
       })
       .addCase(verifyCodeAndResetPassword.fulfilled, (state, action) => {
-        // Handle success if needed
+        state.status = "success";
       })
       .addCase(verifyCodeAndResetPassword.rejected, (state, action) => {
-        // Handle error if needed
+        state.error = action.error.message;
+        console.log(action.error.message);
+        state.status = "failed";
+      })
+      .addCase(verifyCodeAndResetPassword.pending, (state, action) => {
+        state.status = "pending";
       });
   },
 });
@@ -112,12 +120,14 @@ export const selectCurrentUserFk = (state) => state.auth.userFk;
 
 export const selectAuthStatus = (state) => state.auth.status;
 
+export const selectAuthError = (state) => state.auth.error;
+
 export const selectAuthData = (state) => state.auth;
 
 export const isAuthenticated = (state) => state.auth.token;
 
 export const selectUserType = (state) => state.auth.userType;
 
-export const { clearToken, setLoginError } = authSlice.actions;
+export const { clearToken, setLoginError, resetStatus } = authSlice.actions;
 
 export default authSlice.reducer;

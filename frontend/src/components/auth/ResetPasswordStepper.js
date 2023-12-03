@@ -10,10 +10,11 @@ import ResetPasswordStep1 from "./ResetPasswordStep1";
 import ResetPasswordStep2 from "./ResetPasswordStep2";
 import { Avatar, Paper } from "@mui/material";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import ResetPasswordStep3 from "./ResetPasswordStep3";
 
-const steps = ["Enter Email", "Verify Code & Reset Password"];
+const steps = ["Enter Email", "Verification Code", "Reset Successful"];
 
-const ResetPasswordStepper = () => {
+const ResetPasswordStepper = ({ onClose }) => {
   const [email, setEmail] = useState(""); // Add state to store the email
 
   const [activeStep, setActiveStep] = useState(0);
@@ -24,6 +25,10 @@ const ResetPasswordStepper = () => {
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  const handleCloseModal = () => {
+    onClose();
   };
 
   return (
@@ -37,7 +42,7 @@ const ResetPasswordStepper = () => {
         borderRadius: "10px",
         display: "flex",
         height: "80%",
-        width: "40%",
+        width: "45%",
         alignContent: "center",
         display: "flex",
         flexDirection: "column",
@@ -110,30 +115,22 @@ const ResetPasswordStepper = () => {
       </Typography>
 
       <div>
-        {activeStep === steps.length ? (
-          <React.Fragment>
-            {/* You can display a completion message or redirect to another page */}
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              Password reset completed - you&apos;re finished
-            </Typography>
-            <Button onClick={handleReset}>Reset</Button>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            {/* Display the appropriate step based on activeStep */}
-            {activeStep === 0 && (
-              <ResetPasswordStep1
-                onNext={(nextEmail) => {
-                  setEmail(nextEmail);
-                  handleNext();
-                }}
-              />
-            )}
-            {activeStep === 1 && (
-              <ResetPasswordStep2 email={email} onReset={handleReset} />
-            )}
-          </React.Fragment>
-        )}
+        <React.Fragment>
+          {activeStep === 0 && (
+            <ResetPasswordStep1
+              onNext={(nextEmail) => {
+                setEmail(nextEmail);
+                handleNext();
+              }}
+            />
+          )}
+          {activeStep === 1 && (
+            <ResetPasswordStep2 email={email} onNext={() => handleNext()} />
+          )}
+          {activeStep === 2 && (
+            <ResetPasswordStep3 onClose={handleCloseModal} />
+          )}
+        </React.Fragment>
       </div>
     </Paper>
   );

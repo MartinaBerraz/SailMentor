@@ -14,7 +14,11 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signInImage from "../images/signIn.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, selectAuthStatus } from "../../features/auth/authSlice";
+import {
+  loginUser,
+  resetStatus,
+  selectAuthStatus,
+} from "../../features/auth/authSlice";
 import { selectAuthData } from "../../features/auth/authSlice";
 import { useEffect } from "react";
 import { useNavigate, Navigate, Link } from "react-router-dom";
@@ -95,7 +99,7 @@ const SignIn = () => {
   }, [sailorsStatus, dispatch]);
 
   useEffect(() => {
-    if (authStatus === "failed") {
+    if (authStatus === "failed" && !showModal) {
       setErrorDialogTitle("Error");
       setErrorDialogContent("Invalid Credentials");
       setErrorDialogOpen(true);
@@ -147,6 +151,7 @@ const SignIn = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    dispatch(resetStatus());
   };
 
   return (
@@ -263,7 +268,7 @@ const SignIn = () => {
       </Grid>
       {showModal && (
         <Modal onClose={handleCloseModal} open={showModal}>
-          <ResetPasswordStepper />
+          <ResetPasswordStepper onClose={handleCloseModal} />
         </Modal>
       )}
     </>
