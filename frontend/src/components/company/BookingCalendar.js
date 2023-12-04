@@ -29,8 +29,8 @@ export const BookingsCalendar = (props) => {
   const dispatch = useDispatch();
 
   const initialDateRange = {
-    startDate: subDays(new Date(), 1),
-    endDate: addDays(new Date(), 1),
+    startDate: new Date(),
+    endDate: new Date(),
     key: "selection",
   };
   const [unavailablePeriods, setUnavailablePeriods] = useState([]);
@@ -52,8 +52,8 @@ export const BookingsCalendar = (props) => {
   useEffect(() => {
     if (unbookedAvailabilities.length > 0) {
       const periods = unbookedAvailabilities.map((period) => ({
-        startDate: new Date(period.start_date),
-        endDate: new Date(period.end_date),
+        startDate: addDays(new Date(period.start_date), 1),
+        endDate: addDays(new Date(period.end_date), 1),
         key: period.id,
         color: "#FF6347", // Red color for unavailable periods
       }));
@@ -122,16 +122,9 @@ export const BookingsCalendar = (props) => {
   }
 
   const transformedBookedPeriods = items.map((booking) => {
-    const startDate = new Date(booking.start_date);
-    const endDate = new Date(booking.end_date);
-
-    // Add 1 day to both startDate and endDate
-    startDate.setDate(startDate.getDate());
-    endDate.setDate(endDate.getDate());
-
     return {
-      startDate,
-      endDate,
+      startDate: addDays(new Date(booking.start_date), 1),
+      endDate: addDays(new Date(booking.end_date), 1),
       key: booking.id.toString(),
       sailorName: booking.sailor_name,
       color: "#3FB295",
@@ -144,6 +137,8 @@ export const BookingsCalendar = (props) => {
     key: `${period.startDate}-${period.endDate}`,
     color: "#FF6347", // Red color for unavailable periods
   }));
+
+  console.log(transformedUnavailablePeriods);
 
   // Create an array of disabled dates
   const disabledDates = [
@@ -164,6 +159,7 @@ export const BookingsCalendar = (props) => {
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
+      currentDate.setHours(0, 0, 0, 0); // Set the time to midnight
     }
 
     return dates;
