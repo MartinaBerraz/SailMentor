@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   Box,
   Grid,
+  Paper,
   Typography,
 } from "@mui/material";
 import MaxPeopleFilter from "./filters/MaxPeopleFilter";
@@ -33,6 +34,8 @@ const FilterForm = () => {
           right: "3%", // Align to the right
           zIndex: 1000, // Ensure the accordion is above other elements
         }}
+        component={Paper}
+        elevation={6}
       >
         <AccordionSummary
           expandIcon={<TuneIcon />}

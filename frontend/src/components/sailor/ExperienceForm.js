@@ -77,20 +77,28 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
   const handleSubmit = () => {
     // Handle form submission, e.g., dispatch an action to save experienceData
 
-    console.log("Submitting:", {
-      ...formValues,
-      sailor: sailor.id,
-      destination: destination,
+    const formData = new FormData();
+
+    // Add text fields to the FormData
+    formData.append("name", formValues.name);
+    formData.append("brief_description", formValues.brief_description);
+    formData.append("detailed_description", formValues.detailed_description);
+    formData.append("recommendation", formValues.recommendation);
+    formData.append("precautions", formValues.precautions);
+
+    // Add the sailor ID and destination to the FormData
+    formData.append("sailor", sailor.id);
+    formData.append("destination", destination);
+
+    // Add each image file to the FormData
+    formValues.images.forEach((image, index) => {
+      formData.append(`images[${index}]`, image.file);
     });
 
-    dispatch(
-      addExperience({
-        ...formValues,
-        sailor: sailor.id,
-        destination: destination,
-      })
-    );
-    console.log(sailor);
+    console.log(formValues.images);
+
+    // Dispatch the action with the FormData
+    dispatch(addExperience(formData));
   };
 
   return (

@@ -12,7 +12,6 @@ import ShareIcon from "@mui/icons-material/Share";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Avatar from "@mui/material/Avatar";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState, useEffect } from "react";
 import { Box, Grid, Paper } from "@mui/material";

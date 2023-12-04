@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -7,7 +7,10 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
-import { addYacht } from "../../../features/yachts/yachtsSlice";
+import {
+  addYacht,
+  selectYachtStatus,
+} from "../../../features/yachts/yachtsSlice";
 import {
   fetchYachtTypes,
   selectAllYachtTypes,
@@ -18,6 +21,7 @@ import { selectAllDestinations } from "../../../features/destinations/destinatio
 import { fetchDestinations } from "../../../features/destinations/destinationsSlice";
 import {
   Box,
+  CircularProgress,
   FormControlLabel,
   Grid,
   Modal,
@@ -27,16 +31,56 @@ import {
 import placeholderImage from "../../images/placeholder.png";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AvailabilityCalendar from "../AvailabilityCalendar";
+import { useNavigate } from "react-router-dom";
 
 const AddYacht = ({ formData }) => {
+  const yachtStatus = useSelector(selectYachtStatus);
   const yachtTypes = useSelector(selectAllYachtTypes);
   const yachtTypeStatus = useSelector((state) => state.yachtTypes.status);
   const error = useSelector((state) => state.yachtTypes.error);
+  const [showModal, setShowModal] = useState(false);
+
+  const [modalContent, setModalContent] = useState({
+    message: "",
+    showButton: false,
+    showProgress: false,
+  });
+
+  useEffect(() => {
+    if (yachtStatus === "succeeded") {
+      setModalContent({
+        state: "Success",
+        message: "Yacht submitted successfully!",
+        showButton: true,
+        showProgress: false,
+      });
+    } else if (yachtStatus === "failed") {
+      setModalContent({
+        state: "Failed",
+        message: "Failed to add yacht. Fill in all fields",
+        showButton: true,
+        showProgress: false,
+      });
+    } else if (yachtStatus === "pending") {
+      setModalContent({
+        message: "Adding yacht...",
+        showButton: false,
+        showProgress: true,
+      });
+    }
+  }, [yachtStatus]);
+
+  const navigate = useNavigate();
+  const handleModalClose = () => {
+    setShowModal(false);
+
+    if (modalContent.state === "Success") {
+      navigate("/companyYachts");
+    }
+  };
 
   const currentYear = new Date().getFullYear();
   const dispatch = useDispatch();
-
-  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   React.useEffect(() => {
     if (yachtTypeStatus === "idle") {
@@ -115,11 +159,7 @@ const AddYacht = ({ formData }) => {
     console.log(data);
 
     dispatch(addYacht(data));
-    setShowCalendarModal(true);
-  };
-
-  const handleCloseCalendarModal = () => {
-    setShowCalendarModal(false);
+    setShowModal(true);
   };
 
   const customButtonStyle = {
@@ -374,29 +414,34 @@ const AddYacht = ({ formData }) => {
         <Button type="submit" variant="contained" style={customButtonStyle}>
           Submit
         </Button>
+        {/* Modal for showing status */}
+        <Modal open={showModal} onClose={handleModalClose}>
+          <Paper
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              padding: "20px",
+              transform: "translate(-20%, -50%)",
+              borderRadius: "5px",
+              display: "flex",
+              width: "25vw",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {modalContent.showProgress && <CircularProgress />}
+            <Typography sx={{ marginBottom: "2vh" }}>
+              {modalContent.message}
+            </Typography>
+            {modalContent.showButton && (
+              <Button onClick={handleModalClose} variant="contained">
+                Close
+              </Button>
+            )}
+          </Paper>
+        </Modal>
       </Paper>
-      {/* Conditionally render the AvailabilityCalendar modal */}
-      {
-        //   showCalendarModal && (
-        //     <Modal onClose={handleCloseCalendarModal} open={showCalendarModal}>
-        //       {/* Container element with necessary styles */}
-        //       <Paper
-        //         sx={{
-        //           position: "absolute",
-        //           top: "50%",
-        //           left: "50%",
-        //           padding: "10px",
-        //           transform: "translate(-50%, -50%)",
-        //           borderRadius: "5px",
-        //           display: "flex",
-        //         }}
-        //       >
-        //         {/* You can pass any props or content to your modal */}
-        //         <AvailabilityCalendar />
-        //       </Paper>
-        //     </Modal>
-        //   )
-      }
     </form>
   );
 };

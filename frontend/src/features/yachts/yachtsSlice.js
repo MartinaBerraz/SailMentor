@@ -78,14 +78,6 @@ const yachtsSlice = createSlice({
         existingYacht.reactions[reaction]++;
       }
     },
-    postUpdated(state, action) {
-      const { id, title, content } = action.payload;
-      const existingYacht = state.yachts.find((yacht) => yacht.id === id);
-      if (existingYacht) {
-        existingYacht.title = title;
-        existingYacht.content = content;
-      }
-    },
   },
   extraReducers(builder) {
     builder
@@ -122,6 +114,18 @@ const yachtsSlice = createSlice({
         state.detailedYacht = action.payload;
       })
       .addCase(fetchYachtDetails.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(addYacht.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(addYacht.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Add any fetched posts to the array
+        state.detailedYacht = action.payload;
+      })
+      .addCase(addYacht.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
@@ -163,6 +167,8 @@ export const addYacht = createAsyncThunk("yachts/addYacht", async (data) => {
     throw error;
   }
 });
+
+export const selectYachtStatus = (state) => state.yachts.status;
 
 export const selectSelectedYacht = (state) => state.yachts.selectedYacht;
 
