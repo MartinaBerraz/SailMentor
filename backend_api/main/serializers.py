@@ -52,7 +52,6 @@ class PasswordResetCodeSerializer(serializers.ModelSerializer):
 # Experience serializers
 class ExperienceSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField(method_name='get_image')
-
     sailor_name = serializers.SerializerMethodField()
 
     destination_name = serializers.SlugRelatedField(
@@ -195,7 +194,7 @@ class YachtSerializer(serializers.ModelSerializer):
     # company_name = serializers.SerializerMethodField()
     class Meta:
         model=models.Yacht
-        fields=['id','name','company_name','destination','image','length_in_feet','no_cabins','price_per_night','year_built','max_people','yacht_type','destination_name','yacht_type_description']
+        fields=['id','name','crewed','company_name','destination','image','length_in_feet','no_cabins','price_per_night','year_built','max_people','yacht_type','destination_name','yacht_type_description']
    
 
     image = serializers.ImageField(required=True)
@@ -219,7 +218,7 @@ class YachtCompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Yacht
-        fields=['id','name','image','destination','destination_name','yacht_type_description','price_per_night','max_people','yacht_type','year_built',"no_cabins","length_in_feet"]
+        fields=['id','name','crewed','image','destination','destination_name','yacht_type_description','price_per_night','max_people','yacht_type','year_built',"no_cabins","length_in_feet"]
     
     def __init__(self, *args, **kwargs):
         super(YachtCompanySerializer, self).__init__(*args, **kwargs)
@@ -233,46 +232,9 @@ class YachtDetailSerializer(serializers.ModelSerializer):
 class YachtCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Yacht
-        fields = ['name', 'company', 'length_in_feet', 'no_cabins', 'price_per_night', 'max_people', 'yacht_type', 'image','year_built']
+        fields = ['name', 'company','crewed', 'length_in_feet', 'no_cabins', 'price_per_night', 'max_people', 'yacht_type', 'image','year_built']
 
-    
-# serializer for form data
-class YachtFieldMetadataSerializer(serializers.ModelSerializer):
-    yacht_type_choices = serializers.SerializerMethodField()
-
-    class Meta:
-        model = models.Yacht  # Specify the model you want to serialize
-        fields = '__all__'  # Include all fields from the model
-    
-    _field_info = None  # Class-level variable to cache field information
-
-    def get_field_info(cls):
-        if cls._field_info is None:
-            model = cls.Meta.model
-            fields = model._meta.fields
-            field_info = []
-
-            for field in fields:
-                field_type = field.get_internal_type()
-                if isinstance(field, django_models.ForeignKey):
-                    field_type = "ForeignKey"
-                field_info.append({
-                    "name": field.name,
-                    "type": field_type,
-                })
-
-            cls._field_info = field_info
-        return cls._field_info
-
-    def to_representation(self, instance):
-        field_info = self.get_field_info()
-        return field_info
-
-        
-    def get_yacht_type_choices(self, obj):
-        return models.YachtType.objects.get_yacht_type_choices()
-    
-
+   
 # Booking status serializers
 class BookingStatusSerializer(serializers.ModelSerializer):
     class Meta:

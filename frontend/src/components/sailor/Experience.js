@@ -43,7 +43,7 @@ const Experience = ({ experience }) => {
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                R
+                {experience.sailor_first_name[0]}
               </Avatar>
             }
             action={

@@ -56,6 +56,24 @@ function App() {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          colorSecondary: {
+            "&$checked": {
+              // Controls checked color for the thumb
+              color: "#f2ff00",
+            },
+          },
+          track: {
+            // Controls default (unchecked) color for the track
+            ".Mui-checked.Mui-checked + &": {
+              // Controls checked color for the track
+              opacity: 0.7,
+              backgroundColor: "#3FB295",
+            },
+          },
+        },
+      },
       MuiFormLabel: {
         root: {
           "&:focus": {

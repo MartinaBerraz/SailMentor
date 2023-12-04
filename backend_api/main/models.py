@@ -98,6 +98,8 @@ class Yacht(models.Model):
     yacht_type = models.ForeignKey(YachtType,on_delete=models.CASCADE)
     image = models.ImageField(upload_to='yacht_imgs/', blank=True, null=True, verbose_name="image")
     name = models.CharField(max_length=30)
+    crewed = models.BooleanField(null=False)
+
 
     max_people = models.IntegerField(null=True)
     price_per_night = models.FloatField(null=True)

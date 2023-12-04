@@ -19,6 +19,7 @@ const GenericTable = ({ items, category, onSelect }) => {
     "max_people",
     "length_in_feet",
     "yacht_id",
+    "crewed",
   ]; // Add the column names you want to exclude
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -124,10 +124,6 @@ class YachtDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Yacht.objects.all()
     serializer_class=serializers.YachtDetailSerializer
 
-class YachtFields(generics.ListCreateAPIView):
-    queryset = models.Yacht._meta.fields
-    serializer_class=serializers.YachtFieldMetadataSerializer
-
 class BookingStatusList(generics.ListCreateAPIView):
     queryset = models.BookingStatus.objects.all()
     serializer_class=serializers.BookingStatusSerializer

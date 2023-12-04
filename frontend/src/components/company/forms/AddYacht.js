@@ -16,7 +16,14 @@ import { selectCurrentCompanyId } from "../../../features/companies/companiesSli
 import { selectCurrentUserFk } from "../../../features/auth/authSlice";
 import { selectAllDestinations } from "../../../features/destinations/destinationsSlice";
 import { fetchDestinations } from "../../../features/destinations/destinationsSlice";
-import { Box, Grid, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  Grid,
+  Modal,
+  Switch,
+  Typography,
+} from "@mui/material";
 import placeholderImage from "../../images/placeholder.png";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import AvailabilityCalendar from "../AvailabilityCalendar";
@@ -53,12 +60,14 @@ const AddYacht = ({ formData }) => {
     (_, index) => currentYear - index
   );
   const handleChange = (e, fieldName) => {
-    setFormValues({
+    const updatedFormValues = {
       ...formValues,
-      [fieldName]: e.target.value,
-    });
+      [fieldName]:
+        e.target.type === "checkbox" ? e.target.checked : e.target.value,
+    };
 
-    console.log(formData);
+    setFormValues(updatedFormValues);
+    console.log(updatedFormValues);
   };
 
   const company = useSelector(selectCurrentUserFk);
@@ -218,8 +227,21 @@ const AddYacht = ({ formData }) => {
                 onChange={(e) => handleChange(e, "name")}
               />
             </FormControl>
+            <FormControl sx={{ marginTop: "3vh", opacity: "0.8" }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={formValues["crewed"] || false}
+                    onChange={(e) => handleChange(e, "crewed")}
+                    style={{ color: "#3FB295" }}
+                  />
+                }
+                label="Crewed"
+              />
+            </FormControl>
           </Grid>
         </Grid>
+
         <Grid
           container
           md={9}

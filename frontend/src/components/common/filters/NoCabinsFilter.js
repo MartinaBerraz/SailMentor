@@ -26,7 +26,7 @@ const NoCabinsFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw" }}>
+      <FormControl sx={{ minWidth: "8vw" }}>
         {!selected ? (
           <InputLabel shrink={false} id="demo-simple-select-label">
             No. Cabins
@@ -37,7 +37,7 @@ const NoCabinsFilter = () => {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           renderValue={(value) => (value ? `${value} cabins` : "No. Cabins")}
-          sx={{ backgroundColor: "white", borderRadius: "10px" }}
+          sx={{ backgroundColor: "white", borderRadius: "5px" }}
           value={selected}
           onChange={handleNoCabinsChange}
         >

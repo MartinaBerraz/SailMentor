@@ -21,7 +21,7 @@ import AnchorIcon from "@mui/icons-material/Anchor";
 import HistoryIcon from "@mui/icons-material/History";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../common/styles.css";
 import sailmentor from "../../../sailmentor.png";
 import logo from "../../images/blackLogo.png";
@@ -29,12 +29,16 @@ import { Paper } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@emotion/react";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { clearToken } from "../../../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
 export const SideBar = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   console.log(props);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -45,6 +49,11 @@ export const SideBar = (props) => {
     // maxHeight: "100%", // Set the maximum height
     width: "80%",
     alignSelf: "flex-start",
+  };
+
+  const handleLogOut = () => {
+    dispatch(clearToken());
+    navigate("/signIn");
   };
 
   const drawer = (
@@ -116,6 +125,47 @@ export const SideBar = (props) => {
             </Link>
           ))}
         </List>
+        <Box
+          sx={{
+            color: "white",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            paddingTop: "50vh",
+          }}
+        >
+          <Paper
+            sx={{
+              height: "0.05vh",
+              color: "white",
+              width: "80%",
+              marginBottom: "1vh",
+            }}
+          ></Paper>
+          <ListItemButton
+            sx={{
+              width: "80%",
+              alignContent: "center",
+              borderRadius: "10px",
+              display: "flex",
+              alignSelf: "center",
+              justifyContent: "center",
+              "&.Mui-selected": {
+                backgroundColor: "#3FB295",
+              },
+              "&.Mui-focusVisible": {
+                backgroundColor: "#3FB295",
+              },
+              ":hover": {
+                backgroundColor: "#3FB295",
+              },
+            }}
+            onClick={handleLogOut}
+          >
+            <ListItemIcon sx={{ color: "white" }}>Log Out</ListItemIcon>
+          </ListItemButton>
+        </Box>
       </Paper>
     </div>
   );

@@ -28,11 +28,12 @@ const DestinationFilter = () => {
 
   return (
     <div>
-      <Box>
+      <Box sx={{ display: "flex", alignSelf: "center" }}>
         <FormControl
           sx={{
             minWidth: "20vw",
             color: "white",
+
             borderColor: "white",
             borderBlock: 0,
           }}

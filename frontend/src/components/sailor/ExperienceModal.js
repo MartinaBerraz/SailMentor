@@ -46,8 +46,14 @@ const ExperienceModal = ({ experience, modalOpen, handleCloseModal }) => {
             color: "white",
           }}
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+            <Avatar
+              sx={{
+                bgcolor: "red",
+                opacity: "0.8",
+              }}
+              aria-label="recipe"
+            >
+              {experience.sailor_first_name[0]}
             </Avatar>
           }
           action={

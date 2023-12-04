@@ -27,7 +27,9 @@ const MaxPeopleFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "10vw" }}>
+      <FormControl
+        sx={{ minWidth: "8vw", marginBottom: "1vh", marginRight: "1vw" }}
+      >
         {!selected && <InputLabel shrink={false}>No. People</InputLabel>}
 
         <Select
@@ -36,7 +38,7 @@ const MaxPeopleFilter = () => {
             "&.Mui-focused": {
               borderColor: "red", // Set your desired border color here
             },
-            borderRadius: "10px",
+            borderRadius: "5px",
           }}
           value={selected}
           onChange={handleMaxPeopleChange}
