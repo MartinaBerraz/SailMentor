@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addYacht,
   selectYachtStatus,
+  updateYachts,
 } from "../../../features/yachts/yachtsSlice";
 import {
   fetchYachtTypes,
@@ -159,6 +160,7 @@ const AddYacht = ({ formData }) => {
     console.log(data);
 
     dispatch(addYacht(data));
+    dispatch(updateYachts());
     setShowModal(true);
   };
 

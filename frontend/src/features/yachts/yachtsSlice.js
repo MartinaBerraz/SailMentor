@@ -25,8 +25,7 @@ export const fetchYachtDetails = createAsyncThunk(
   "yachts/fetchYachtDetails",
   async (pk) => {
     try {
-      const response = await client.get(`yachts/${pk}`);
-      console.log("FETCHED");
+      const response = await client.get(`yachts/${pk}/`);
       return response.data;
     } catch (error) {
       // Handle the error, e.g., log it or return a default value
@@ -128,12 +127,39 @@ const yachtsSlice = createSlice({
       .addCase(addYacht.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(deleteYacht.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(deleteYacht.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Remove the deleted yacht from the array
+        state.yachts = state.yachts.filter(
+          (yacht) => yacht.id !== action.payload.id
+        );
+      })
+      .addCase(deleteYacht.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
     // .addCase(addNewYacht.fulfilled, (state, action) => {
     //   state.yachts.push(action.payload);
     // });
   },
 });
+
+export const deleteYacht = createAsyncThunk(
+  "yachts/deleteYacht",
+  async (yachtId) => {
+    try {
+      const response = await client.delete(`yachts/${yachtId}/`);
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting yacht:", error);
+      throw error;
+    }
+  }
+);
 
 export const addYacht = createAsyncThunk("yachts/addYacht", async (data) => {
   try {

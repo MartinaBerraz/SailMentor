@@ -12,7 +12,6 @@ export const fetchCompanyBookings = createAsyncThunk(
   async (companyId) => {
     try {
       const response = await client.get(`bookings/company/${companyId}/`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       // Handle the error, e.g., log it or return a default value
@@ -62,6 +61,22 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+export const deleteSailorBooking = createAsyncThunk(
+  "bookings/deleteSailorBooking",
+  async (booking) => {
+    console.log(booking);
+    try {
+      const response = await client.delete(
+        `availabilities/${booking.availability}/`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error adding booking:", error);
+      throw error;
+    }
+  }
+);
+
 const bookingsSlice = createSlice({
   name: "bookings",
   initialState,
@@ -102,7 +117,6 @@ const bookingsSlice = createSlice({
       .addCase(fetchCompanyBookings.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched posts to the array
-        console.log(action.payload);
         state.bookings = action.payload;
       })
       .addCase(fetchCompanyBookings.rejected, (state, action) => {
@@ -115,7 +129,6 @@ const bookingsSlice = createSlice({
       .addCase(fetchSailorBookings.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched posts to the array
-        console.log(action.payload);
         state.bookings = action.payload;
       })
       .addCase(fetchSailorBookings.rejected, (state, action) => {
@@ -127,10 +140,19 @@ const bookingsSlice = createSlice({
       })
       .addCase(deleteBooking.fulfilled, (state, action) => {
         // Add any fetched posts to the array
-        console.log(action.payload);
         state.status = "idle";
       })
       .addCase(deleteBooking.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+      .addCase(deleteSailorBooking.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(deleteSailorBooking.fulfilled, (state, action) => {
+        // Add any fetched posts to the array
+        state.status = "idle";
+      })
+      .addCase(deleteSailorBooking.rejected, (state, action) => {
         state.error = action.error.message;
       });
     // .addCase(addNewDestination.fulfilled, (state, action) => {

@@ -291,7 +291,7 @@ class BookingCompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model=models.Booking
-        fields=['id','sailor_name','start_date','end_date','yacht_name','status','yacht_id']
+        fields=['id','sailor_name','start_date','end_date','yacht_name','status','yacht_id',"availability"]
     
     def __init__(self, *args, **kwargs):
         super(BookingCompanySerializer, self).__init__(*args, **kwargs)

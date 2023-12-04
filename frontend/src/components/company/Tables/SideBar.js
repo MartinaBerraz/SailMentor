@@ -36,7 +36,6 @@ const drawerWidth = 240;
 
 export const SideBar = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  console.log(props);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

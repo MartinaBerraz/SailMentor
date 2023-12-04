@@ -8,7 +8,7 @@ import { Paper, Typography } from "@mui/material";
 import { selectYacht } from "../../../features/yachts/yachtsSlice";
 import { useDispatch } from "react-redux";
 
-const GenericTable = ({ items, category, onSelect }) => {
+const GenericTable = ({ items, category, onSelect, onUpdateOrDelete }) => {
   const [columns, setColumns] = useState([]);
   const columnsToExclude = [
     "id",
@@ -18,6 +18,7 @@ const GenericTable = ({ items, category, onSelect }) => {
     "yacht_type",
     "max_people",
     "length_in_feet",
+    "availability",
     "yacht_id",
     "crewed",
   ]; // Add the column names you want to exclude
@@ -28,7 +29,10 @@ const GenericTable = ({ items, category, onSelect }) => {
   const handleUpdate = (id) => {
     const yacht = items.find((item) => item.id === id);
     dispatch(selectYacht(yacht));
-    navigate(`/${category}/update/${id}`);
+
+    if (onUpdateOrDelete) {
+      onUpdateOrDelete(id, "update");
+    }
   };
 
   const customButtonStyle = {
@@ -44,9 +48,8 @@ const GenericTable = ({ items, category, onSelect }) => {
     alignContent: "start",
   };
 
-  const handleDelete = (id) => {
-    // Implement your delete logic here
-    console.log(`Delete item with ID ${id}`);
+  const handleDelete = (id, id2) => {
+    onUpdateOrDelete(id, "delete");
   };
 
   const handleAdd = () => {
@@ -93,7 +96,7 @@ const GenericTable = ({ items, category, onSelect }) => {
                 <Button
                   size="small"
                   style={customButtonStyle}
-                  onClick={() => handleDelete(params.row.id)}
+                  onClick={() => handleDelete(params.row.id, params.row)}
                   variant="contained"
                 >
                   Delete
@@ -109,7 +112,7 @@ const GenericTable = ({ items, category, onSelect }) => {
     }
   }, [items]);
 
-  return items.length > 1 ? (
+  return items.length > 0 ? (
     <>
       <Paper
         elevation={16}

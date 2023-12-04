@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import SideBar from "./Tables/SideBar";
 import GenericTable from "./Tables/GenericTable";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthData } from "../../features/auth/authSlice";
 import {
   fetchCompanyBookings,
   selectAllBookings,
+  deleteSailorBooking,
+  updateBookings,
 } from "../../features/bookings/bookingsSlice";
-import { Typography } from "@mui/material";
+import ConfirmationModal from "./ConfirmationModal";
+import { Alert } from "@mui/material";
+import BookingList from "../../features/bookings/BookingList";
+// ... (imports remain the same)
 
 export const BookingsDashboard = (props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+  const [items, setItems] = useState([]); // Use state for items
 
   const authData = useSelector(selectAuthData);
-  const companyFk = authData ? authData.userFk : null; // Replace with the correct path to the company foreign key in your Redux state
+  const companyFk = authData ? authData.userFk : null;
+  const bookingStatus = useSelector((state) => state.bookings.status);
 
   useEffect(() => {
     console.log(companyFk);
@@ -27,59 +36,107 @@ export const BookingsDashboard = (props) => {
 
   const drawerWidth = 240;
 
-  const bookingStatus = useSelector((state) => state.bookings.status);
   const bookingsList = useSelector(selectAllBookings);
 
-  let items = [];
+  const handleOnDelete = (id, action) => {
+    const booking = bookingsList.filter(
+      (booking) => String(booking.id) === String(id)
+    );
+    console.log(id);
+    console.log(BookingList);
+    setSelectedBooking(booking[0]);
+    setConfirmationModalOpen(true);
+  };
+
   useEffect(() => {
     if (props.category === "bookings") {
-      console.log(`props id: ${props.id}`);
       if (props.id) {
-        items = bookingsList.filter(
-          (booking) => booking.yacht_id === props.id.toString()
+        setItems(
+          bookingsList.filter(
+            (booking) => booking.yacht_id === props.id.toString()
+          )
         );
       } else {
-        items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
+        setItems(
+          bookingsList.filter((booking) => booking.status !== "Finished")
+        );
       }
     } else if (props.category === "history") {
-      items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
+      setItems(bookingsList.filter((booking) => booking.status === "Finished"));
     }
-  }, [props.id]);
-
-  if (props.category === "bookings") {
-    if (props.id) {
-      items = bookingsList.filter(
-        (booking) => booking.yacht_id === props.id.toString()
-      );
-    } else {
-      items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
-    }
-  } else if (props.category === "history") {
-    items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
-  }
+  }, [props.id, props.category, bookingsList]); // Update items when props.id or props.category changes
 
   useEffect(() => {
     if (!loading && bookingStatus === "idle") {
       dispatch(fetchCompanyBookings(companyFk));
     }
-  }, [props.category, bookingStatus, dispatch, loading]);
+  }, [props.category, bookingStatus, dispatch, loading, companyFk]);
+
+  const handleConfirmDelete = async () => {
+    dispatch(deleteSailorBooking(selectedBooking));
+    setConfirmationModalOpen(false);
+    setSuccessAlertOpen(true);
+
+    dispatch(updateBookings());
+
+    setTimeout(() => {
+      setSuccessAlertOpen(false);
+    }, 3000);
+  };
+
+  const handleModalClose = () => {
+    setConfirmationModalOpen(false);
+  };
+
+  const handleAlertClose = () => {
+    setSuccessAlertOpen(false);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    // BookingsDashboard.js
     <Box
       sx={{
         flexGrow: 1,
         width: { sm: `calc(100% - ${drawerWidth}px)` },
         display: "flex",
-        flexDirection: "column", // Set the flex direction to column
-        alignItems: "flex-start", // Adjust alignment as needed
+        flexDirection: "column",
+        alignItems: "flex-start",
       }}
     >
-      <GenericTable category={props.category} items={items} />
+      <GenericTable
+        category={props.category}
+        items={items}
+        onSelect={null}
+        onUpdateOrDelete={handleOnDelete}
+      />
+
+      {successAlertOpen && (
+        <Alert
+          sx={{
+            width: "90%",
+            bgcolor: "#3FB295",
+            opacity: "0.6",
+            color: "black",
+          }}
+          open={successAlertOpen}
+          onClose={handleAlertClose}
+        >
+          Booking has been successfully deleted!
+        </Alert>
+      )}
+
+      {confirmationModalOpen && (
+        <ConfirmationModal
+          open={confirmationModalOpen}
+          onClose={handleModalClose}
+          onConfirm={handleConfirmDelete}
+          title="Confirm Deletion"
+          message="Are you sure you want to delete this booking?"
+        />
+      )}
     </Box>
   );
 };
