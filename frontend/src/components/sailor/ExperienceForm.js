@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "@mui/material/Modal";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -10,7 +10,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import DestinationFilter from "../common/filters/DestinationFilter";
-import { Grid } from "@mui/material";
+import { Alert, Grid, Stack } from "@mui/material";
 import placeholderImage from "../images/placeholder.png";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +19,8 @@ import { addExperience } from "../../features/experiences/experiencesSlice";
 
 const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
   const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState(false);
+
   const [formValues, setFormValues] = useState({
     newImage: null,
     name: "",
@@ -75,8 +77,19 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
   const destination = useSelector((state) => state.filters.destination);
 
   const handleSubmit = () => {
-    // Handle form submission, e.g., dispatch an action to save experienceData
-
+    // Validate form fields
+    if (formValues) {
+      if (
+        !formValues.name ||
+        !formValues.brief_description ||
+        !formValues.detailed_description
+      ) {
+        setShowAlert(true);
+        return;
+      }
+    } else {
+      setShowAlert(true);
+    }
     const formData = new FormData();
 
     // Add text fields to the FormData
@@ -99,6 +112,9 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
 
     // Dispatch the action with the FormData
     dispatch(addExperience(formData));
+    setShowAlert(false);
+    handleCloseModal();
+    setFormValues({});
   };
 
   return (
@@ -168,26 +184,27 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
               alignItems="center"
               sx={{ marginTop: "2vh" }}
             >
-              {formValues.images.map((image, index) => (
-                <Grid item key={index} style={{ position: "relative" }}>
-                  <img
-                    src={image.preview}
-                    alt={`Uploaded Preview ${index + 1}`}
-                    style={{
-                      width: "100px",
-                      height: "75px",
-                      borderRadius: "10px",
-                      justifyContent: "center",
-                    }}
-                  />
-                  <IconButton
-                    onClick={() => handleDeleteImage(index)}
-                    style={{ position: "absolute", top: 0, right: 0 }}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </Grid>
-              ))}
+              {formValues.images &&
+                formValues.images.map((image, index) => (
+                  <Grid item key={index} style={{ position: "relative" }}>
+                    <img
+                      src={image.preview}
+                      alt={`Uploaded Preview ${index + 1}`}
+                      style={{
+                        width: "100px",
+                        height: "75px",
+                        borderRadius: "10px",
+                        justifyContent: "center",
+                      }}
+                    />
+                    <IconButton
+                      onClick={() => handleDeleteImage(index)}
+                      style={{ position: "absolute", top: 0, right: 0 }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Grid>
+                ))}
             </Grid>
 
             <Button
@@ -260,6 +277,9 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
               rows={4}
               style={{ width: "95%" }}
             />
+            {showAlert && (
+              <Alert severity="error">Please fill in all fields.</Alert>
+            )}
 
             {/* Submit Button */}
             <Button variant="contained" onClick={handleSubmit}>

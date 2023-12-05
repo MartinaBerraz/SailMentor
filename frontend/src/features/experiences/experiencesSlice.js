@@ -21,6 +21,19 @@ export const fetchExperiences = createAsyncThunk(
   }
 );
 
+export const deleteExperience = createAsyncThunk(
+  "experiences/deleteExperience",
+  async (experienceId) => {
+    try {
+      await client.delete(`experience/${experienceId}/`);
+      return experienceId;
+    } catch (error) {
+      console.error("Error deleting experience:", error);
+      throw error;
+    }
+  }
+);
+
 export const addExperience = createAsyncThunk(
   "experiences/addExperience",
   async (experienceData) => {
@@ -85,6 +98,22 @@ const experiencesSlice = createSlice({
         state.experiences.push(action.payload);
       })
       .addCase(addExperience.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(deleteExperience.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteExperience.fulfilled, (state, action) => {
+        state.status = "idle";
+        // Remove the deleted experience from the array
+
+        console.log(action.payload);
+        state.experiences = state.experiences.filter(
+          (experience) => String(experience.id) !== String(action.payload)
+        );
+      })
+      .addCase(deleteExperience.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

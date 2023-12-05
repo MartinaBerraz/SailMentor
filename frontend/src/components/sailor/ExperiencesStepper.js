@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import Button from "@mui/material/Button";
-
 import StepLabel from "@mui/material/StepLabel";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -14,7 +13,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import backgroundImage from "../images/background.jpg";
 
-export const ExperiencesStepper = ({ experiences }) => {
+export const ExperiencesStepper = ({ experiences, owner = false }) => {
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -23,19 +22,19 @@ export const ExperiencesStepper = ({ experiences }) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const steps = Math.ceil(experiences.length / 3); // Calculate the number of steps
-  const [activeStep, setActiveStep] = useState(0); // Initialize it with 0 or the desired step
+  const steps = Math.ceil(experiences.length / 3);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const startIdx = activeStep * 3;
+  const endIdx = Math.min((activeStep + 1) * 3, experiences.length);
+  const currentExperiences = experiences.slice(startIdx, endIdx);
+
   return (
     <div>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {Array.from({ length: steps }).map((_, index) => (
-          <Step key={index}></Step>
-        ))}
-      </Stepper>
       <Grid sx={{ justifyContent: "center" }} container spacing={3}>
-        {experiences.map((experience, index) => (
+        {currentExperiences.map((experience) => (
           <Grid item key={experience.id}>
-            <Experience experience={experience} />
+            <Experience owner={owner} experience={experience} />
           </Grid>
         ))}
       </Grid>

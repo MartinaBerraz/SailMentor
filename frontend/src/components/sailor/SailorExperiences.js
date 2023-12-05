@@ -80,11 +80,17 @@ export const SailorExperiences = () => {
 
   const handleOpenModal = () => {
     setModalOpen(true);
+    dispatch(fetchExperiences());
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    dispatch(fetchExperiences());
   };
+
+  useEffect(() => {
+    dispatch(fetchExperiences());
+  }, []);
 
   return (
     <>
@@ -125,12 +131,12 @@ export const SailorExperiences = () => {
           sx={{
             width: "20vw",
           }}
-          onClick={setModalOpen}
+          onClick={() => setModalOpen(true)}
         >
           Create a new one
         </Button>
         {sailorExperiences.length > 0 && (
-          <ExperiencesStepper experiences={sailorExperiences} />
+          <ExperiencesStepper owner={true} experiences={sailorExperiences} />
         )}
       </Box>
       <ExperienceForm
