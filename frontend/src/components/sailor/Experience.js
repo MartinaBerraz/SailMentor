@@ -13,13 +13,14 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Avatar from "@mui/material/Avatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Grid, Paper, Stack, Alert } from "@mui/material";
+import { Box, Grid, Paper, Stack, Alert, CardActionArea } from "@mui/material";
 import ExperienceModal from "./ExperienceModal";
 import { useDispatch } from "react-redux";
 import { deleteExperience } from "../../features/experiences/experiencesSlice";
 
 const Experience = ({ experience, owner, onDeleteExperience }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [experienceModalOpen, setExperienceModalOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const dispatch = useDispatch();
@@ -29,6 +30,14 @@ const Experience = ({ experience, owner, onDeleteExperience }) => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
+  };
+
+  const handleOpenExperienceModal = () => {
+    setExperienceModalOpen(true);
+  };
+
+  const handleExperienceCloseModal = () => {
+    setExperienceModalOpen(false);
   };
 
   const handleConfirmDelete = () => {
@@ -54,7 +63,7 @@ const Experience = ({ experience, owner, onDeleteExperience }) => {
 
   return (
     <>
-      <div onClick={handleOpenModal}>
+      <div>
         <Card
           sx={{
             width: "25vw",
@@ -64,34 +73,36 @@ const Experience = ({ experience, owner, onDeleteExperience }) => {
             marginBottom: "4%",
           }}
         >
-          <CardHeader
-            avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                {experience.sailor_first_name[0]}
-              </Avatar>
-            }
-            action={
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={experience.name}
-            subheader={experience.destination_name}
-          />
-          <CardMedia
-            component="img"
-            height="194"
-            image={`http://localhost:8000${experience.images[0]}`}
-          />
-          <CardContent>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ minHeight: "7vh", maxHeight: "7vh" }}
-            >
-              {experience.brief_description}
-            </Typography>
-          </CardContent>
+          <CardActionArea onClick={handleOpenExperienceModal}>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  {experience.sailor_first_name[0]}
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={experience.name}
+              subheader={experience.destination_name}
+            />
+            <CardMedia
+              component="img"
+              height="194"
+              image={`http://localhost:8000${experience.images[0]}`}
+            />
+            <CardContent>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ minHeight: "7vh", maxHeight: "7vh" }}
+              >
+                {experience.brief_description}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
 
           {owner ? (
             <Box
@@ -122,7 +133,12 @@ const Experience = ({ experience, owner, onDeleteExperience }) => {
           )}
         </Card>
       </div>
-      {modalOpen && (
+      <ExperienceModal
+        experience={experience}
+        modalOpen={experienceModalOpen}
+        handleCloseModal={handleExperienceCloseModal}
+      />
+      {modalOpen && owner && (
         <Modal open={modalOpen} onClose={handleCloseModal}>
           <Paper
             sx={{
@@ -160,7 +176,7 @@ const Experience = ({ experience, owner, onDeleteExperience }) => {
           </Paper>
         </Modal>
       )}
-      {confirmDelete && (
+      {confirmDelete && owner && (
         <Alert severity="success" sx={{ marginTop: 2 }}>
           Experience deleted successfully!
         </Alert>

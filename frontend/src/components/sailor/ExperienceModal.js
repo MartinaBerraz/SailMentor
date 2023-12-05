@@ -95,16 +95,20 @@ const ExperienceModal = ({ experience, modalOpen, handleCloseModal }) => {
             sx={{
               justifyContent: "center",
               display: "flex",
-              marginBottom: "4vh",
+              marginBottom: "3vh",
             }}
           >
             <Carrousel images={experience.images} />
           </CardMedia>
           <Typography
             sx={{
-              justifyContent: "center",
-              display: "flex",
+              textAlign: "center", // Center the text horizontally
+              margin: "0 auto", // Center the text horizontally using auto margins
               marginBottom: "4vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center", // Center the text vertically
+              alignItems: "center", // Center the text horizontally and vertically
             }}
             variant="body2"
             color="text.secondary"

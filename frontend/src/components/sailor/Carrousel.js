@@ -33,11 +33,11 @@ function Carrousel({ images }) {
   return (
     <Box
       sx={{
-        maxWidth: "100%",
-        flexGrow: 1,
+        width: "100%",
+        height: "53vh",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center", // Center the carousel horizontally
+        justifyContent: "center",
       }}
     >
       <AutoPlaySwipeableViews
@@ -49,18 +49,25 @@ function Carrousel({ images }) {
         {images.map(
           (step, index) =>
             step && (
-              <div key={index}>
-                {Math.abs(activeStep - index) <= 2 ? (
-                  <Box
-                    component="img"
-                    sx={{
-                      height: "50vh",
-                      overflow: "hidden",
-                    }}
-                    src={`${baseUrl}${step}`}
-                  />
-                ) : null}
-              </div>
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "50vh",
+                  overflow: "hidden",
+                }}
+              >
+                <img
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                  src={`${baseUrl}${step}`}
+                  alt={`step-${index}`}
+                />
+              </Box>
             )
         )}
       </AutoPlaySwipeableViews>
