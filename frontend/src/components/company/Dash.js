@@ -91,7 +91,11 @@ export const Dash = (props) => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <GenericTable category={props.category} items={items} />
+        <GenericTable
+          category={props.category}
+          rowsPerPage={props.rowsPerPage ? props.rowsPerPage : null}
+          items={items}
+        />
       </Box>
     </Box>
   );

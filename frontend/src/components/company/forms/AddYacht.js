@@ -31,7 +31,6 @@ import {
 } from "@mui/material";
 import placeholderImage from "../../images/placeholder.png";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import AvailabilityCalendar from "../AvailabilityCalendar";
 import { useNavigate } from "react-router-dom";
 
 const AddYacht = ({ formData }) => {

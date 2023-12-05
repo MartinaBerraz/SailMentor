@@ -109,6 +109,7 @@ export const BookingsDashboard = (props) => {
       <GenericTable
         category={props.category}
         items={items}
+        rowsPerPage={props.rowsPerPage ? props.rowsPerPage : 5}
         onSelect={null}
         onUpdateOrDelete={handleOnDelete}
       />

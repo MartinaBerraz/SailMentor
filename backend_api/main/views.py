@@ -178,7 +178,12 @@ class ExperienceCreateView(generics.CreateAPIView):
     queryset = models.Experience.objects.all()
     serializer_class = serializers.ExperienceCreateSerializer
 
+    def perform_create(self, serializer):
+        # Extracting the list of images from the request data
+        images = self.request.FILES.getlist('images')
 
+        # Saving the experience with the list of images
+        serializer.save(images=images)
 
 class AvailabilityList(generics.ListCreateAPIView):
     queryset = models.Availability.objects.all()

@@ -41,6 +41,8 @@ export const SailorExperiences = () => {
   const sailorExperiences = useSelector((state) =>
     selectSailorFilteredExperiences(state, userFk)
   );
+
+  console.log(userFk);
   const experiencesState = useSelector((state) => state.experiences.status);
 
   const destinationsList = useSelector(selectAllDestinations);

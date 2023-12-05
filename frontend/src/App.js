@@ -156,11 +156,11 @@ function App() {
             <Route path="/companyYachts" element={<YachtsDashboard />} />
             <Route
               path="/companyBookings"
-              element={<Dash category="bookings" />}
+              element={<Dash category="bookings" rowsPerPage={10} />}
             />
             <Route
               path="/companyHistory"
-              element={<Dash category="history" />}
+              element={<Dash category="history" rowsPerPage={10} />}
             />
 
             <Route path="/yachts/add" element={<AddForm category="yachts" />} />

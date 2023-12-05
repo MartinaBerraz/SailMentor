@@ -112,7 +112,7 @@ export const selectSailorFilteredExperiences = (state, sailorId) => {
 
   if (!destinationId) {
     return state.experiences.experiences.filter(
-      (experience) => experience.sailor_id === sailorId
+      (experience) => experience.sailor === sailorId
     );
   }
   const destination = state.destinations.destinations.find(
@@ -123,7 +123,7 @@ export const selectSailorFilteredExperiences = (state, sailorId) => {
   return state.experiences.experiences.filter(
     (experience) =>
       experience.destination_name === destination.name &&
-      experience.sailor_id === sailorId
+      experience.sailor === sailorId
   );
 };
 

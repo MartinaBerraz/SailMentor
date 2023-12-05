@@ -92,7 +92,7 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
 
     // Add each image file to the FormData
     formValues.images.forEach((image, index) => {
-      formData.append(`images[${index}]`, image.file);
+      formData.append(`images`, image.file, image.name);
     });
 
     console.log(formValues.images);

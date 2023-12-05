@@ -36,7 +36,11 @@ const Availability = () => {
         <YachtSelect onYachtSelection={handleYachtSelection} />
         {selectedYacht && (
           <>
-            <BookingsDashboard category="bookings" id={selectedYacht} />
+            <BookingsDashboard
+              category="bookings"
+              rowsPerPage={3}
+              id={selectedYacht}
+            />
             <BookingsCalendar id={selectedYacht} />
           </>
         )}

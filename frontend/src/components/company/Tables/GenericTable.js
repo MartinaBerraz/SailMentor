@@ -8,7 +8,13 @@ import { Paper, Typography } from "@mui/material";
 import { selectYacht } from "../../../features/yachts/yachtsSlice";
 import { useDispatch } from "react-redux";
 
-const GenericTable = ({ items, category, onSelect, onUpdateOrDelete }) => {
+const GenericTable = ({
+  items,
+  category,
+  onSelect,
+  onUpdateOrDelete,
+  rowsPerPage = 5,
+}) => {
   const [columns, setColumns] = useState([]);
   const columnsToExclude = [
     "id",
@@ -124,7 +130,7 @@ const GenericTable = ({ items, category, onSelect, onUpdateOrDelete }) => {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 3 },
+              paginationModel: { page: 0, pageSize: rowsPerPage },
             },
           }}
           pageSizeOptions={[5, 10]}

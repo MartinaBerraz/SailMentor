@@ -93,21 +93,24 @@ class ExperienceImageSerializer(serializers.ModelSerializer):
         fields=['id','experience','image']
 
 class ExperienceCreateSerializer(serializers.ModelSerializer):
-    images = ExperienceImageSerializer(many=True, required=False)
+    images = serializers.ListField(child=serializers.ImageField(), write_only=True)
 
     class Meta:
         model = models.Experience
         fields = ['id', 'name', 'destination', 'sailor', 'brief_description', 'detailed_description', 'recommendation', 'precautions', 'images']
 
     def create(self, validated_data):
+        # Extract and remove the 'images' data from the validated data
         images_data = validated_data.pop('images', [])
+
+        # Create the Experience instance without 'images'
         experience = models.Experience.objects.create(**validated_data)
 
+        # Create ExperienceImage instances linked to the experience
         for image_data in images_data:
-            models.ExperienceImage.objects.create(experience=experience, **image_data)
+            models.ExperienceImage.objects.create(experience=experience, image=image_data)
 
         return experience
-
 class ExperienceDetailSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField(method_name='get_images')
     destination_name = serializers.CharField(source='destination.name', read_only=True)
@@ -124,7 +127,7 @@ class ExperienceDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.Experience
-        fields = ['id', 'name', 'destination_name', 'sailor_last_name','sailor_first_name', 'images', 'brief_description', 'detailed_description', 'precautions','recommendation','experience_imgs']
+        fields = ['id', 'name', 'destination_name','sailor', 'sailor_last_name','sailor_first_name', 'images', 'brief_description', 'detailed_description', 'precautions','recommendation','experience_imgs']
     
     def __init__(self, *args, **kwargs):
         super(ExperienceDetailSerializer, self).__init__(*args, **kwargs)
