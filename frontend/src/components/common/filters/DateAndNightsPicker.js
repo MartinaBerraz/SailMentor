@@ -48,7 +48,23 @@ const DateAndNightsPicker = () => {
         <Grid item md={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              sx={{ backgroundColor: "white" }}
+              sx={{
+                backgroundColor: "white",
+                borderRadius: 0,
+
+                ".MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                  border: 0,
+                  borderBottom: 1,
+                  color: "#3FB295",
+                  textDecorationColor: "white",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: 0,
+                  borderBottom: 0,
+                  color: "#3FB295",
+                },
+              }}
               label="Departure date"
               selected={startDate}
               onChange={handleStartDateChange}
@@ -58,10 +74,31 @@ const DateAndNightsPicker = () => {
         </Grid>
         <Grid item md={6}>
           <FormControl sx={{ minWidth: "10vw" }}>
-            <InputLabel id="demo-simple-select-label">No. Nights</InputLabel>
+            <InputLabel
+              style={{ color: "black", opacity: "0.7" }}
+              id="demo-simple-select-label"
+            >
+              No. Nights
+            </InputLabel>
 
             <Select
-              sx={{ backgroundColor: "white" }}
+              sx={{
+                backgroundColor: "white",
+                borderRadius: 0,
+
+                ".MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                  border: 0,
+                  borderBottom: 1,
+                  color: "#3FB295",
+                  textDecorationColor: "white",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: 0,
+                  borderBottom: 2,
+                  color: "#3FB295",
+                },
+              }}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={numberOfNights}

@@ -28,7 +28,11 @@ const NoCabinsFilter = () => {
     <div>
       <FormControl sx={{ minWidth: "8vw" }}>
         {!selected ? (
-          <InputLabel shrink={false} id="demo-simple-select-label">
+          <InputLabel
+            style={{ color: "black", opacity: "0.7" }}
+            shrink={false}
+            id="demo-simple-select-label"
+          >
             No. Cabins
           </InputLabel>
         ) : null}
@@ -36,8 +40,21 @@ const NoCabinsFilter = () => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
+          sx={{
+            ".MuiOutlinedInput-notchedOutline": {
+              border: 0,
+              borderBottom: 1,
+              color: "#3FB295",
+              textDecorationColor: "white",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              border: 0,
+              borderBottom: 2,
+              color: "#3FB295",
+            },
+            borderRadius: 0,
+          }}
           renderValue={(value) => (value ? `${value} cabins` : "No. Cabins")}
-          sx={{ backgroundColor: "white", borderRadius: "5px" }}
           value={selected}
           onChange={handleNoCabinsChange}
         >

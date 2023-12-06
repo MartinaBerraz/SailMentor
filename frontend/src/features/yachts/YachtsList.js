@@ -93,6 +93,10 @@ export const YachtsList = () => {
       return false;
     }
 
+    if (filters.crewed !== null && filters.crewed !== yacht.crewed) {
+      return false;
+    }
+
     if (filters.yachtType && filters.yachtType !== yacht.yacht_type) {
       return false;
     }

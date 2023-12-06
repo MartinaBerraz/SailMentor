@@ -8,7 +8,7 @@ import { setYachtTypesFilter } from "../../../features/filters/filtersSlice";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { FormControl } from "@mui/material";
+import { Box, FormControl } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 
 const YachtTypesFilter = () => {
@@ -35,12 +35,50 @@ const YachtTypesFilter = () => {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: "17vw" }}>
-        {selected ? null : <InputLabel shrink={false}>Yacht Type</InputLabel>}
+      <FormControl sx={{ width: "15vw" }}>
+        {selected ? null : (
+          <Box
+            sx={{
+              color: "black",
+              textAlign: "center", // Center the label
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <InputLabel
+              style={{
+                color: "black",
+                opacity: 0.8,
+                justifyContent: "center",
+                display: "flex",
+                alignSelf: "center",
+                justifySelf: "center",
+              }}
+              shrink={false}
+            >
+              Yacht Type
+            </InputLabel>
+          </Box>
+        )}
         <Select
+          sx={{
+            ".MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+              textDecorationColor: "white",
+              border: 0,
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              border: 0,
+              color: "white",
+            },
+            alignContent: "center",
+            alignItems: "center",
+            // backgroundColor: "#3FB295",
+            backgroundColor: "white",
+            borderRadius: "0",
+          }}
           value={selected}
           onChange={handleYachtTypeChange}
-          sx={{ backgroundColor: "white", borderRadius: "5px" }}
         >
           {yachtTypesOptions.map((yachtType) => (
             <MenuItem value={yachtType.id}>{yachtType.description}</MenuItem>

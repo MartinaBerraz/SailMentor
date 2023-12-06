@@ -38,7 +38,7 @@ export const YachtsStepper = ({ yachts }) => {
           <Step key={index}></Step>
         ))}
       </Stepper> */}
-      <Grid sx={{ justifyContent: "center", marginTop: "7vh" }} container>
+      <Grid sx={{ justifyContent: "center", marginTop: "10vh" }} container>
         {yachts.map((yacht, index) => (
           <Grid item md={6} key={yacht.id}>
             <YachtCard yacht={yacht} />

@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  Paper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,9 +14,18 @@ import {
   verifyCodeAndResetPassword,
 } from "../../features/auth/authSlice";
 
+function isStrongPassword(password) {
+  // Password should be at least 8 characters long
+  // It should contain at least one uppercase letter, one lowercase letter, one number, and one special character
+  const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+  return strongPasswordRegex.test(password);
+}
+
 const ResetPasswordStep2 = ({ email, onNext }) => {
   const [codes, setCodes] = useState(["", "", "", "", "", ""]);
   const [newPassword, setNewPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const dispatch = useDispatch();
   const [openAlert, setOpenAlert] = useState(false);
@@ -26,6 +34,7 @@ const ResetPasswordStep2 = ({ email, onNext }) => {
   const authError = useSelector(selectAuthError);
 
   useEffect(() => {
+    setOpenAlert(false);
     if (authStatus === "failed") {
       console.log(authError);
       setOpenAlert(true);
@@ -35,13 +44,54 @@ const ResetPasswordStep2 = ({ email, onNext }) => {
     }
   }, [authStatus]);
 
+  const handlePasswordChange = (e) => {
+    const password = e.target.value;
+    setOpenAlert(false);
+
+    if (!isStrongPassword(password)) {
+      setNewPassword(password);
+      setPasswordError(
+        "Password should be at least 8 characters long, contain an uppercase and a lowercase letter, one number, and one special character."
+      );
+    } else {
+      setNewPassword(password);
+      setPasswordError("");
+    }
+  };
+
+  const handleCodeChange = (index, value) => {
+    const newCodes = [...codes];
+    newCodes[index] = value;
+    setCodes(newCodes);
+
+    console.log(newCodes);
+
+    setOpenAlert(false);
+
+    if (value !== "" && index < codes.length - 1) {
+      document.getElementById(`code-${index + 1}`).focus();
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const verificationCode = codes.join(""); // Combine individual digits
+    const verificationCode = codes.join("");
+    console.log(newPassword);
+
+    if (!isStrongPassword(newPassword)) {
+      setOpenAlert(true);
+      setPasswordError("");
+      console.log("probelm in psw");
+      return;
+    } else {
+      setOpenAlert(false);
+      setPasswordError("");
+      console.log("here");
+    }
 
     try {
-      // Dispatch an action to verify the code and reset the password
+      console.log("got here");
       dispatch(
         verifyCodeAndResetPassword({
           email: email,
@@ -49,27 +99,8 @@ const ResetPasswordStep2 = ({ email, onNext }) => {
           newPassword: newPassword,
         })
       );
-
-      // If the dispatch is successful, proceed to the next step
     } catch (error) {
-      // Handle errors here, you can set an error state and display a message
       console.error("Error:", error);
-      // Optionally, you can show an error message to the user
-      // setErrorState(true);
-    }
-  };
-
-  const handleCodeChange = (index, value) => {
-    console.log(email);
-    const newCodes = [...codes];
-    newCodes[index] = value;
-    setCodes(newCodes);
-
-    setOpenAlert(false);
-
-    // Focus on the next input field after entering a digit
-    if (value !== "" && index < codes.length - 1) {
-      document.getElementById(`code-${index + 1}`).focus();
     }
   };
 
@@ -119,7 +150,9 @@ const ResetPasswordStep2 = ({ email, onNext }) => {
         type="password"
         placeholder="Enter New Password"
         value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
+        onChange={(e) => handlePasswordChange(e)}
+        error={Boolean(passwordError)}
+        helperText={passwordError}
         style={{ textAlign: "center", marginTop: "10vh", width: "100%" }}
       />
       <Button
@@ -140,8 +173,8 @@ const ResetPasswordStep2 = ({ email, onNext }) => {
         )}
       </Button>
       {openAlert && (
-        <Alert severity="error" sx={{ marginTop: "2vh" }}>
-          Invalid code
+        <Alert severity="error" sx={{ marginTop: "10vh" }}>
+          Invalid code or Password not Strong Enough
         </Alert>
       )}
     </Box>

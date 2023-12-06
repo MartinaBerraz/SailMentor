@@ -73,7 +73,14 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
       ...formValues,
       [name]: value,
     });
+
+    setShowAlert(false);
   };
+
+  useEffect(() => {
+    setShowAlert(false);
+  }, []);
+
   const destination = useSelector((state) => state.filters.destination);
 
   const handleSubmit = () => {
@@ -278,11 +285,17 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
               style={{ width: "95%" }}
             />
             {showAlert && (
-              <Alert severity="error">Please fill in all fields.</Alert>
+              <Alert severity="error" sx={{ width: "90%" }}>
+                Please fill in all fields.
+              </Alert>
             )}
 
             {/* Submit Button */}
-            <Button variant="contained" onClick={handleSubmit}>
+            <Button
+              variant="contained"
+              sx={{ marginTop: "3vh", width: "40%", height: "7vh" }}
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </CardContent>

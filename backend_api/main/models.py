@@ -34,7 +34,7 @@ class Sailor(models.Model):
 
 
     def __str__(self):
-        return self.user.first_name
+        return self.user.username
     
 # Model for region
 class Region(models.Model):
@@ -77,14 +77,8 @@ class ExperienceImage(models.Model):
     def __str__(self):
         return self.image.url
 
-class YachtTypeManager(models.Manager):
-    def get_yacht_type_choices(self):
-        return tuple((yt.description, yt.description) for yt in self.all())
-
 # Model for yacht type
 class YachtType(models.Model):
-
-    objects = YachtTypeManager()
 
     description = models.CharField(max_length=20,null=True)
     sailing_boat = models.BooleanField(null=True)
@@ -134,6 +128,8 @@ class Booking(models.Model):
     sailor = models.ForeignKey(Sailor, on_delete=models.CASCADE)
     availability = models.ForeignKey(Availability, on_delete=models.CASCADE)
     confirmation_token = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    destination = models.ForeignKey(Destination,on_delete=models.PROTECT, null=True)
+    price = models.FloatField(null=True)
 
 
     def __str__(self):

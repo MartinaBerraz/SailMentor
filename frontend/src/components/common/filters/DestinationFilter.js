@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllDestinations } from "../../../features/destinations/destinationsSlice";
 import {
@@ -26,6 +26,10 @@ const DestinationFilter = () => {
     dispatch(setDestinationFilter(selectedDestination));
   };
 
+  useEffect(() => {
+    setSelected(initialDestination);
+  }, [initialDestination]);
+
   return (
     <div>
       <Box sx={{ display: "flex", alignSelf: "center" }}>
@@ -39,15 +43,32 @@ const DestinationFilter = () => {
           }}
         >
           {selected ? null : (
-            <InputLabel shrink={false}>Destinations</InputLabel>
+            <InputLabel
+              sx={{
+                "&.Mui-focused": {
+                  color: "grey", // Change the color when focused
+                },
+              }}
+              shrink={false}
+            >
+              Destinations
+            </InputLabel>
           )}
           <Select
             sx={{
+              ".MuiOutlinedInput-notchedOutline": {
+                borderColor: "white",
+                textDecorationColor: "white",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                border: 5,
+                color: "white",
+              },
               // backgroundColor: "#3FB295",
               backgroundColor: "white",
-              borderRadius: "10px",
+              borderRadius: "5px",
             }}
-            value={selected}
+            value={selected ? selected : ""}
             onChange={handleDestinationChange}
           >
             {destinationOptions.map((destination) => (

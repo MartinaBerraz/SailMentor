@@ -11,9 +11,11 @@ import {
 } from "@mui/material";
 import MaxPeopleFilter from "./filters/MaxPeopleFilter";
 import NoCabinsFilter from "./filters/NoCabinsFilter";
+
 import YachtTypesFilter from "./filters/YachtTypeFilter";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TuneIcon from "@mui/icons-material/Tune";
+import CrewedFilter from "./filters/CrewedFilter";
 
 const FilterForm = () => {
   return (
@@ -47,13 +49,16 @@ const FilterForm = () => {
         <AccordionDetails>
           <Box
             sx={{
-              paddingTop: "4vh",
+              paddingTop: "0vh",
               display: "flex",
               flexDirection: "column",
               paddingBottom: "0.5vh",
               borderTop: "0.1px solid white",
             }}
           >
+            <YachtTypesFilter />
+            <CrewedFilter />
+
             <Box
               sx={{
                 display: "flex",
@@ -64,7 +69,6 @@ const FilterForm = () => {
               <MaxPeopleFilter />
               <NoCabinsFilter />
             </Box>
-            <YachtTypesFilter />
           </Box>
         </AccordionDetails>
       </Accordion>

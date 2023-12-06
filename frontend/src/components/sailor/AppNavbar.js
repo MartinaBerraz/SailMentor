@@ -22,6 +22,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import AnchorIcon from "@mui/icons-material/Anchor";
 import EventIcon from "@mui/icons-material/Event";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import { setDestinationFilter } from "../../features/filters/filtersSlice";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
@@ -66,6 +67,7 @@ export const AppNavbar = () => {
   const handleButtonClick = (buttonName) => {
     console.log(buttonName);
     setActiveButton(buttonName);
+
     navigate(`/${buttonName}`);
   };
 

@@ -11,11 +11,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import MaxPeopleFilter from "./filters/MaxPeopleFilter";
-import NoCabinsFilter from "./filters/NoCabinsFilter";
-import YachtTypesFilter from "./filters/YachtTypeFilter";
 import DateAndNightsPicker from "./filters/DateAndNightsPicker";
-import background from "../images/background.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectSelectedYacht,

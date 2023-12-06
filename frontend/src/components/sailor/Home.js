@@ -42,11 +42,13 @@ export const Home = () => {
     // setSelectedOption(options.find((option) => option.name === childData));
     // console.log(childData);
 
-    const destination = destinationsList.find(
-      (item) => item.name === childData
-    );
-    console.log("destination id:" + destination.id);
-    dispatch(setDestinationFilter(destination.id));
+    if (childData) {
+      const destination = destinationsList.find(
+        (item) => item.name === childData
+      );
+      console.log("destination id:" + destination.id);
+      dispatch(setDestinationFilter(destination.id));
+    }
   };
 
   useEffect(() => {

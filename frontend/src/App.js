@@ -87,9 +87,6 @@ function App() {
             "&:focus": {
               borderColor: "#3FB295", // Change the focused background color
             },
-            "&[aria-expanded='true']": {
-              borderColor: "green", // Change the border color when options are displayed
-            },
           },
           icon: {
             color: "#3FB295", // Change the select icon color

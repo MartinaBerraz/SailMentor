@@ -115,7 +115,7 @@ const ResetPasswordStep1 = ({ onNext }) => {
         </Button>
         {openAlert && (
           <Alert severity="error" sx={{ marginTop: "3vh" }}>
-            Account not found
+            Invalid E-mail
           </Alert>
         )}
       </Box>

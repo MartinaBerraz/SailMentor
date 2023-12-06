@@ -30,15 +30,26 @@ const MaxPeopleFilter = () => {
       <FormControl
         sx={{ minWidth: "8vw", marginBottom: "1vh", marginRight: "1vw" }}
       >
-        {!selected && <InputLabel shrink={false}>No. People</InputLabel>}
+        {!selected && (
+          <InputLabel style={{ color: "black", opacity: "0.7" }} shrink={false}>
+            No. People
+          </InputLabel>
+        )}
 
         <Select
           sx={{
-            backgroundColor: "white",
-            "&.Mui-focused": {
-              borderColor: "red", // Set your desired border color here
+            ".MuiOutlinedInput-notchedOutline": {
+              border: 0,
+              borderBottom: 1,
+              color: "#3FB295",
+              textDecorationColor: "white",
             },
-            borderRadius: "5px",
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              border: 0,
+              borderBottom: 2,
+              color: "#3FB295",
+            },
+            borderRadius: 0,
           }}
           value={selected}
           onChange={handleMaxPeopleChange}
