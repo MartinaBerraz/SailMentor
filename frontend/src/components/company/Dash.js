@@ -82,7 +82,7 @@ export const Dash = (props) => {
   }
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "#FEFEFE" }}>
+    <Box sx={{ display: "flex", backgroundColor: "#FEFEFE", maxWidth: "93%" }}>
       <SideBar />
       <Box
         sx={{

@@ -118,7 +118,7 @@ const BookForm = () => {
               color="text.secondary"
               component="div"
             >
-              Company Name
+              {selectedYacht.destination_name}
             </Typography>
           </CardContent>
         </Box>
