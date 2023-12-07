@@ -104,7 +104,7 @@ const BookForm = () => {
       <Card sx={{ display: "flex" }}>
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: 151, height: "13vh" }}
           image={selectedYacht.image}
         />
 

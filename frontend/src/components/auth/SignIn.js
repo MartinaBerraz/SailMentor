@@ -84,6 +84,10 @@ const SignIn = () => {
 
   const companiesStatus = useSelector(selectCompaniesStatus);
 
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
   useEffect(() => {
     if (companiesStatus === "idle") {
       dispatch(fetchCompanies());
@@ -234,7 +238,7 @@ const SignIn = () => {
               </Link>
               <Typography sx={{ fontSize: "13px" }}>
                 <Link
-                  onClick={() => setShowModal(true)}
+                  onClick={handleOpenModal}
                   sx={{ display: "flex", flexDirection: "column" }}
                   style={customStyles}
                   variant="body2"

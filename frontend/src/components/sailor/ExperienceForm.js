@@ -252,7 +252,8 @@ const ExperienceForm = ({ sailor, modalOpen, handleCloseModal }) => {
               margin="normal"
               multiline
               rows={2}
-              style={{ minWidth: "95%" }}
+              sx={{ width: "95%" }}
+              inputProps={{ maxLength: 150 }}
             />
             <TextField
               label="Detailed Description"

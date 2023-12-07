@@ -1,5 +1,5 @@
 // ResetPasswordStepper.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -28,8 +28,13 @@ const ResetPasswordStepper = ({ onClose }) => {
   };
 
   const handleCloseModal = () => {
+    setActiveStep(0);
     onClose();
   };
+
+  useEffect(() => {
+    handleReset();
+  }, []); // Empty dependency array means it runs only once when the component mounts
 
   return (
     <Paper

@@ -100,10 +100,18 @@ export const BookingsCalendar = (props) => {
   }
 
   const handleDeleteAvailability = (availabilityId) => {
+    // Dispatch the delete action
     dispatch(deleteUnbookedAvailability(availabilityId))
       .then(() => {
         // Fetch updated unbooked availabilities after deletion
-        dispatch(fetchUnbookedAvailabilities(props.id));
+        dispatch(fetchUnbookedAvailabilities(props.id)).then(() => {
+          // Filter out the deleted availability from the local state
+          setUnavailablePeriods((prevUnavailablePeriods) =>
+            prevUnavailablePeriods.filter(
+              (period) => period.key !== availabilityId
+            )
+          );
+        });
       })
       .catch((error) => {
         // Handle errors if necessary

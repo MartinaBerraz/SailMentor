@@ -134,7 +134,7 @@ const availabilitiesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(deleteUnbookedAvailability.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "idle";
         const availabilityId = action.payload;
         state.unbookedAvailabilities = state.unbookedAvailabilities.filter(
           (availability) => availability.id !== availabilityId
