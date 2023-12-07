@@ -53,7 +53,9 @@ export const BookingsDashboard = (props) => {
       if (props.id) {
         setItems(
           bookingsList.filter(
-            (booking) => booking.yacht_id === props.id.toString()
+            (booking) =>
+              booking.yacht_id === props.id.toString() &&
+              booking.status !== "Finished"
           )
         );
       } else {

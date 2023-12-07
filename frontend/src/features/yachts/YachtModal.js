@@ -107,7 +107,7 @@ const YachtModal = ({ yacht, modalOpen, handleCloseModal }) => {
                 }}
               >
                 <p style={{ lineHeight: "0", color: "grey" }}>
-                  Price per night: ${yacht.price_per_night}
+                  Price per night: €{yacht.price_per_night}
                 </p>
               </Typography>
 

@@ -115,7 +115,7 @@ export const YachtCard = ({ yacht }) => {
           <Typography sx={{ textTransform: "none" }}>
             {selectedYacht && selectedYacht.id === yacht.id
               ? "Selected"
-              : `Select for $${numberOfNights * yacht.price_per_night}`}
+              : `Select for €${numberOfNights * yacht.price_per_night}`}
           </Typography>
         </Button>
       </Card>

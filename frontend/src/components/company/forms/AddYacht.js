@@ -324,7 +324,7 @@ const AddYacht = ({ formData }) => {
           <Grid item md={4}>
             <FormControl variant="standard" sx={{ width: "12vw" }}>
               <TextField
-                label="Price per Night"
+                label="Price per Night (€)"
                 type="number" // Set the input type to "number" for float values
                 value={formValues["price_per_night"] || ""}
                 onChange={(e) => handleChange(e, "price_per_night")}
