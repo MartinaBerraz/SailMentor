@@ -94,7 +94,7 @@ const experiencesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(addExperience.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "idle";
         state.experiences.push(action.payload);
       })
       .addCase(addExperience.rejected, (state, action) => {
@@ -114,7 +114,7 @@ const experiencesSlice = createSlice({
         );
       })
       .addCase(deleteExperience.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "idle";
         state.error = action.error.message;
       });
   },

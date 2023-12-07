@@ -94,10 +94,6 @@ export const BookingsDashboard = (props) => {
     setSuccessAlertOpen(false);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <Box
       sx={{

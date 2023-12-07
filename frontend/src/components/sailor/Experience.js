@@ -15,8 +15,13 @@ import Avatar from "@mui/material/Avatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Box, Grid, Paper, Stack, Alert, CardActionArea } from "@mui/material";
 import ExperienceModal from "./ExperienceModal";
-import { useDispatch } from "react-redux";
-import { deleteExperience } from "../../features/experiences/experiencesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteExperience,
+  fetchExperiences,
+  selectRefreshState,
+} from "../../features/experiences/experiencesSlice";
+import { useNavigate } from "react-router-dom";
 
 const Experience = ({ experience, owner, onDeleteExperience }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -50,6 +55,7 @@ const Experience = ({ experience, owner, onDeleteExperience }) => {
     setConfirmDelete(false);
   };
 
+  const navigate = useNavigate();
   useEffect(() => {
     console.log(experience.id);
 

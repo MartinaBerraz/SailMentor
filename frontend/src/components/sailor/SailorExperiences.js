@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import ExperiencesStepper from "./ExperiencesStepper";
 import Typography from "@mui/material/Typography";
 import InputAutocomplete from "../common/InputAutocomplete";
-import { Button, Container } from "@mui/material";
+import { Button, CircularProgress, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import Yachts from "./Yachts";
 import { setDestinationFilter } from "../../features/filters/filtersSlice";
@@ -69,7 +69,7 @@ export const SailorExperiences = () => {
     if (destinationsState === "idle") {
       dispatch(fetchDestinations());
     }
-  }, [experiencesState, dispatch]);
+  }, [experiencesState, destinationsState, dispatch]);
 
   const handleOnClick = (e) => {
     if (selectedOption) {

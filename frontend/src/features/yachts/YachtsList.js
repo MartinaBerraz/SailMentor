@@ -79,7 +79,11 @@ export const YachtsList = () => {
   // Filter yachts based on the filter criteria
   const filteredYachts = yachtsList.filter((yacht) => {
     // Apply destination filter
-    if (filters.destination && filters.destination !== yacht.destination) {
+    if (
+      filters.destination &&
+      filters.destination !== "" &&
+      filters.destination !== yacht.destination
+    ) {
       return false;
     }
     if (filters.maxPeople && filters.maxPeople > yacht.max_people) {

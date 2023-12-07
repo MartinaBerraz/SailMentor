@@ -68,6 +68,8 @@ export const AppNavbar = () => {
     console.log(buttonName);
     setActiveButton(buttonName);
 
+    dispatch(setDestinationFilter(""));
+
     navigate(`/${buttonName}`);
   };
 

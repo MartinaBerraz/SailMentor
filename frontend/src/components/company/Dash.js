@@ -12,9 +12,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthData } from "../../features/auth/authSlice";
 import {
+  deleteSailorBooking,
   fetchCompanyBookings,
   selectAllBookings,
+  updateBookings,
 } from "../../features/bookings/bookingsSlice";
+import { Alert } from "@mui/material";
+import ConfirmationModal from "./ConfirmationModal";
 
 export const Dash = (props) => {
   const dispatch = useDispatch();
@@ -26,18 +30,9 @@ export const Dash = (props) => {
   useEffect(() => {
     console.log(companyFk);
 
-    if (companyFk && props.category === "yachts") {
-      dispatch(fetchCompanyYachts(companyFk)).then(() => {
-        setLoading(false);
-      });
-    } else if (
-      (companyFk && props.category === "bookings") ||
-      props.category === "history"
-    ) {
-      dispatch(fetchCompanyBookings(companyFk)).then(() => {
-        setLoading(false);
-      });
-    }
+    dispatch(fetchCompanyBookings(companyFk)).then(() => {
+      setLoading(false);
+    });
   }, [companyFk, dispatch]);
 
   const drawerWidth = 240;
@@ -47,57 +42,108 @@ export const Dash = (props) => {
 
   const bookingStatus = useSelector((state) => state.bookings.status);
   const bookingsList = useSelector(selectAllBookings);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
 
   let items = [];
-  if (props.category === "yachts") {
-    console.log("WHAT");
-    items = yachtsList; // Use yachtsList when the category is "yachts"
-  } else if (props.category === "bookings") {
+  if (props.category === "bookings") {
     items = bookingsList.filter((booking) => booking.status !== "Finished"); // Use bookingsList when the category is "bookings"
   } else if (props.category === "history") {
     items = bookingsList.filter((booking) => booking.status === "Finished"); // Use bookingsList when the category is "bookings"
     console.log("fetched");
   }
 
+  const handleOnDelete = (id, action) => {
+    const booking = bookingsList.filter(
+      (booking) => String(booking.id) === String(id)
+    );
+
+    setSelectedBooking(booking[0]);
+    setConfirmationModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    dispatch(deleteSailorBooking(selectedBooking));
+    setConfirmationModalOpen(false);
+    setSuccessAlertOpen(true);
+
+    dispatch(updateBookings());
+
+    setTimeout(() => {
+      setSuccessAlertOpen(false);
+    }, 3000);
+  };
+
   useEffect(() => {
     if (!loading) {
-      if (props.category === "yachts") {
-        console.log(yachtStatus);
-        if (yachtStatus === "idle") {
-          dispatch(fetchCompanyYachts(companyFk));
-        }
-      } else if (
-        props.category === "bookings" ||
-        props.category === "history"
-      ) {
-        if (bookingStatus === "idle") {
-          dispatch(fetchCompanyBookings(companyFk));
-        }
+      if (bookingStatus === "idle") {
+        dispatch(fetchCompanyBookings(companyFk));
       }
     }
   }, [props.category, yachtStatus, bookingStatus, dispatch, loading]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleModalClose = () => {
+    setConfirmationModalOpen(false);
+  };
 
+  const handleAlertClose = () => {
+    setSuccessAlertOpen(false);
+  };
   return (
-    <Box sx={{ display: "flex", backgroundColor: "#FEFEFE", maxWidth: "93%" }}>
-      <SideBar />
+    <>
+      <Box
+        sx={{ display: "flex", backgroundColor: "#FEFEFE", maxWidth: "93%" }}
+      >
+        <SideBar />
+        <Box
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+          }}
+        >
+          <GenericTable
+            category={props.category}
+            rowsPerPage={props.rowsPerPage ? props.rowsPerPage : null}
+            items={items}
+            onUpdateOrDelete={handleOnDelete}
+          />
+          {successAlertOpen && (
+            <Alert
+              sx={{
+                width: "100%",
+                height: "5vh",
+                bgcolor: "#3FB295",
+                opacity: "0.6",
+                color: "black",
+              }}
+              open={successAlertOpen}
+              onClose={handleAlertClose}
+            >
+              Booking has been successfully deleted!
+            </Alert>
+          )}
+        </Box>
+      </Box>
       <Box
         sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          display: "flex",
+          alignContent: "center",
+          flexDirection: "column",
         }}
       >
-        <GenericTable
-          category={props.category}
-          rowsPerPage={props.rowsPerPage ? props.rowsPerPage : null}
-          items={items}
-        />
+        {confirmationModalOpen && (
+          <ConfirmationModal
+            open={confirmationModalOpen}
+            onClose={handleModalClose}
+            onConfirm={handleConfirmDelete}
+            title="Confirm Deletion"
+            message="Are you sure you want to delete this booking?"
+          />
+        )}
       </Box>
-    </Box>
+    </>
   );
 };
 
