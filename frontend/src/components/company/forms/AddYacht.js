@@ -377,13 +377,29 @@ const AddYacht = ({ formData }) => {
               variant="standard"
               sx={{ minWidth: "15vw", marginBottom: "3vh" }}
             >
-              <InputLabel id="input-label">Yacht Type</InputLabel>
+              <InputLabel
+                id="input-label"
+                sx={{
+                  justifyContent: "center",
+                  "&.Mui-focused": {
+                    color: "#3FB295",
+                  },
+                }}
+              >
+                Yacht Type
+              </InputLabel>
 
               <Select
                 labelId="input-label"
                 label="yacht_type"
                 value={formValues["yacht_type"] || ""}
                 onChange={(e) => handleChange(e, "yacht_type")}
+                sx={{
+                  "&:after": {
+                    borderBottom: "2px solid #3FB295",
+                    color: "#3FB295",
+                  },
+                }}
               >
                 {yachtTypes.map((yachtType) => (
                   <MenuItem key={yachtType.id} value={yachtType.id}>
@@ -393,11 +409,27 @@ const AddYacht = ({ formData }) => {
               </Select>
             </FormControl>
             <FormControl variant="standard" sx={{ minWidth: "15vw" }}>
-              <InputLabel id="input-label">Destination</InputLabel>
+              <InputLabel
+                sx={{
+                  justifyContent: "center",
+                  "&.Mui-focused": {
+                    color: "#3FB295",
+                  },
+                }}
+                id="input-label"
+              >
+                Destination
+              </InputLabel>
 
               <Select
                 labelId="input-label"
                 label="Destination"
+                sx={{
+                  "&:after": {
+                    borderBottom: "2px solid #3FB295",
+                    color: "#3FB295",
+                  },
+                }}
                 value={formValues["destination"] || ""}
                 onChange={(e) => handleChange(e, "destination")}
               >

@@ -125,6 +125,7 @@ const bookingsSlice = createSlice({
       })
       .addCase(fetchSailorBookings.pending, (state, action) => {
         state.status = "loading";
+        state.bookings = [];
       })
       .addCase(fetchSailorBookings.fulfilled, (state, action) => {
         state.status = "succeeded";
@@ -133,6 +134,7 @@ const bookingsSlice = createSlice({
       })
       .addCase(fetchSailorBookings.rejected, (state, action) => {
         state.status = "failed";
+        state.bookings = [];
         state.error = action.error.message;
       })
       .addCase(deleteBooking.pending, (state, action) => {

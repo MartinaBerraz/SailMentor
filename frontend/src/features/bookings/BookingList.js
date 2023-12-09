@@ -1,8 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Typography } from "@mui/material";
-import { fetchSailorBookings, selectAllBookings } from "./bookingsSlice";
+import { Container, Typography, CircularProgress } from "@mui/material";
+import {
+  fetchSailorBookings,
+  selectAllBookings,
+  updateBookings,
+} from "./bookingsSlice";
 import { selectAuthData } from "../auth/authSlice";
 import BookingStepper from "./BookingStepper";
 
@@ -28,15 +32,22 @@ export const BookingList = () => {
 
   return (
     <>
-      {console.log(bookingList)}
-      {bookingList && bookingList.length > 0 ? (
-        <Container>
-          <BookingStepper bookings={bookingList}></BookingStepper>
-        </Container>
+      {bookingStatus === "loading" ? (
+        // Show loading spinner when fetching bookings
+        <CircularProgress />
       ) : (
-        <Typography>
-          <p>Yo have no bookings.</p>
-        </Typography>
+        <>
+          {console.log(bookingList)}
+          {bookingList && bookingList.length > 0 ? (
+            <Container>
+              <BookingStepper bookings={bookingList}></BookingStepper>
+            </Container>
+          ) : (
+            <Typography>
+              <p>You have no bookings.</p>
+            </Typography>
+          )}
+        </>
       )}
     </>
   );

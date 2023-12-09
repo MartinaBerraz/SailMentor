@@ -65,7 +65,7 @@ export const BookingCard = ({ booking }) => {
 
   if (!yacht) {
     // Return a loading state or handle the case where yacht or yacht.images is undefined
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (
@@ -125,7 +125,7 @@ export const BookingCard = ({ booking }) => {
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <Typography>Status: {booking.status}</Typography>
             </Box>
-            {booking.status !== "Confirmed" && (
+            {booking.status === "Pending" && (
               <>
                 <Button
                   variant="contained"

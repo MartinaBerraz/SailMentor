@@ -125,10 +125,6 @@ export const BookingsCalendar = (props) => {
     }
   }, [props.category, bookingStatus, dispatch, loading]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   const transformedBookedPeriods = items.map((booking) => {
     return {
       startDate: addDays(new Date(booking.start_date), 1),

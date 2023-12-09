@@ -118,26 +118,52 @@ const GenericTable = ({
     }
   }, [items]);
 
-  return items.length > 0 ? (
+  return (
     <>
-      <Paper
-        elevation={16}
-        sx={{ display: "flex", borderRadius: "20px", marginBottom: "3vh" }}
-      >
-        <DataGrid
-          sx={{ border: "none", paddingLeft: "1vw" }}
-          rows={items}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: rowsPerPage },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
-          autoHeight
-          onRowClick={handleRowClick}
-        />
-      </Paper>
+      {items.length > 0 ? (
+        <>
+          <Paper
+            elevation={16}
+            sx={{ display: "flex", borderRadius: "20px", marginBottom: "3vh" }}
+          >
+            <DataGrid
+              sx={{ border: "none", paddingLeft: "1vw" }}
+              rows={items}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: rowsPerPage },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              autoHeight
+              onRowClick={handleRowClick}
+            />
+          </Paper>
+        </>
+      ) : (
+        <>
+          <Paper
+            elevation={12}
+            sx={{
+              width: "72vw",
+              height: "32vh",
+              justifyContent: "center",
+              marginBottom: "2vh",
+              borderRadius: "20px",
+              // backgroundColor: "#3FB295",
+              opacity: "0.3",
+            }}
+          >
+            <Typography
+              sx={{
+                justifyContent: "center",
+                paddingTop: "10vh",
+              }}
+            >{`No ${category} found`}</Typography>
+          </Paper>
+        </>
+      )}
       {category !== "bookings" && category !== "history" && (
         <Box
           sx={{
@@ -168,28 +194,6 @@ const GenericTable = ({
           </Button>
         </Box>
       )}
-    </>
-  ) : (
-    <>
-      <Paper
-        elevation={12}
-        sx={{
-          width: "72vw",
-          height: "32vh",
-          justifyContent: "center",
-          marginBottom: "2vh",
-          borderRadius: "20px",
-          // backgroundColor: "#3FB295",
-          opacity: "0.3",
-        }}
-      >
-        <Typography
-          sx={{
-            justifyContent: "center",
-            paddingTop: "10vh",
-          }}
-        >{`No ${category} found`}</Typography>
-      </Paper>
     </>
   );
 };
